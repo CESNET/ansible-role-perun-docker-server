@@ -1,0 +1,21 @@
+{% if perun_apps_config is defined %}
+{{ perun_apps_config }}
+{% else %}
+brands:
+  - name: default
+    new_apps:
+      admin: "https://{{ perun_ngui_hostname }}"
+      profile: "https://{{ perun_ngui_profile_hostname }}"
+      pwd_reset: "https://{{ perun_ngui_pwdreset_hostname }}"
+      publications: "https://{{ perun_ngui_pub_hostname }}"
+    old_gui_domain: "https://{{ perun_rpc_hostname }}"
+{% for item in perun_rpc_hostname_aliases %}
+  - name: {{ item }}
+    new_apps:
+      admin: ""
+      profile: ""
+      pwd_reset: ""
+      publications: ""
+    old_gui_domain: "https://{{ item }}"
+{% endfor %}
+{% endif %}

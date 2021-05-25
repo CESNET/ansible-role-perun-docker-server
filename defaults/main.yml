@@ -117,6 +117,9 @@ perun_oldgui_supportedPasswordNamespaces: ''
 
 # new GUI
 perun_ngui_hostname: "perun.aai.example.org"
+perun_ngui_profile_hostname:  "{{ perun_ngui_hostname }}"
+perun_ngui_pwdreset_hostname: "{{ perun_ngui_hostname }}"
+perun_ngui_pub_hostname: "{{ perun_ngui_hostname }}"
 perun_ngui_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_apache_special_config1: ""
 
