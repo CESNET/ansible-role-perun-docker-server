@@ -16,6 +16,15 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
+- name: "create perun-apps-config.yml for RPC"
+  template:
+    src: perun-apps-config.yml.j2
+    dest: /etc/perun/rpc/perun-apps-config.yml
+    owner: perunrpc
+    group: perunrpc
+    mode: '0440'
+  notify: "restart perun_rpc"
+
 - name: "create perun-roles.yml for RPC"
   template:
     src: perun-roles.yml.j2

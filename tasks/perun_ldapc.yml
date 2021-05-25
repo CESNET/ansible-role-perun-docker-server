@@ -26,6 +26,15 @@
     mode: 0440
   notify: "restart perun_ldapc"
 
+- name: "create perun-apps-config.yml for LDAPc"
+  template:
+    src: perun-apps-config.yml.j2
+    dest: /etc/perun/ldapc/perun-apps-config.yml
+    owner: perunldc
+    group: perunldc
+    mode: '0440'
+  notify: "restart perun_ldapc"
+
 - name: "create perun-roles.yml for LDAPc"
   template:
     src: perun-roles.yml.j2
