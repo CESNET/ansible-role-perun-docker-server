@@ -59,16 +59,11 @@
   with_fileglob:
     - "{{ perun_instance_hostname }}/img/*"
 
-- name: "detect local instanceConfig.json"
-  local_action:
-    module: stat
-    path: "files/{{ perun_instance_hostname }}/admin-gui-instanceConfig.json"
-  register: ic
-
-- name: "create /etc/perun/apache/instanceConfig.json"
-  when: ic.stat.exists
-  copy:
-    src: "{{ ic.stat.path}}"
+# docs at https://github.com/CESNET/perun-web-apps/wiki/Description-of-the-configuration-file
+- name: "generate /etc/perun/apache/instanceConfig.json"
+  when: perun_ngui_enabled
+  template:
+    src: instanceConfig.json.j2
     dest: /etc/perun/apache/instanceConfig.json
 
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
@@ -81,7 +76,7 @@
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-ngui.conf"
-  when: perun_rpc_oidc_issuers is defined and perun_rpc_oidc_issuers
+  when: perun_ngui_enabled
   template:
     src: perun-ngui.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-ngui.conf

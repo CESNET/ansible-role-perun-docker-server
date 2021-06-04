@@ -66,7 +66,7 @@ perun_rpc_accountActivation_validationWindow: 72
 perun_rpc_instance_name: 'TESTPERUN'
 perun_rpc_instance_id: 'TP1'
 perun_rpc_proxy_idps: ""
-perun_rpc_cors_domains: [ "https://{{ perun_ngui_hostname }}" ]
+perun_rpc_cors_domains: [ "https://{{ perun_ngui_admin_hostname }}" ]
 perun_rpc_oidc_issuers:
   - iss: "https://login.example.org/oidc/"
     extsource_name: "https://login.example.org/idp/"
@@ -115,13 +115,39 @@ perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
 perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 
-# new GUI
-perun_ngui_hostname: "perun.aai.example.org"
-perun_ngui_profile_hostname:  "{{ perun_ngui_hostname }}"
-perun_ngui_pwdreset_hostname: "{{ perun_ngui_hostname }}"
-perun_ngui_pub_hostname: "{{ perun_ngui_hostname }}"
-perun_ngui_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_apache_special_config1: ""
+# new GUI common
+perun_ngui_enabled: false
+perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
+perun_ngui_footer_privacy_policy_web: "https://www.example.org/privacy-policy/"
+perun_ngui_footer_copyright:
+  - name: CESNET
+    webpage: https://www.cesnet.cz/
+perun_ngui_logo_padding: "2px 2px"
+perun_ngui_logo: "😀"
+perun_ngui_theme: {}
+
+# new GUI Admin
+perun_ngui_admin_hostname: "perun.aai.example.org"
+perun_ngui_admin_document_title: "Perun Next Generation Web UI"
+perun_ngui_admin_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
+perun_ngui_admin_oauth_callback: "https://{{ perun_ngui_admin_hostname }}/api-callback"
+perun_ngui_admin_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/api-callback"
+perun_ngui_admin_oauth_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/api-callback"
+perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/silent-refresh.html"
+perun_ngui_admin_oauth_load_user_info: "false"
+perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin"
+perun_ngui_admin_oauth_response_type: "id_token token"
+perun_ngui_admin_login_namespace_attributes: []
+perun_ngui_admin_password_namespace_attributes: []
+perun_ngui_admin_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
+perun_ngui_admin_log_out_enabled: "true"
+perun_ngui_admin_brandings: "{ '{{ perun_ngui_admin_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
+perun_ngui_admin_apache_special_config1: ""
+
+# perun-apps-config.yml
+perun_ngui_profile_hostname:  "{{ perun_ngui_admin_hostname }}"
+perun_ngui_pwdreset_hostname: "{{ perun_ngui_admin_hostname }}"
+perun_ngui_pub_hostname: "{{ perun_ngui_admin_hostname }}"
 
 # perun-registrar-lib.properties
 perun_registrar_secretKey: "test"

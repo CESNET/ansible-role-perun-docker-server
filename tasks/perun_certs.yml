@@ -20,13 +20,13 @@
         certbot_prehook: perun_prehook.sh
         certbot_posthook: perun_posthook.sh
 
-    - name: "create certbot cert for  {{ perun_ngui_hostname }}"
+    - name: "create certbot cert for  {{ perun_ngui_admin_hostname }}"
       include_role:
         name: cesnet.certbot_certs
         apply:
           tags: [ 'perun_certs' ]
       vars:
-        certbot_hostname: "{{ perun_ngui_hostname }}"
+        certbot_hostname: "{{ perun_ngui_admin_hostname }}"
         certbot_prehook: perun_prehook.sh
         certbot_posthook: perun_posthook.sh
 
@@ -57,19 +57,19 @@
     - name: "create link to ngui key"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_ngui_hostname }}/privkey.pem"
+        src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/privkey.pem"
         dest: "{{ perun_certs_dir }}/nguikey.pem"
 
     - name: "create link to ngui cert"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_ngui_hostname }}/cert.pem"
+        src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/cert.pem"
         dest: "{{ perun_certs_dir }}/nguicert.pem"
 
     - name: "create link to ngui chain"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_ngui_hostname }}/chain.pem"
+        src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/chain.pem"
         dest: "{{ perun_certs_dir }}/nguichain.pem"
 
 - name: "use issued certificates"

@@ -1,0 +1,37 @@
+{
+  "config": "admin {{ perun_ngui_admin_hostname }}",
+  "api_url": "https://{{ perun_rpc_hostname }}/oauth/rpc",
+  "document_title": "{{ perun_ngui_admin_document_title }}",
+  "oidc_client" : {
+    "oauth_authority": "{{ perun_ngui_oauth_authority }}",
+    "oauth_callback": "{{ perun_ngui_admin_oauth_callback }}",
+    "oauth_client_id": "{{ perun_ngui_admin_client_id }}",
+    "oauth_post_logout_redirect_uri": "{{  perun_ngui_admin_oauth_post_logout_redirect_uri }}",
+    "oauth_redirect_uri": "{{ perun_ngui_admin_oauth_redirect_uri }}",
+    "oauth_silent_redirect_uri": "{{ perun_ngui_admin_oauth_silent_redirect_uri }}",
+    "oauth_load_user_info": {{ perun_ngui_admin_oauth_load_user_info }},
+    "oauth_scopes": "{{ perun_ngui_admin_oauth_scopes }}",
+    "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}"
+  },
+  "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json }},
+  "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json }},
+  "pwd_reset_base_url": "{{ perun_ngui_admin_pwd_reset_base_url }}",
+{% if perun_rpc_group_nameSecondaryRegex is defined %}
+  "groupNameSecondaryRegex": {{ perun_rpc_group_nameSecondaryRegex|to_json }},
+{% endif %}
+{% if perun_rpc_group_nameErrorMessage is defined %}
+  "groupNameErrorMessage": {{ perun_rpc_group_nameErrorMessage|to_json }},
+{% endif %}
+  "footer_perun_web_web": "https://perun-aai.org/",
+  "footer_perun_team_web": "https://perun-aai.org/team",
+  "footer_privacy_policy_web": "{{ perun_ngui_footer_privacy_policy_web }}",
+  "footer_users_documentation_web": "https://perun-aai.org/documentation/users-documentation",
+  "footer_administrator_documentation": "https://perun-aai.org/documentation/admin-documentation",
+  "footer_support_mail": "{{ perun_email }}",
+  "footer_copyright": {{ perun_ngui_footer_copyright|to_nice_json }},
+  "log_out_enabled": {{ perun_ngui_admin_log_out_enabled }},
+  "logo_padding": {{ perun_ngui_logo_padding|to_json }},
+  "logo": {{ perun_ngui_logo|to_json }},
+  "theme": {{ perun_ngui_theme|to_nice_json }},
+  "brandings": {{ perun_ngui_admin_brandings|to_nice_json }}
+}
