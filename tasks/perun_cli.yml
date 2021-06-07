@@ -34,8 +34,26 @@
         --env-file /etc/perun/perun-cli-env --entrypoint="" ${PERUN_DOCKER_OPTS} \
         registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }} "$@"
 
+- name: "prune unused docker images other than CLI"
+  docker_prune:
+    images: yes
+    images_filters:
+      dangling: false
+      label!: org.perun-aai.cli
+  register: pruned
+
+- name: "pruned"
+  debug:
+    var: pruned
+
 - name: "preload image for perun_cli"
   docker_image:
     name: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }}"
     source: pull
     state: present
+  register: perun_cli_image
+
+- name: "command for pruning cli images (they are labelled after v3.25.0)"
+  when: perun_cli_image.changed
+  debug:
+    msg: "docker rmi $(docker images --filter before=registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }} --filter label=org.perun-aai.cli -q)"
