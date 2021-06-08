@@ -27,11 +27,6 @@
   import_tasks: perun_users.yml
   tags: perun_users
 
-
-- name: "SMTP setup"
-  import_tasks: smtp_setup.yml
-  tags: smtp_setup
-
 - name: "Postgres server setup"
   import_tasks: postgres.yml
   tags: postgresql
@@ -43,6 +38,15 @@
 - name: "Docker and Portainer setup"
   import_tasks: perun_docker.yml
   tags: perun_docker
+
+- name: "SMTP setup for Dockerized environment"
+  import_role:
+    name: cesnet.sendmail_for_docker
+  vars:
+    sendmail_for_docker_hostname: "{{ perun_rpc_hostname }}"
+    sendmail_for_docker_bridge_network_name: perun_net
+    sendmail_for_docker_bridge_network_gateway: 192.168.0.1
+    sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
 - name: "OpenLDAP directory server installation"
   import_tasks: openldap.yml
