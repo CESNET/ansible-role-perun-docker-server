@@ -51,7 +51,6 @@
   apt:
     name:
       - containerd.io
-      - python-docker
       - python3-docker
       - pass
     state: present

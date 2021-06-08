@@ -10,7 +10,7 @@
 
 - name: "install prerequisite for htpasswd task"
   package:
-    name: python-passlib
+    name: python3-passlib
     state: present
 
 - name: "add common passwords into /etc/perun/apache/perun.passwd"
