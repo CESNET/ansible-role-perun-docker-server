@@ -185,6 +185,8 @@
     networks_cli_compatible: yes
     networks:
       - name: perun_net
+    network_mode: perun_net
+    container_default_behavior: no_defaults
     ports:
       - 80:80
       - 443:443

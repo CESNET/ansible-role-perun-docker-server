@@ -1,8 +1,8 @@
 - name: "set cn=config attribute olcAttributeOptions: x-ns-"
-  ldap_attr:
+  ldap_attrs:
     dn: cn=config
-    name: olcAttributeOptions
-    values: "x-ns-"
+    attributes:
+      olcAttributeOptions: "x-ns-"
     state: present
 
 - name: "create entry for schema perun"
@@ -51,29 +51,29 @@
   when: tenOperEntry_schema_entry.changed or tenOperEntry_schema_file.changed
 
 - name: "set indexes (olcDbIndex attribute)"
-  ldap_attr:
+  ldap_attrs:
     dn: olcDatabase={1}mdb,cn=config
-    name: olcDbIndex
-    values:
-      - cn,uid eq
-      - member,memberUid eq
-      - objectClass eq
-      - uidNumber,gidNumber eq
-      - perunVoId eq
-      - eduPersonPrincipalNames eq
-      - entryCSN,entryUUID eq
-      - login eq
-      - memberOfPerunVo eq
-      - userCertificateSubject eq
-      - entityID eq
-      - assignedToResourceId eq
-      - userIdentities eq
-      - OIDCClientID eq
-      - perunFacilityId eq
-      - perunFacilityDn eq
-      - perunUserId eq
-      - perunGroupId eq
-      - assignedGroupId eq
+    attributes:
+      olcDbIndex:
+        - cn,uid eq
+        - member,memberUid eq
+        - objectClass eq
+        - uidNumber,gidNumber eq
+        - perunVoId eq
+        - eduPersonPrincipalNames eq
+        - entryCSN,entryUUID eq
+        - login eq
+        - memberOfPerunVo eq
+        - userCertificateSubject eq
+        - entityID eq
+        - assignedToResourceId eq
+        - userIdentities eq
+        - OIDCClientID eq
+        - perunFacilityId eq
+        - perunFacilityDn eq
+        - perunUserId eq
+        - perunGroupId eq
+        - assignedGroupId eq
     state: exact
 
 - name: "get OS service facts"

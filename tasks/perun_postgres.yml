@@ -30,6 +30,7 @@
     session_role: perun
     db: perun
     path_to_script: /tmp/postgres.sql
+    as_single_query: yes
   when: not table_users.query_result[0].exists
 
 - name: "create /etc/cron.d/perundb-backup"

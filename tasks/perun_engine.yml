@@ -167,6 +167,8 @@
     networks_cli_compatible: yes
     networks:
       - name: perun_net
+    network_mode: perun_net
+    container_default_behavior: no_defaults
   register: perun_engine_container
 
 - name: "put container IP into /etc/hosts"

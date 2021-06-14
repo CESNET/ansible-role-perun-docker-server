@@ -105,6 +105,7 @@
     ports:
       - 9000:9000
     mounts: "{{ portainer_mounts }}"
+    container_default_behavior: no_defaults
   register: portainer_container
 
 - name: "login into gitlab docker registry"

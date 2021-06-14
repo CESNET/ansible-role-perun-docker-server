@@ -1,10 +1,19 @@
 ---
-- name:  "Ansible 2.9+ required"
+- name:  "Ansible 2.11+ required"
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.9', '>=')
-    msg: "Required Ansible version is 2.9+"
+      - ansible_version.full is version_compare('2.11', '>=')
+    msg: "Required Ansible version is 4 with 2.11+ (core)"
+  tags: always
+
+- name: "Debian 10 required"
+  assert:
+    that:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_major_version in [ "10" ]
+    msg: "Only Debian 10 is supported, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+  tags: always
 
 - name: "get OS service facts"
   service_facts:
