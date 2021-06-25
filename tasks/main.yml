@@ -62,8 +62,9 @@
   tags:
     - perun_ldap
 
-- name: "OpenLDAP directory server config"
-  import_tasks: perun_ldap_config.yml
+- name: "OpenLDAP Perun specific settings"
+  import_role:
+    name: cesnet.perun_ldap_config
   tags:
     - perun_ldap
     - perun_config
