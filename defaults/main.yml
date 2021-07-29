@@ -118,7 +118,36 @@ perun_oldgui_supportedPasswordNamespaces: ''
 # new GUI common
 perun_ngui_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
-perun_ngui_footer: {}
+perun_ngui_footer:
+  columns:
+    - title_en: ABOUT
+      elements:
+        - link: https://perun-aai.org/
+          label_en: Perun website
+        - link: https://perun-aai.org/team
+          label_en: Perun team
+        - link: https://www.example.org/privacy-notice/
+          label_en: Privacy policy
+    - title_en: HELP
+      elements:
+        - link: https://perun-aai.org/documentation/users-documentation
+          label_en: Documentation
+        - link: https://perun-aai.org/documentation/admin-documentation
+          label_en: API Documentation
+        - dialog: reportIssue
+          label_en: Report issue
+    - title_en: SUPPORT
+      elements:
+        - icon: mail
+          link: 'mailto:perun@example.org'
+          label_en: perun@example.org
+  copyright_items:
+    - name: CESNET
+      url: 'https://www.cesnet.cz/'
+    - name: CERIT-SC
+      url: 'https://www.cerit-sc.cz/'
+  github_releases: 'https://www.github.com/CESNET/perun-web-apps/releases/'
+
 perun_ngui_logo_padding: "2px 2px"
 perun_ngui_logo: "😀"
 perun_ngui_theme: {}
