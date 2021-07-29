@@ -22,13 +22,7 @@
 {% if perun_rpc_group_nameErrorMessage is defined %}
   "groupNameErrorMessage": {{ perun_rpc_group_nameErrorMessage|to_json }},
 {% endif %}
-  "footer_perun_web_web": "https://perun-aai.org/",
-  "footer_perun_team_web": "https://perun-aai.org/team",
-  "footer_privacy_policy_web": "{{ perun_ngui_footer_privacy_policy_web }}",
-  "footer_users_documentation_web": "https://perun-aai.org/documentation/users-documentation",
-  "footer_administrator_documentation": "https://perun-aai.org/documentation/admin-documentation",
-  "footer_support_mail": "{{ perun_email }}",
-  "footer_copyright": {{ perun_ngui_footer_copyright|to_nice_json }},
+  "footer": {{ perun_ngui_footer|to_nice_json }},
   "log_out_enabled": {{ perun_ngui_admin_log_out_enabled }},
   "logo_padding": {{ perun_ngui_logo_padding|to_json }},
   "logo": {{ perun_ngui_logo|to_json }},

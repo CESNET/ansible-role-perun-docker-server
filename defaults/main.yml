@@ -118,10 +118,7 @@ perun_oldgui_supportedPasswordNamespaces: ''
 # new GUI common
 perun_ngui_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
-perun_ngui_footer_privacy_policy_web: "https://www.example.org/privacy-policy/"
-perun_ngui_footer_copyright:
-  - name: CESNET
-    webpage: https://www.cesnet.cz/
+perun_ngui_footer: {}
 perun_ngui_logo_padding: "2px 2px"
 perun_ngui_logo: "😀"
 perun_ngui_theme: {}
