@@ -120,32 +120,14 @@
         group: peruneng
         mode: '0550'
 
-    - name: "use certbot certificates for generic_send"
-      when: perun_use_certbot_certificates
+    - name: "copy host certificates for generic_send"
       copy:
         remote_src: yes
-        src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/privkey.pem"
-        dest: /etc/perun/engine/ssl/perun-send.key
-        owner: peruneng
-        group: peruneng
-        mode: '0550'
-      notify:
-        - "restart perun_engine"
-      loop:
-        - { src: "privkey.pem", dest: "perun-send.key" }
-        - { src: "cert.pem", dest: "perun-send.pem" }
-        - { src: "chain.pem", dest: "perun-send.chain" }
-
-    - name: "use issued certificates for generic_send"
-      when: not perun_use_certbot_certificates
-      copy:
-        src: "{{ perun_instance_hostname }}/{{ item.src }}"
+        src: "/etc/perun/ssl/{{ item.src }}"
         dest: "/etc/perun/engine/ssl/{{ item.dest }}"
         owner: peruneng
         group: peruneng
         mode: '0550'
-      notify:
-        - "restart perun_engine"
       loop:
         - { src: "hostkey.pem", dest: "perun-send.key" }
         - { src: "hostcert.pem", dest: "perun-send.pem" }
