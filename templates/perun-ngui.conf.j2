@@ -64,4 +64,9 @@
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
   Header always set Feature-Policy "microphone 'none'; camera 'none'; geolocation 'none'; payment 'none'"
 
+  # Disable caching for HTML files (our index.html)
+  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{CONTENT_TYPE} == 'text/html'"
+  Header always set Pragma no-cache "expr=%{CONTENT_TYPE} == 'text/html'"
+  Header always set Expires 0 "expr=%{CONTENT_TYPE} == 'text/html'"
+
 </VirtualHost>
