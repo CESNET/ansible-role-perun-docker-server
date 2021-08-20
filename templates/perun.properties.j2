@@ -157,3 +157,7 @@ perun.attributesToKeep={{ perun_rpc_attributesToKeep|join(',') }}
 
 # When set to true, notifications about account linking are send to afffected user 
 perun.sendIdentityAlerts={{ perun_rpc_sendIdentityAlerts }}
+
+# When set to true, finding of similar users will not be triggered during registrar initialization.
+# Therefore, account linking will not be offered to users even when they already have registered some similar accounts.
+perun.findSimilarUsersDisabled={{ perun_rpc_registrar_findSimilarUsers_disabled }}

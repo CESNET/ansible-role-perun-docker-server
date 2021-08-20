@@ -82,6 +82,7 @@ perun_rpc_attributesToKeep:
   - urn:perun:user:attribute-def:def:uid-namespace:*
 perun_rpc_ajp_secret: "xpRrA7UNrT7c"
 perun_rpc_sendIdentityAlerts: 'false'
+perun_rpc_registrar_findSimilarUsers_disabled: 'false'
 
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
@@ -102,7 +103,7 @@ perun_oldgui_cert_hosts:
 perun_oldgui_logoUrl: 'img/logo.png'
 perun_oldgui_nativeLanguage: 'cs,\u010Cesky,Czech'
 perun_oldgui_language_supported: 'cs'
-perun_oldgui_registrar_findSimilarUsers_disabled: 'false'
+perun_oldgui_registrar_findSimilarUsers_disabled: '{{ perun_rpc_registrar_findSimilarUsers_disabled }}'
 perun_oldgui_profile_personal_showAttributes:
   - urn:perun:user:attribute-def:core:displayName
   - urn:perun:user:attribute-def:def:organization
