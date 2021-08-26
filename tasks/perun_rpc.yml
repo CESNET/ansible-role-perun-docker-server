@@ -32,7 +32,7 @@
     owner: perunrpc
     group: perunrpc
     mode: '0440'
-    notify: "restart perun_rpc"
+  notify: "restart perun_rpc"
 
 - name: "create perun-web-gui.properties"
   template:
