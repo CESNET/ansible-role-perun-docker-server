@@ -85,7 +85,8 @@
 # the same time. In this case Trusted facility admin also has rights to set roles Resource admin and Resource self
 # service.
 #
-perun_roles: []
+perun_roles:
+  {{ perun_roles | to_nice_yaml(indent=2) | trim | indent(2) }}
 
 # A list of Perun policies that are loaded to the PerunPoliciesContainer.
 #
@@ -131,8 +132,10 @@ perun_roles: []
 #            - default_policy
 #            - getAllVos_policy
 #
-perun_policies: {}
+perun_policies:
+  {{ perun_policies | to_nice_yaml(indent=2) | trim | indent(2) }}
 
 # A list of Perun management rules that are loaded to the PerunPoliciesContainer.
-perun_roles_management: {}
+perun_roles_management:
+ {{ perun_roles_management | to_nice_yaml(indent=2) | trim | indent(2) }}
 ...
