@@ -116,6 +116,11 @@ perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
 perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 
+#perun-roles.yml
+perun_roles: []
+perun_policies: {}
+perun_roles_management: {}
+
 # new GUI common
 perun_ngui_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
