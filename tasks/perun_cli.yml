@@ -53,7 +53,20 @@
     state: present
   register: perun_cli_image
 
-- name: "command for pruning cli images (they are labelled after v3.25.0)"
-  when: perun_cli_image.changed
-  debug:
-    msg: "docker rmi $(docker images --filter before=registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }} --filter label=org.perun-aai.cli -q)"
+- name: "find old CLI images"
+  command:
+    argv:
+      - "docker"
+      - "images"
+      - "-q"
+      - "--filter"
+      - "before=registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }}"
+      - "--filter"
+      - "label=org.perun-aai.cli"
+  register: oldcliimages
+  changed_when: oldcliimages.stdout_lines
+
+- name: "prune old CLI images"
+  when: oldcliimages.stdout_lines
+  command:
+    argv: "{{ [ 'docker', 'rmi' ] + oldcliimages.stdout_lines }}"
