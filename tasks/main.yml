@@ -7,12 +7,12 @@
     msg: "Required Ansible version is 4 with 2.11+ (core)"
   tags: always
 
-- name: "Debian 10 required"
+- name: "Debian 10 or 11 required"
   assert:
     that:
       - ansible_distribution == "Debian"
-      - ansible_distribution_major_version in [ "10" ]
-    msg: "Only Debian 10 is supported, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+      - ansible_distribution_major_version in [ "10", "11" ]
+    msg: "Only Debian 10 adn 11 is supported, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
   tags: always
 
 - name: "get OS service facts"
