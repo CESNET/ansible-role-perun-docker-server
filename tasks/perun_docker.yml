@@ -28,7 +28,6 @@
     update_cache: yes
 
 - set_fact:
-    docker_version: "5:20.10.1~3-0~debian-buster"
     docker_packages:
       - docker-ce
       - docker-ce-cli
@@ -37,8 +36,7 @@
 - name: "install docker packages"
   apt:
     state: present
-    name: "{{ item }}={{ docker_version }}"
-    force: yes
+    name: "{{ item }}"
   loop: "{{ docker_packages }}"
 
 - name: "hold docker packages from upgrading"
@@ -104,6 +102,7 @@
     command: "-H unix:///var/run/docker.sock --ssl --sslcert {{ perun_certificate_fullchain_file }} --sslkey {{ perun_certificate_key_file }} --admin-password-file {{ perun_certs_dir }}/portainer_admin_password.txt"
     ports:
       - 9000:9000
+    default_host_ip: ''
     mounts: "{{ portainer_mounts }}"
     container_default_behavior: no_defaults
   register: portainer_container

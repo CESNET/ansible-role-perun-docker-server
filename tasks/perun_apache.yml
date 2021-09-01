@@ -190,6 +190,7 @@
     ports:
       - 80:80
       - 443:443
+    default_host_ip: ''
   register: perun_apache_container
 
 - name: "put container IP into /etc/hosts"
