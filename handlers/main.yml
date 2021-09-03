@@ -12,7 +12,7 @@
     state: started
     restart: yes
     container_default_behavior: no_defaults
-  when: perun_apache_container is defined and perun_apache_container.container and not perun_apache_container.changed
+  when: perun_apache_container is defined and perun_apache_container.container is defined and perun_apache_container.container and not perun_apache_container.changed
 
 - name: "restart perun_engine"
   docker_container:
@@ -36,7 +36,7 @@
     state: started
     restart: yes
     container_default_behavior: no_defaults
-  when: portainer_container is defined and portainer_container.container and not portainer_container.changed
+  when: portainer_container is defined and portainer_container.container is defined and portainer_container.container and not portainer_container.changed
 
 - name: "restart ldap"
   service:

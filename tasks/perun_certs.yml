@@ -181,9 +181,11 @@
 - name: "detect perun_apache existence for handler"
   docker_container_info:
     name: perun_apache
+  ignore_errors: yes
   register: perun_apache_container
 
 - name: "detect portainer existence for handler"
   docker_container_info:
     name: portainer
+  ignore_errors: yes
   register: portainer_container
