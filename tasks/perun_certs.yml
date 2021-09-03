@@ -35,42 +35,54 @@
         state: link
         src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/privkey.pem"
         dest: "{{ perun_certificate_key_file }}"
+        force: yes
+      notify:
+        - "restart perun_apache"
+        - "restart portainer"
+        - "restart ldap"
+        - "restart postgres"
 
     - name: "create link to host cert"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/cert.pem"
         dest: "{{ perun_certificate_file }}"
+        force: yes
 
     - name: "create link to host chain"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/chain.pem"
         dest: "{{ perun_certificate_chain_file }}"
+        force: yes
 
     - name: "create link to host full chain"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/fullchain.pem"
         dest: "{{ perun_certificate_fullchain_file }}"
+        force: yes
 
     - name: "create link to ngui key"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/privkey.pem"
         dest: "{{ perun_certs_dir }}/nguikey.pem"
+        force: yes
 
     - name: "create link to ngui cert"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/cert.pem"
         dest: "{{ perun_certs_dir }}/nguicert.pem"
+        force: yes
 
     - name: "create link to ngui chain"
       file:
         state: link
         src: "/etc/letsencrypt/live/{{ perun_ngui_admin_hostname }}/chain.pem"
         dest: "{{ perun_certs_dir }}/nguichain.pem"
+        force: yes
 
 - name: "use issued certificates"
   when: not perun_use_certbot_certificates
@@ -113,6 +125,17 @@
         - "restart ldap"
         - "restart postgres"
 
+    - name: "detect whether full chain is link"
+      stat:
+        path: "{{ perun_certificate_fullchain_file }}"
+      register: fclnk
+
+    - name: "unlink {{ perun_certificate_fullchain_file }}"
+      file:
+        state: absent
+        path: "{{ perun_certificate_fullchain_file }}"
+      when: fclnk.stat.exists and fclnk.stat.islnk
+
     - name: "assemble full chain (for portainer)"
       shell:
         chdir: "{{ perun_certs_dir }}"
@@ -149,3 +172,18 @@
         mode: 0644
       notify:
         - "restart perun_apache"
+
+- name: "prereq for docker_container_info task"
+  apt:
+    name: python3-docker
+    state: present
+
+- name: "detect perun_apache existence for handler"
+  docker_container_info:
+    name: perun_apache
+  register: perun_apache_container
+
+- name: "detect portainer existence for handler"
+  docker_container_info:
+    name: portainer
+  register: portainer_container
