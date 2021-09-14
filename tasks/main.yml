@@ -70,9 +70,7 @@
     ldap_certificate_file: "{{ perun_certificate_file }}"
     ldap_certificate_key_file: "{{ perun_certificate_key_file }}"
     ldap_certificate_chain_file: "{{ perun_certificate_chain_file }}"
-    ldap_access_rules_start: "{{ perun_ldap_access_rules_start }}"
-    ldap_access_rules_additional: "{{ perun_ldap_access_rules_additional }}"
-    ldap_access_rules_end: "{{ perun_ldap_access_rules_end }}"
+    ldap_access_rules_set: no
     ldap_size_limit: "{{ perun_ldap_size_limit }}"
     ldap_master_replica: "{{ perun_ldap_master_replica }}"
     ldap_replication_password: "{{ perun_ldap_replication_password }}"
