@@ -154,7 +154,6 @@ perun_ngui_footer:
       url: 'https://www.cerit-sc.cz/'
   github_releases: 'https://www.github.com/CESNET/perun-web-apps/releases/'
 
-perun_ngui_logo_padding: "2px 2px"
 perun_ngui_logo: "😀"
 perun_ngui_theme: {}
 

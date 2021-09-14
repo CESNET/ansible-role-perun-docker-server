@@ -17,14 +17,13 @@
   "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json }},
   "pwd_reset_base_url": "{{ perun_ngui_admin_pwd_reset_base_url }}",
 {% if perun_rpc_group_nameSecondaryRegex is defined %}
-  "groupNameSecondaryRegex": {{ perun_rpc_group_nameSecondaryRegex|to_json }},
+  "group_name_secondary_regex": {{ perun_rpc_group_nameSecondaryRegex|to_json }},
 {% endif %}
 {% if perun_rpc_group_nameErrorMessage is defined %}
-  "groupNameErrorMessage": {{ perun_rpc_group_nameErrorMessage|to_json }},
+  "group_name_error_message": {{ perun_rpc_group_nameErrorMessage|to_json }},
 {% endif %}
   "footer": {{ perun_ngui_footer|to_nice_json }},
   "log_out_enabled": {{ perun_ngui_admin_log_out_enabled }},
-  "logo_padding": {{ perun_ngui_logo_padding|to_json }},
   "logo": {{ perun_ngui_logo|to_json }},
   "theme": {{ perun_ngui_theme|to_nice_json }},
   "brandings": {{ perun_ngui_admin_brandings|to_nice_json }}
