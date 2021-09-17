@@ -213,7 +213,9 @@ ShibCompatValidUser on
     SSLVerifyClient none
     AuthType basic
     AuthName "Perun RPC"
-    Require valid-user
+    <LimitExcept OPTIONS>
+      Require valid-user
+    </LimitExcept>
     AuthBasicProvider file
     AuthUserFile /etc/perun/apache/perun.passwd
     SetEnvIf _ .* AJP_EXTSOURCE=INTERNAL
