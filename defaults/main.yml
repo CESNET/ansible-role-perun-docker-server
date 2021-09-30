@@ -159,6 +159,7 @@ perun_ngui_theme: {}
 
 # new GUI Admin
 perun_ngui_admin_hostname: "perun.aai.example.org"
+perun_ngui_admin_tls_cert_same_as_host: yes
 perun_ngui_admin_document_title: "Perun Next Generation Web UI"
 perun_ngui_admin_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_admin_oauth_callback: "https://{{ perun_ngui_admin_hostname }}/api-callback"
@@ -176,9 +177,20 @@ perun_ngui_admin_brandings: "{ '{{ perun_ngui_admin_hostname}}': {} }" #Ansible 
 perun_ngui_admin_apache_special_config1: ""
 
 # perun-apps-config.yml
-perun_ngui_profile_hostname:  "{{ perun_ngui_admin_hostname }}"
-perun_ngui_pwdreset_hostname: "{{ perun_ngui_admin_hostname }}"
-perun_ngui_pub_hostname: "{{ perun_ngui_admin_hostname }}"
+perun_ngui_profile_enabled: no
+perun_ngui_profile_hostname: profile.aai.example.org
+perun_ngui_profile_tls_cert_same_as_host: yes
+perun_ngui_pwdreset_enabled: no
+perun_ngui_pwdreset_hostname: pwdreset.aai.example.org
+perun_ngui_pwdreset_tls_cert_same_as_host: yes
+perun_ngui_publications_enabled: no
+perun_ngui_publications_hostname: publications.aai.example.org
+perun_ngui_publications_tls_cert_same_as_host: yes
+
+# virtual host for API
+perun_api_enabled: no
+perun_api_hostname: perun-api.aai.example.org
+perun_api_tls_cert_same_as_host: yes
 
 # perun-registrar-lib.properties
 perun_registrar_secretKey: "test"
