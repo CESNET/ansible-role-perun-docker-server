@@ -78,6 +78,13 @@
   tags:
     - perun_ldap
 
+- name: "prepare vars for perun_config"
+  import_tasks: perun_config.yml
+  tags:
+    - perun_config
+    - perun_rpc
+    - perun_ldapc
+
 - name: "OpenLDAP Perun specific settings"
   import_role:
     name: cesnet.perun_ldap_config

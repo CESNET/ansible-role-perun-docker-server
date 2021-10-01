@@ -66,7 +66,7 @@ perun_rpc_accountActivation_validationWindow: 72
 perun_rpc_instance_name: 'TESTPERUN'
 perun_rpc_instance_id: 'TP1'
 perun_rpc_proxy_idps: ""
-perun_rpc_cors_domains: [ "https://{{ perun_ngui_admin_hostname }}" ]
+perun_rpc_cors_domains: []
 perun_rpc_oidc_issuers:
   - iss: "https://login.example.org/oidc/"
     extsource_name: "https://login.example.org/idp/"
