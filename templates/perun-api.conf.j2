@@ -1,0 +1,145 @@
+{{ ansible_managed | comment }}
+
+####
+# Perun RPC API without XSS protection
+####
+
+<VirtualHost *:80>
+    ServerAdmin {{ perun_email }}
+    ServerName {{ perun_api_hostname }}
+    Redirect / https://{{ perun_api_hostname }}/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerAdmin {{ perun_email }}
+    ServerName {{ perun_api_hostname }}
+
+    DocumentRoot /var/www/html
+    <Directory "/var/www/html">
+        Options -Indexes +FollowSymLinks -MultiViews
+        Require all granted
+    </Directory>
+
+    # GENERIC ERRORS
+    ErrorDocument 401 /maintenance/401.html
+    ErrorDocument 403 /maintenance/403.html
+    ErrorDocument 404 /maintenance/404.html
+    ErrorDocument 500 /maintenance/500.html
+    ErrorDocument 503 /maintenance/503.html
+
+    RewriteEngine On
+
+    ProxyIOBufferSize 65536
+
+    SSLEngine on
+    SSLCertificateFile /etc/perun/ssl/apicert.pem
+    SSLCertificateKeyFile /etc/perun/ssl/apikey.pem
+    SSLCertificateChainFile /etc/perun/ssl/apichain.pem
+
+    LogLevel warn ssl:warn rewrite:warn
+
+    #### SECURITY
+
+    # HTTP tracing
+    TraceEnable off
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-frame-options
+    Header always set X-Frame-Options SAMEORIGIN
+    # https://scotthelme.co.uk/hsts-the-missing-link-in-tls/
+    Header always set Strict-Transport-Security "max-age=63072000"
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-content-type-options
+    Header always set X-Content-Type-Options nosniff
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
+    Header always set X-XSS-Protection "1; mode=block"
+    # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+    # Disable browser caching for our RPC resources
+    Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+    Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+    Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+
+    ####################################
+    ##     RPC                      ####
+    ####################################
+
+    <Proxy "ajp://perun_rpc:8009/">
+        ProxySet secret={{ perun_rpc_ajp_secret }}
+    </Proxy>
+
+    RewriteRule ^/(.*)/rpc/(.*)$ ajp://perun_rpc:8009/perun-rpc/$2 [P,QSA]
+
+    ####################################
+    ##     AuthN Methods            ####
+    ####################################
+
+    # HTTP Basic Authentication with username and password
+    <LocationMatch "^/ba/">
+        Options FollowSymLinks
+        SSLRequireSSL
+        SSLVerifyClient none
+        AuthType basic
+        AuthName "Perun RPC"
+        <LimitExcept OPTIONS>
+            Require valid-user
+        </LimitExcept>
+        AuthBasicProvider file
+        AuthUserFile /etc/perun/apache/perun.passwd
+        SetEnvIf _ .* AJP_EXTSOURCE=INTERNAL
+        SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceInternal
+        SetEnvIf _ .* AJP_EXTSOURCELOA=0
+    </LocationMatch>
+
+{% if perun_apache_non_enabled %}
+    <LocationMatch "^/non/">
+        Options FollowSymLinks
+        Require all granted
+        SSLVerifyClient none
+        SetEnvIf _ .* AJP_EXTSOURCE=LOCAL
+        SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceInternal
+        SetEnvIf _ .* AJP_EXTSOURCELOA=0
+    </LocationMatch>
+{% endif %}
+
+{% if perun_apache_kerberos_enabled %}
+    # authentication with Kerberos
+{% for krbrealm in perun_apache_kerberos_realms %}
+    <LocationMatch "{{ krbrealm.urlmatch }}">
+        Options FollowSymLinks
+        SSLRequireSSL
+        AuthName "Kerberos {{ krbrealm.name }}"
+        Require valid-user
+        AuthType GSSAPI
+        # https://github.com/gssapi/mod_auth_gssapi#configuration-directives
+        GssapiSSLonly On
+        GssapiCredStore keytab:/etc/perun/apache/krb5.http.keytab
+        GssapiBasicAuthMech krb5
+        GssapiBasicAuth On
+        GssapiLocalName On
+        GssapiNegotiateOnce On
+        BrowserMatch Windows gssapi-no-negotiate
+        SetEnvIf _ .* AJP_EXTSOURCE={{ krbrealm.name }}
+        SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceKerberos
+        SetEnvIf _ .* AJP_EXTSOURCELOA=0
+    </LocationMatch>
+{% endfor %}
+{% endif %}
+
+    ###########################
+    # OAuth2/OIDC             #
+    ###########################
+
+    OIDCOAuthIntrospectionEndpoint    {{ perun_apache_oauth_introspection_url }}
+    OIDCOAuthClientID      {{ perun_apache_oauth_client_id }}
+    OIDCOAuthClientSecret  {{ perun_apache_oauth_client_secret }}
+    OIDCOAuthAcceptTokenAs header
+    OIDCOAuthAcceptTokenAs post
+    OIDCOAuthAcceptTokenAs query
+    OIDCCryptoPassphrase tcXtrGbIlRWXkrT7
+    OIDCCacheEncrypt On
+    <LocationMatch "^/oauth/">
+        SSLRequireSSL
+        Authtype oauth20
+        Require valid-user
+    </LocationMatch>
+
+</VirtualHost>

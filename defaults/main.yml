@@ -189,7 +189,7 @@ perun_ngui_publications_tls_cert_same_as_host: yes
 
 # virtual host for API
 perun_api_enabled: no
-perun_api_hostname: perun-api.aai.example.org
+perun_api_hostname: "{{ perun_rpc_hostname }}"
 perun_api_tls_cert_same_as_host: yes
 
 # perun-registrar-lib.properties

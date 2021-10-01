@@ -85,6 +85,47 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "create /etc/perun/apache/sites-enabled/perun-api.conf"
+  when: perun_api_enabled
+  template:
+    src: perun-api.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-api.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"
+  when: perun_ngui_profile_enabled
+  template:
+    src: perun-profile.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-profile.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-pwdreset.conf"
+  when: perun_ngui_pwdreset_enabled
+  template:
+    src: perun-pwdreset.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-pwdreset.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-publications.conf"
+  when: perun_ngui_publications_enabled
+  template:
+    src: perun-publications.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-publications.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+
 - name: "set Kerberos keytab"
   copy:
     src: "{{ perun_instance_hostname }}/krb5.http.keytab"
