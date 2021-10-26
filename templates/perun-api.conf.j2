@@ -106,17 +106,16 @@
     <LocationMatch "{{ krbrealm.urlmatch }}">
         Options FollowSymLinks
         SSLRequireSSL
+        AuthType KerberosV5
         AuthName "Kerberos {{ krbrealm.name }}"
         Require valid-user
-        AuthType GSSAPI
-        # https://github.com/gssapi/mod_auth_gssapi#configuration-directives
-        GssapiSSLonly On
-        GssapiCredStore keytab:/etc/perun/apache/krb5.http.keytab
-        GssapiBasicAuthMech krb5
-        GssapiBasicAuth On
-        GssapiLocalName On
-        GssapiNegotiateOnce On
-        BrowserMatch Windows gssapi-no-negotiate
+        Krb5Keytab /etc/perun/apache/krb5.http.keytab
+        KrbAuthRealms {{ krbrealm.name }}
+        KrbSaveCredentials Off
+        KrbMethodNegotiate On
+        KrbMethodK5Passwd On
+        KrbServiceName Any
+        KrbVerifyKDC Off
         SetEnvIf _ .* AJP_EXTSOURCE={{ krbrealm.name }}
         SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceKerberos
         SetEnvIf _ .* AJP_EXTSOURCELOA=0
