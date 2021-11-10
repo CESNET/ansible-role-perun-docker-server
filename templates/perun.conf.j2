@@ -54,8 +54,11 @@ ShibCompatValidUser on
   SSLOptions +LegacyDNStringFormat
 {% endif %}
 
-  # Note: buffer size must be set also in Tomcat and must be lower then this value.
-  ProxyIOBufferSize 65536
+  # Increasing limits on HTTP headers. Connector packetSize in Tomcat must be set to bigger value than ProxyIOBufferSize here.
+  # https://httpd.apache.org/docs/2.4/mod/core.html#limitrequestfieldsize
+  LimitRequestFieldSize 65000
+  # https://httpd.apache.org/docs/2.4/mod/mod_proxy.html#proxyiobuffersize
+  ProxyIOBufferSize 65520
 
   #### SECURITY
 
