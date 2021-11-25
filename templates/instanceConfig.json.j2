@@ -11,7 +11,8 @@
     "oauth_silent_redirect_uri": "{{ perun_ngui_admin_oauth_silent_redirect_uri }}",
     "oauth_load_user_info": {{ perun_ngui_admin_oauth_load_user_info }},
     "oauth_scopes": "{{ perun_ngui_admin_oauth_scopes }}",
-    "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}"
+    "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}",
+    "oauth_offline_access_consent_prompt": "{{ perun_ngui_oauth_offline_access_consent_prompt }}"
   },
   "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json }},
   "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json }},
