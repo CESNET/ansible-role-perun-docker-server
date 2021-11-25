@@ -167,8 +167,8 @@ perun_ngui_admin_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_admin_ho
 perun_ngui_admin_oauth_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/api-callback"
 perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/silent-refresh.html"
 perun_ngui_admin_oauth_load_user_info: "false"
-perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin"
-perun_ngui_admin_oauth_response_type: "id_token token"
+perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin offline_access"
+perun_ngui_admin_oauth_response_type: "code"
 perun_ngui_admin_login_namespace_attributes: []
 perun_ngui_admin_password_namespace_attributes: []
 perun_ngui_admin_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
