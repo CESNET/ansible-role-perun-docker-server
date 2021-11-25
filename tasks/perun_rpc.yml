@@ -105,17 +105,17 @@
       - "perun-extSources.xml"
   notify: "restart perun_rpc"
 
-- name: "create sponsored-accounts-config.yml"
+- name: "create login-namespaces-rules-config.yml"
   copy:
     src: "{{ lookup('first_found', findme) }}"
-    dest: /etc/perun/rpc/sponsored-accounts-config.yml
+    dest: /etc/perun/rpc/login-namespaces-rules-config.yml
     owner: perunrpc
     group: perunrpc
     mode: 0440
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/sponsored-accounts-config.yml"
-      - "sponsored-accounts-config.yml"
+      - "{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
+      - "login-namespaces-rules-config.yml"
   notify: "restart perun_rpc"
 
 - name: "create directory /etc/perun/rpc/modules/"
