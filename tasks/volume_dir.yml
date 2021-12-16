@@ -21,12 +21,12 @@
     path: "{{ volume.link }}"
     force: yes
 
-- name: "make {{ volume.name }} writable by {{ volume.owner }}"
+- name: "set {{ volume.name }} owner {{ volume.owner }} and group {{ volume.group }}"
   file:
     state: directory
     path: "{{ vlm.volume.Mountpoint }}"
     owner: "{{ volume.owner }}"
-    group: "{{ volume.owner }}"
+    group: "{{ volume.group }}"
     mode: "{{ volume.mode }}"
 
 - name: "prevent changing permissions when mounted to a container"
@@ -34,4 +34,4 @@
     dest: "{{ vlm.volume.Mountpoint }}/README.txt"
     content: "this Docker volume is linked from {{ volume.link }} "
     owner: "{{ volume.owner }}"
-    group: "{{ volume.owner }}"
+    group: "{{ volume.group }}"

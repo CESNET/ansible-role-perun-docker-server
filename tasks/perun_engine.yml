@@ -2,7 +2,7 @@
   template:
     src: perun-engine.properties.j2
     dest: /etc/perun/engine/perun-engine.properties
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: 0440
   notify: "restart perun_engine"
@@ -11,7 +11,7 @@
   template:
     src: logback-engine.xml.j2
     dest: /etc/perun/engine/logback-engine.xml
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: 0440
 
@@ -19,7 +19,7 @@
   template:
     src: perun-engine.j2
     dest: /etc/perun/engine/perun-engine
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: 0440
   notify: "restart perun_engine"
@@ -67,7 +67,7 @@
   copy:
     src: "{{ hs.stat.path }}"
     dest: /etc/perun/engine/
-    owner: peruneng
+    owner: root
     group: peruneng
     directory_mode: '0550'
     mode: '0440'
@@ -76,7 +76,7 @@
   file:
     path: /etc/perun/engine/gen-local
     state: directory
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: '0550'
 
@@ -84,7 +84,7 @@
   copy:
     src: "{{ item }}"
     dest: /etc/perun/engine/gen-local/
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: '0550'
   with_fileglob:
@@ -95,7 +95,7 @@
   file:
     path: /etc/perun/engine/send-local
     state: directory
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: '0550'
 
@@ -103,7 +103,7 @@
   copy:
     src: "{{ item }}"
     dest: /etc/perun/engine/send-local/
-    owner: peruneng
+    owner: root
     group: peruneng
     mode: '0550'
   with_fileglob:
@@ -116,7 +116,7 @@
       file:
         state: directory
         path: /etc/perun/engine/ssl
-        owner: peruneng
+        owner: root
         group: peruneng
         mode: '0550'
 
@@ -125,7 +125,7 @@
         remote_src: yes
         src: "/etc/perun/ssl/{{ item.src }}"
         dest: "/etc/perun/engine/ssl/{{ item.dest }}"
-        owner: peruneng
+        owner: root
         group: peruneng
         mode: '0550'
       loop:

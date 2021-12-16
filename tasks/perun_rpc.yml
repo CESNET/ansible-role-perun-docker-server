@@ -2,7 +2,7 @@
   template:
     src: server.xml.j2
     dest: /etc/perun/rpc/server.xml
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -11,7 +11,7 @@
   template:
     src: jdbc.properties.j2
     dest: /etc/perun/rpc/jdbc.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -20,7 +20,7 @@
   template:
     src: perun-apps-config.yml.j2
     dest: /etc/perun/rpc/perun-apps-config.yml
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -29,7 +29,7 @@
   template:
     src: perun-roles.yml.j2
     dest: /etc/perun/rpc/perun-roles.yml
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -38,7 +38,7 @@
   template:
     src: perun-web-gui.properties.j2
     dest: /etc/perun/rpc/perun-web-gui.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -47,7 +47,7 @@
   template:
     src: perun.properties.j2
     dest: /etc/perun/rpc/perun.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   notify: "restart perun_rpc"
@@ -56,7 +56,7 @@
   template:
     src: logback.xml.j2
     dest: /etc/perun/rpc/logback.xml
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
 
@@ -64,7 +64,7 @@
   template:
     src: perun-cabinet.properties.j2
     dest: /etc/perun/rpc/perun-cabinet.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
 
@@ -72,7 +72,7 @@
   template:
     src: perun-registrar-lib.properties.j2
     dest: /etc/perun/rpc/perun-registrar-lib.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
 
@@ -80,7 +80,7 @@
   template:
     src: perun-dispatcher.properties.j2
     dest: /etc/perun/rpc/perun-dispatcher.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
 
@@ -88,7 +88,7 @@
   template:
     src: perun-notification.properties.j2
     dest: /etc/perun/rpc/perun-notification.properties
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
 
@@ -96,7 +96,7 @@
   copy:
     src: "{{ lookup('first_found', findme) }}"
     dest: "/etc/perun/rpc/perun-extSources.xml"
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   vars:
@@ -109,7 +109,7 @@
   copy:
     src: "{{ lookup('first_found', findme) }}"
     dest: /etc/perun/rpc/login-namespaces-rules-config.yml
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: 0440
   vars:
@@ -122,15 +122,15 @@
   file:
     path: /etc/perun/rpc/modules
     state: directory
-    owner: perunrpc
+    owner: root
     group: perunrpc
-    mode: '0755'
+    mode: '0550'
 
 - name: "create perun modules"
   copy:
     src: "{{ item }}"
     dest: "/etc/perun/rpc/modules/"
-    owner: perunrpc
+    owner: root
     group: perunrpc
     mode: '0440'
   with_fileglob:
@@ -148,7 +148,7 @@
   copy:
     src: "{{ rpcetc.stat.path }}"
     dest: /etc/perun/rpc/
-    owner: perunrpc
+    owner: root
     group: perunrpc
     directory_mode: '0550'
     mode: '0440'

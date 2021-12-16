@@ -2,7 +2,7 @@
   template:
     src: perun-ldapc.properties.j2
     dest: /etc/perun/ldapc/perun-ldapc.properties
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   notify: "restart perun_ldapc"
@@ -12,7 +12,7 @@
   template:
     src: jdbc.properties.j2
     dest: /etc/perun/ldapc/jdbc.properties
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   notify: "restart perun_ldapc"
@@ -21,7 +21,7 @@
   template:
     src: perun.properties.j2
     dest: /etc/perun/ldapc/perun.properties
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   notify: "restart perun_ldapc"
@@ -30,7 +30,7 @@
   template:
     src: perun-apps-config.yml.j2
     dest: /etc/perun/ldapc/perun-apps-config.yml
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: '0440'
   notify: "restart perun_ldapc"
@@ -39,7 +39,7 @@
   template:
     src: perun-roles.yml.j2
     dest: /etc/perun/ldapc/perun-roles.yml
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   notify: "restart perun_ldapc"
@@ -48,7 +48,7 @@
   copy:
     src: "{{ lookup('first_found', findme) }}"
     dest: /etc/perun/ldapc/login-namespaces-rules-config.yml
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   vars:
@@ -61,7 +61,7 @@
   template:
     src: logback-ldapc.xml.j2
     dest: /etc/perun/ldapc/logback-ldapc.xml
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
 
@@ -69,7 +69,7 @@
   template:
     src: perun-ldapc.j2
     dest: /etc/perun/ldapc/perun-ldapc
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
 
@@ -77,7 +77,7 @@
   copy:
     src: "{{ lookup('first_found', findme) }}"
     dest: /etc/perun/ldapc/perun-ldapc-attributes.xml
-    owner: perunldc
+    owner: root
     group: perunldc
     mode: 0440
   vars:

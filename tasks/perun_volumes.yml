@@ -11,13 +11,13 @@
       tags:
         - perun_volumes
   loop:
-    - { name: 'perun_logs', link: "/var/log/perun", owner: perun, mode: '1777' }
-    - { name: 'perunrpc_home', link: "/home/perunrpc", owner: perunrpc, mode: '770' }
-    - { name: 'peruneng_home', link: "/home/peruneng", owner: peruneng, mode: '770' }
-    - { name: 'perunldc_home', link: "/home/perunldc", owner: perunldc, mode: '770' }
-    - { name: 'perunrpc_etc',  link: "/etc/perun/rpc", owner: perunrpc, mode: '770' }
-    - { name: 'peruneng_etc',  link: "/etc/perun/engine", owner: peruneng, mode: '770' }
-    - { name: 'perunldc_etc',  link: "/etc/perun/ldapc", owner: perunldc, mode: '770' }
+    - { name: 'perun_logs', link: "/var/log/perun", owner: perun, group: perun, mode: '1777' }
+    - { name: 'perunrpc_home', link: "/home/perunrpc", owner: perunrpc, group: perunrpc, mode: '770' }
+    - { name: 'peruneng_home', link: "/home/peruneng", owner: peruneng, group: peruneng, mode: '770' }
+    - { name: 'perunldc_home', link: "/home/perunldc", owner: perunldc, group: perunldc, mode: '770' }
+    - { name: 'perunrpc_etc',  link: "/etc/perun/rpc", owner: root, group: perunrpc, mode: '550' }
+    - { name: 'peruneng_etc',  link: "/etc/perun/engine", owner: root, group: peruneng, mode: '550' }
+    - { name: 'perunldc_etc',  link: "/etc/perun/ldapc", owner: root, group: perunldc, mode: '550' }
   loop_control:
     loop_var: volume
     label: "{{ volume.name }}"
