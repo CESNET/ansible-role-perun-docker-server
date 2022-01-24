@@ -196,7 +196,8 @@
       - name: perun_net
     network_mode: perun_net
     # limit to max 60% of host memory, no swap
-    # check with "docker exec -it perun_rpc bash ; jcmd 1 VM.flags" the value of -XX:MaxHeapSize
+    # check with "docker exec -it perun_rpc jcmd 1 VM.flags" the value of -XX:MaxRAM
+    # JVM then uses -XX:MaxRAMPercentage to compute -XX:MaxHeapSize
     memory: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     memory_swap: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     container_default_behavior: no_defaults
