@@ -66,6 +66,12 @@
     src: instanceConfig.json.j2
     dest: /etc/perun/apache/instanceConfig.json
 
+- name: "generate /etc/perun/apache/profileInstanceConfig.json"
+  when: perun_ngui_profile_enabled
+  template:
+    src: profileInstanceConfig.json.j2
+    dest: /etc/perun/apache/profileInstanceConfig.json
+
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
     src: perun.conf.j2
