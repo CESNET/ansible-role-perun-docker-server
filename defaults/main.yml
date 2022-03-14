@@ -54,6 +54,7 @@ perun_rpc_alternativePasswordManager_program: ""
 perun_rpc_native_language: 'cs,Česky,Czech'
 perun_rpc_userExtSources_persistent: "PERUN;"
 perun_rpc_extsources_multiple_identifiers: ""
+perun_rpc_lookup_user_by_identifiers_and_extSourceLogin: 'false'
 perun_rpc_defaultLoa_idp: "2"
 perun_rpc_recaptcha_privatekey: '6Lf0eUYUAAAAAIBxpRrA7UNrT7czQ28IoH9yiDBE'
 perun_rpc_mailchange_secretKey: "test"
