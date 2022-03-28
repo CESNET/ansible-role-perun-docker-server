@@ -178,11 +178,70 @@ perun_ngui_admin_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-r
 perun_ngui_admin_log_out_enabled: true
 perun_ngui_admin_brandings: "{ '{{ perun_ngui_admin_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
 perun_ngui_admin_apache_special_config1: ""
+perun_ngui_admin_instance_favicon: false
 
-# perun-apps-config.yml
+#new GUI Profile
 perun_ngui_profile_enabled: no
 perun_ngui_profile_hostname: profile.aai.example.org
 perun_ngui_profile_tls_cert_same_as_host: yes
+perun_ngui_profile_document_title: "User Profile"
+perun_ngui_profile_instance_favicon: false
+perun_ngui_profile_auto_oauth_redirect: true
+perun_ngui_profile_supported_languages: ['en']
+perun_ngui_profile_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/api-callback"
+perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
+perun_ngui_profile_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
+perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
+perun_ngui_profile_oauth_scopes: "openid profile perun_api perun_admin offline_access"
+perun_ngui_profile_oauth_response_type: "code"
+perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_profile_password_namespace_attributes: []
+perun_ngui_profile_consolidator_base_url: "https://{{ perun_rpc_hostname }}/fed/ic/"
+perun_ngui_profile_registrar_base_url: "https://{{ perun_rpc_hostname }}/fed/registrar/"
+perun_ngui_profile_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
+perun_ngui_profile_page_attributes: [
+  {
+    "friendly_name": "organization",
+    "display_name_en": "Organization",
+    "display_name_cs": "Organizace",
+    "tooltip_en": "",
+    "tooltip_cs": ""
+  },
+  {
+    "friendly_name": "preferredLanguage",
+    "display_name_en": "Preferred language",
+    "display_name_cs": "Preferovaný jazyk",
+    "tooltip_en": "",
+    "tooltip_cs": ""
+  },
+  {
+    "friendly_name": "preferredMail",
+    "display_name_en": "Preferred mail",
+    "display_name_cs": "Preferovaný mail",
+    "tooltip_en": "",
+    "tooltip_cs": ""
+  }
+]
+perun_ngui_profile_mfa: {}
+perun_ngui_profile_display_identity_certificates: true
+perun_ngui_profile_external_services: []
+perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'settings', 'ssh_keys']
+perun_ngui_profile_custom_labels: []
+perun_ngui_profile_header_label_en: "User Profile"
+perun_ngui_profile_header_label_cs: "Uživatelský Profil"
+perun_ngui_profile_admin_gui_label_en: "IAM Administration"
+perun_ngui_profile_admin_gui_label_cs: "Správa IAM"
+perun_ngui_profile_link_to_admin_gui_by_roles: []
+perun_ngui_profile_preferred_unix_group_names: []
+perun_ngui_profile_footer: '{{ perun_ngui_footer }}'
+perun_ngui_profile_theme: '{{ perun_ngui_theme }}'
+perun_ngui_profile_log_out_enabled: true
+perun_ngui_profile_logo_padding: ""
+perun_ngui_profile_logo: '{{ perun_ngui_logo }}'
+perun_ngui_profile_brandings: "{ '{{ perun_ngui_profile_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
+
+# perun-apps-config.yml
 perun_ngui_pwdreset_enabled: no
 perun_ngui_pwdreset_hostname: pwdreset.aai.example.org
 perun_ngui_pwdreset_tls_cert_same_as_host: yes
