@@ -191,9 +191,9 @@ perun_ngui_profile_supported_languages: ['en']
 perun_ngui_profile_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/api-callback"
 perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_profile_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
+perun_ngui_profile_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_profile_hostname }}"
 perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
-perun_ngui_profile_oauth_scopes: "openid profile perun_api perun_admin offline_access"
+perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_profile_password_namespace_attributes: []
@@ -240,6 +240,42 @@ perun_ngui_profile_log_out_enabled: true
 perun_ngui_profile_logo_padding: ""
 perun_ngui_profile_logo: '{{ perun_ngui_logo }}'
 perun_ngui_profile_brandings: "{ '{{ perun_ngui_profile_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
+# remove this property when url to linker is retrieved from backend
+perun_ngui_profile_link_to_linker: "linker.aai.example.org"
+
+#new GUI Consolidator
+
+perun_ngui_consolidator_enabled: no
+perun_ngui_consolidator_hostname: "perun.aai.example.org"
+perun_ngui_consolidator_tls_cert_same_as_host: yes
+perun_ngui_consolidator_document_title: "Consolidator"
+perun_ngui_consolidator_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
+perun_ngui_consolidator_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_consolidator_oauth_callback: "https://{{ perun_ngui_consolidator_hostname }}/api-callback"
+perun_ngui_consolidator_oauth_redirect_uri: "https://{{ perun_ngui_consolidator_hostname }}/api-callback"
+perun_ngui_consolidator_oauth_load_user_info: true
+perun_ngui_consolidator_oauth_scopes: "openid profile perun_api offline_access"
+perun_ngui_consolidator_oauth_response_type: "code"
+perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
+perun_ngui_consolidator_instance_favicon: false
+perun_ngui_consolidator_link_to_linker: "linker.aai.example.org"
+
+#new GUI Linker
+
+perun_ngui_linker_enabled: no
+perun_ngui_linker_hostname: "perun.aai.example.org"
+perun_ngui_linker_tls_cert_same_as_host: yes
+perun_ngui_linker_document_title: "Linker"
+perun_ngui_linker_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
+perun_ngui_linker_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_linker_oauth_callback: "https://{{ perun_ngui_linker_hostname }}/api-callback"
+perun_ngui_linker_oauth_redirect_uri: "https://{{ perun_ngui_linker_hostname }}/api-callback"
+perun_ngui_linker_oauth_load_user_info: true
+perun_ngui_linker_oauth_scopes: "openid profile perun_api offline_access"
+perun_ngui_linker_oauth_response_type: "code"
+perun_ngui_linker_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
+perun_ngui_linker_instance_favicon: false
+
 
 # perun-apps-config.yml
 perun_ngui_pwdreset_enabled: no

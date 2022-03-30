@@ -29,6 +29,14 @@
         hostname: perun_ngui_publications_hostname
         prefix: pubs
         same: perun_ngui_publications_tls_cert_same_as_host
+      - cond: perun_ngui_consolidator_enabled
+        hostname: perun_ngui_consolidator_hostname
+        prefix: consolidator
+        same: perun_ngui_consolidator_tls_cert_same_as_host
+      - cond: perun_ngui_linker_enabled
+        hostname: perun_ngui_linker_hostname
+        prefix: linker
+        same: perun_ngui_linker_tls_cert_same_as_host
 
 - name: "use certbot certificates"
   when: perun_use_certbot_certificates
