@@ -1,0 +1,22 @@
+{
+  "config": "{{ perun_ngui_consolidator_hostname }}",
+  "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
+  "oidc_client" : {
+      "oauth_authority": "{{ perun_ngui_consolidator_oauth_authority }}",
+      "oauth_callback": "{{ perun_ngui_consolidator_oauth_callback }}",
+      "oauth_client_id": "{{ perun_ngui_consolidator_client_id }}",
+      "oauth_redirect_uri": "{{ perun_ngui_consolidator_oauth_redirect_uri }}",
+      "oauth_load_user_info": {{ perun_ngui_consolidator_oauth_load_user_info|bool|to_json }},
+      "oauth_scopes": "{{ perun_ngui_consolidator_oauth_scopes }}",
+      "oauth_response_type": "{{ perun_ngui_consolidator_oauth_response_type }}",
+      "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }},
+      "user_info_endpoint_url": "{{ perun_ngui_consolidator_user_info_endpoint_url }}"
+    },
+  "document_title": "{{ perun_ngui_consolidator_document_title }}",
+  "instance_favicon": {{ perun_ngui_consolidator_instance_favicon|to_json }},
+  "linker_url": "{{ perun_ngui_consolidator_link_to_linker }}",
+  "support_mail": "{{ perun_email }}",
+  "footer": {{ perun_ngui_footer|to_nice_json }},
+  "logo": {{ perun_ngui_logo|to_json }},
+  "theme": {{ perun_ngui_theme|to_nice_json }}
+}

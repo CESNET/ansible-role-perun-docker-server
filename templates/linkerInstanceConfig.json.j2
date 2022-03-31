@@ -1,0 +1,18 @@
+{
+  "config": "{{ perun_ngui_linker_hostname }}",
+  "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
+  "oidc_client" : {
+      "oauth_authority": "{{ perun_ngui_linker_oauth_authority }}",
+      "oauth_callback": "{{ perun_ngui_linker_oauth_callback }}",
+      "oauth_client_id": "{{ perun_ngui_linker_client_id }}",
+      "oauth_redirect_uri": "{{ perun_ngui_linker_oauth_redirect_uri }}",
+      "oauth_load_user_info": {{ perun_ngui_linker_oauth_load_user_info|bool|to_json }},
+      "oauth_scopes": "{{ perun_ngui_linker_oauth_scopes }}",
+      "oauth_response_type": "{{ perun_ngui_linker_oauth_response_type }}",
+      "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }},
+      "user_info_endpoint_url": "{{ perun_ngui_linker_user_info_endpoint_url }}"
+    },
+  "document_title": "{{ perun_ngui_linker_document_title }}",
+  "instance_favicon": {{ perun_ngui_linker_instance_favicon|to_json }},
+  "support_mail": "{{ perun_email }}",
+}

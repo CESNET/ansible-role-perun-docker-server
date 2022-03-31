@@ -59,7 +59,7 @@
   with_fileglob:
     - "{{ perun_instance_hostname }}/img/*"
 
-# docs at https://github.com/CESNET/perun-web-apps/wiki/Description-of-the-configuration-file
+# docs at https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications
 - name: "generate /etc/perun/apache/instanceConfig.json"
   when: perun_ngui_enabled
   template:
@@ -71,6 +71,18 @@
   template:
     src: profileInstanceConfig.json.j2
     dest: /etc/perun/apache/profileInstanceConfig.json
+
+- name: "generate /etc/perun/apache/consolidatorInstanceConfig.json"
+  when: perun_ngui_consolidator_enabled
+  template:
+    src: consolidatorInstanceConfig.json.j2
+    dest: /etc/perun/apache/consolidatorInstanceConfig.json
+
+- name: "generate /etc/perun/apache/linkerInstanceConfig.json"
+  when: perun_ngui_linker_enabled
+  template:
+    src: linkerInstanceConfig.json.j2
+    dest: /etc/perun/apache/linkerInstanceConfig.json
 
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
@@ -126,6 +138,26 @@
   template:
     src: perun-publications.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-publications.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-consolidator.conf"
+  when: perun_ngui_consolidator_enabled
+  template:
+    src: perun-consolidator.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-consolidator.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-linker.conf"
+  when: perun_ngui_linker_enabled
+  template:
+    src: perun-linker.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-linker.conf
     owner: root
     group: root
     mode: '0400'

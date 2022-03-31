@@ -20,6 +20,16 @@
   set_fact:
     perun_rpc_cors_domains: "{{ perun_rpc_cors_domains + [ 'https://' + perun_ngui_publications_hostname ] }}"
 
+- name: "add {{ 'https://' + perun_ngui_consolidator_hostname }} to CORS domains"
+  when: perun_ngui_consolidator_enabled and ('https://' + perun_ngui_consolidator_hostname) not in perun_rpc_cors_domains
+  set_fact:
+    perun_rpc_cors_domains: "{{ perun_rpc_cors_domains + [ 'https://' + perun_ngui_consolidator_hostname ] }}"
+
+- name: "add {{ 'https://' + perun_ngui_linker_hostname }} to CORS domains"
+  when: perun_ngui_linker_enabled and ('https://' + perun_ngui_linker_hostname) not in perun_rpc_cors_domains
+  set_fact:
+    perun_rpc_cors_domains: "{{ perun_rpc_cors_domains + [ 'https://' + perun_ngui_linker_hostname ] }}"
+
 - name: "CORS domains are:"
   debug:
     var: perun_rpc_cors_domains

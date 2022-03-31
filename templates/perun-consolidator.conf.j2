@@ -1,0 +1,63 @@
+{{ ansible_managed | comment }}
+
+####
+# Angular consolidator
+####
+
+<VirtualHost *:80>
+  ServerAdmin {{ perun_email }}
+  ServerName {{ perun_ngui_consolidator_hostname }}
+  Redirect / https://{{ perun_ngui_consolidator_hostname }}/
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerAdmin {{ perun_email }}
+  ServerName {{ perun_ngui_consolidator_hostname }}
+  DocumentRoot /var/www/perun-web-apps/consolidator
+  <Directory "/var/www/perun-web-apps/consolidator">
+  Options -Indexes +FollowSymLinks -MultiViews
+  Require all granted
+  </Directory>
+
+  RewriteEngine On
+
+  # If an existing asset or directory is requested go to it as it is
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+  RewriteRule ^ - [L]
+
+  # If the requested resource doesn't exist, use index.html
+  RewriteRule ^ /index.html
+
+  SSLEngine on
+  SSLCertificateFile /etc/perun/ssl/consolidatorcert.pem
+  SSLCertificateKeyFile /etc/perun/ssl/consolidatorkey.pem
+  SSLCertificateChainFile /etc/perun/ssl/consolidatorchain.pem
+
+  LogLevel warn ssl:warn rewrite:warn
+
+  #### SECURITY
+
+  # HTTP tracing
+  TraceEnable off
+  # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-frame-options
+  Header always set X-Frame-Options SAMEORIGIN
+  # https://scotthelme.co.uk/hsts-the-missing-link-in-tls/
+  Header always set Strict-Transport-Security "max-age=63072000"
+  # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-content-type-options
+  Header always set X-Content-Type-Options nosniff
+  # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
+  Header always set X-XSS-Protection "1; mode=block"
+  # https://scotthelme.co.uk/content-security-policy-an-introduction/
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: ; script-src 'self' 'unsafe-eval' ; font-src https://fonts.gstatic.com https://fonts.googleapis.com ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; connect-src 'self' {{ perun_rpc_oidc_issuers[0].iss }} https://{{ perun_api_hostname }} ; frame-src 'self' {{ perun_rpc_oidc_issuers[0].iss }} https://{{ perun_api_hostname }} "
+  # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
+  Header always set Referrer-Policy "no-referrer-when-downgrade"
+  # https://scotthelme.co.uk/a-new-security-header-feature-policy/
+  Header always set Feature-Policy "microphone 'none'; camera 'none'; geolocation 'none'; payment 'none'"
+
+  # Disable caching for HTML files (our index.html)
+  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{CONTENT_TYPE} == 'text/html'"
+  Header always set Pragma no-cache "expr=%{CONTENT_TYPE} == 'text/html'"
+  Header always set Expires 0 "expr=%{CONTENT_TYPE} == 'text/html'"
+
+</VirtualHost>
