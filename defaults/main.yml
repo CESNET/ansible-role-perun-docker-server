@@ -289,6 +289,13 @@ perun_ngui_publications_tls_cert_same_as_host: yes
 perun_api_enabled: no
 perun_api_hostname: "{{ perun_rpc_hostname }}"
 perun_api_tls_cert_same_as_host: yes
+# second API with other OIDC
+perun_api_alternative_enabled: no
+perun_api_alternative_hostname: perun-api-second.example.org
+perun_apache_oauth_alternative_introspection_url: https://other.oidc.provider/oidc/introspection
+perun_apache_oauth_alternative_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
+perun_apache_oauth_alternative_client_secret: "YYYYYYYYYYYYYYYYY"
+
 
 # perun-registrar-lib.properties
 perun_registrar_secretKey: "test"
@@ -329,6 +336,8 @@ perun_apache_in_maintenance: no
 perun_apache_default_gui_enabled: yes
 # whether to enable redirect from / to /{{ perun_apache_profile_default_auth }}/profile/
 perun_apache_default_profile_enabled: no
+# whether to activate CSRF protection in Perun RPC on main hostname
+perun_apache_csrf_protection_enabled: no
 
 # passwords for basic authentication, expected to be redefined in an encrypted vault
 perun_apache_basicAuth_user_perun_password: "test"

@@ -113,6 +113,21 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "create /etc/perun/apache/sites-enabled/perun-api-alt.conf"
+  when: perun_api_alternative_enabled
+  template:
+    src: perun-api.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-api-alt.conf
+    owner: root
+    group: root
+    mode: '0400'
+  vars:
+    perun_api_hostname: "{{ perun_api_alternative_hostname }}"
+    perun_apache_oauth_introspection_url: "{{ perun_apache_oauth_alternative_introspection_url }}"
+    perun_apache_oauth_client_id: "{{ perun_apache_oauth_alternative_client_id }}"
+    perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative_client_secret }}"
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"
   when: perun_ngui_profile_enabled
   template:
