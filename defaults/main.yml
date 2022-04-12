@@ -198,7 +198,7 @@ perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_profile_password_namespace_attributes: []
-perun_ngui_profile_consolidator_base_url: "https://{{ perun_rpc_hostname }}/fed/ic/"
+perun_ngui_profile_consolidator_base_url: "https://{{ perun_rpc_hostname }}/"
 perun_ngui_profile_registrar_base_url: "https://{{ perun_rpc_hostname }}/fed/registrar/"
 perun_ngui_profile_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
 perun_ngui_profile_page_attributes: [
