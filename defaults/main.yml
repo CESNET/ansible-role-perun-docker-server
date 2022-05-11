@@ -106,6 +106,7 @@ perun_oldgui_logoUrl: 'img/logo.png'
 perun_oldgui_nativeLanguage: 'cs,\u010Cesky,Czech'
 perun_oldgui_language_supported: 'cs'
 perun_oldgui_registrar_findSimilarUsers_disabled: '{{ perun_rpc_registrar_findSimilarUsers_disabled }}'
+perun_oldgui_registrar_hide_proxy: ''
 perun_oldgui_profile_personal_showAttributes:
   - urn:perun:user:attribute-def:core:displayName
   - urn:perun:user:attribute-def:def:organization
