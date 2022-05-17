@@ -30,6 +30,18 @@ ShibCompatValidUser on
     Require all granted
   </Directory>
 
+  Alias /img /etc/perun/apache/img
+  <Directory "/etc/perun/apache/img">
+    Options -Indexes -FollowSymLinks -MultiViews
+    Require all granted
+  </Directory>
+
+  Alias /.well-known /etc/perun/apache/well-known
+  <Directory "/etc/perun/apache/well-known">
+    Options -Indexes -FollowSymLinks -MultiViews
+    Require all granted
+  </Directory>
+
   # GENERIC ERRORS
   ErrorDocument 401 /maintenance/401.html
   ErrorDocument 403 /maintenance/403.html

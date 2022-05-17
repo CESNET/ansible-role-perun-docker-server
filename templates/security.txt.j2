@@ -1,0 +1,26 @@
+# RFC 9161 security vulnerability disclosure practices https://www.rfc-editor.org/rfc/rfc9116
+Contact: mailto:{{ perun_security_email }}
+Expires: {{ lookup('pipe','date --iso-8601=seconds --date=+year') }}
+Preferred-Languages: en, cz, sk
+# old GUI
+Canonical: https://{{ perun_rpc_hostname }}/.well-known/security.txt
+{% if perun_api_enabled %}
+# RPC API
+Canonical: https://{{ perun_api_hostname }}/.well-known/security.txt
+{% endif %}
+{% if perun_ngui_enabled %}
+# admin GUI
+Canonical: https://{{ perun_ngui_admin_hostname }}/.well-known/security.txt
+{% endif %}
+{% if perun_ngui_profile_enabled %}
+# user profile
+Canonical: https://{{ perun_ngui_profile_hostname }}/.well-known/security.txt
+{% endif %}
+{% if perun_ngui_linker_enabled %}
+# identity linker
+Canonical: https://{{ perun_ngui_linker_hostname }}/.well-known/security.txt
+{% endif %}
+{% if perun_ngui_consolidator_enabled %}
+# consolidator
+Canonical: https://{{ perun_ngui_consolidator_hostname }}/.well-known/security.txt
+{% endif %}

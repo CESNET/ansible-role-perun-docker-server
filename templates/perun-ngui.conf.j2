@@ -15,12 +15,18 @@
   ServerName {{ perun_ngui_admin_hostname }}
   DocumentRoot /var/www/perun-web-apps/admin-gui
   <Directory "/var/www/perun-web-apps/admin-gui">
-  Options -Indexes +FollowSymLinks -MultiViews
-  Require all granted
+    Options -Indexes +FollowSymLinks -MultiViews
+    Require all granted
   </Directory>
 
   Alias /img /etc/perun/apache/img
   <Directory "/etc/perun/apache/img">
+    Options -Indexes -FollowSymLinks -MultiViews
+    Require all granted
+  </Directory>
+
+  Alias /.well-known /etc/perun/apache/well-known
+  <Directory "/etc/perun/apache/well-known">
     Options -Indexes -FollowSymLinks -MultiViews
     Require all granted
   </Directory>
@@ -31,6 +37,7 @@
 
   # If URI start with /img or an existing asset or directory is requested go to it as it is
   RewriteCond "%{REQUEST_URI}" "^/img" [OR]
+  RewriteCond "%{REQUEST_URI}" "^/.well-known" [OR]
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
   RewriteRule ^ - [L]

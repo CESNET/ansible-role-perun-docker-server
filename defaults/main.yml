@@ -16,6 +16,9 @@ perun_rpc_git_version: "{{ perun_rpc_container_version }}"
 # support email
 perun_email: "perun@example.org"
 
+# security email
+perun_security_email: "{{ perun_email }}"
+
 # whether to use Let's Encrypt (certbot) certificates
 perun_use_certbot_certificates: no
 

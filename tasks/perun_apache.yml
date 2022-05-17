@@ -59,6 +59,17 @@
   with_fileglob:
     - "{{ perun_instance_hostname }}/img/*"
 
+- name: "create dir /etc/perun/apache/well-known"
+  file:
+    state: directory
+    path: /etc/perun/apache/well-known
+    mode: '0755'
+
+- name: "create /.well-known/security.txt file"
+  template:
+    src: security.txt.j2
+    dest: /etc/perun/apache/well-known/security.txt
+
 # docs at https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications
 - name: "generate /etc/perun/apache/instanceConfig.json"
   when: perun_ngui_enabled
