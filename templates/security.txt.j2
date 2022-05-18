@@ -1,5 +1,10 @@
 # RFC 9161 security vulnerability disclosure practices https://www.rfc-editor.org/rfc/rfc9116
-Contact: mailto:{{ perun_security_email }}
+{% for contact in perun_security_contacts %}
+Contact: {{ contact }}
+{% endfor %}
+{% if perun_security_encryption %}
+Encryption: {{ perun_security_encryption }}
+{% endif %}
 Expires: {{ lookup('pipe','date --iso-8601=seconds --date=+year') }}
 Preferred-Languages: en, cz, sk
 # old GUI

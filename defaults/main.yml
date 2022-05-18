@@ -17,7 +17,10 @@ perun_rpc_git_version: "{{ perun_rpc_container_version }}"
 perun_email: "perun@example.org"
 
 # security email
-perun_security_email: "{{ perun_email }}"
+perun_security_contacts:
+  - "mailto:certs@cesnet.cz"
+  - "tel:+420-234-680-222"
+perun_security_encryption: "https://csirt.cesnet.cz/publickey.asc"
 
 # whether to use Let's Encrypt (certbot) certificates
 perun_use_certbot_certificates: no
