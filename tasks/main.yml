@@ -1,10 +1,10 @@
 ---
-- name:  "Ansible 2.11+ required"
+- name:  "Ansible 2.12+ required"
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.11', '>=')
-    msg: "Required Ansible version is 4 with 2.11+ (core)"
+      - ansible_version.full is version_compare('2.12', '>=')
+    msg: "Required Ansible version is 5 with 2.12+ (core)"
   tags: always
 
 - name: "Debian 10 or 11 required"

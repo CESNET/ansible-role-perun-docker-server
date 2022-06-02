@@ -6,7 +6,8 @@ Contact: {{ contact }}
 Encryption: {{ perun_security_encryption }}
 {% endif %}
 Expires: {{ lookup('pipe','date --iso-8601=seconds --date=+year') }}
-Preferred-Languages: en, cs, sk
+Policy: {{ perun_security_policy }}
+Preferred-Languages: {{ perun_security_preferred_languages }}
 # old GUI
 Canonical: https://{{ perun_rpc_hostname }}/.well-known/security.txt
 {% if perun_api_enabled %}
