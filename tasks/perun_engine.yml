@@ -133,19 +133,28 @@
         - { src: "hostcert.pem", dest: "perun-send.pem" }
         - { src: "hostchain.pem", dest: "perun-send.chain" }
 
-- name: "create Perun engine container"
-  docker_container:
-    name: perun_engine
-    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
-    pull: yes
-    restart_policy: unless-stopped
-    mounts:
+- name: "list normal engine mounts"
+  set_fact:
+    engine_mounts:
       - { type: volume, source: perun_logs, target: /var/log/perun }
       - { type: volume, source: peruneng_home, target: /home/perun }
       - { type: volume, source: peruneng_etc,  target: /etc/perun }
       # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
       - { type: bind, source: /dev/log, target: /dev/log }
       - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+
+- name: "add perun_engine_mounts_additional to engine mounts"
+  when: perun_engine_mounts_additional|length > 0
+  set_fact:
+    engine_mounts: "{{ engine_mounts + perun_engine_mounts_additional }}"
+
+- name: "create Perun engine container"
+  docker_container:
+    name: perun_engine
+    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
+    pull: yes
+    restart_policy: unless-stopped
+    mounts: "{{ engine_mounts}}"
     networks_cli_compatible: yes
     networks:
       - name: perun_net
@@ -158,3 +167,19 @@
     dest: /etc/hosts
     regexp: 'perun_engine'
     line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_engine"
+
+- name: "detect local directory perun_engine_etc/"
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/perun_engine_etc/"
+  register: engineetc
+
+- name: "recursive copy from perun_engine_etc/ to /etc/perun/engine/"
+  when: engineetc.stat.exists
+  copy:
+    src: "{{ engineetc.stat.path }}"
+    dest: /etc/perun/engine/
+    owner: root
+    group: peruneng
+    directory_mode: '0550'
+    mode: '0440'

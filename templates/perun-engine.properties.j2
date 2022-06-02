@@ -15,3 +15,12 @@ dispatcher.ip.address=perun_rpc
 # paths
 engine.genscript.path=/opt/perun-engine/gen
 engine.sendscript.path=/opt/perun-engine/send
+
+{% if perun_engine_thread_genstasks_max is defined %}
+engine.thread.gentasks.max={{ perun_engine_thread_genstasks_max }}
+{% endif %}
+
+{% if perun_engine_propagation_timeout is defined %}
+# number of minutes, after which task is aborted
+engine.propagation.timeout={{ perun_engine_propagation_timeout }}
+{% endif %}

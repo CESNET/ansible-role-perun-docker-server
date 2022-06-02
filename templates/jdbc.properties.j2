@@ -9,7 +9,7 @@ jdbc.password={{ perun_postgresql_db_user_password }}
 # minimumIdle means that number unused connections will be maintained all the time
 # Max. should be below DB limit (which si by default 150 for Perun).
 jdbc.maximumPoolSize=150
-jdbc.minimumIdle=1
+jdbc.minimumIdle={{ perun_postgresql_db_minimumIdle }}
 
 # How long Perun waits for connection from the pool before exception is thrown. Value is in millis.
 # Our default is 5 minutes / Hikari default is 30s
@@ -19,12 +19,12 @@ jdbc.connectionTimeout=300000
 # Currently used connection are evicted only after returning to the pool if they exceeded the limit.
 # Must be below any DB or infrastructure limit.
 # Hikari default is 30 minutes.
-jdbc.maxLifetime=1800000
+jdbc.maxLifetime={{ perun_postgresql_db_maxLifetime }}
 
 # How long we keep idle connections in the pool before eviction.
 # Must be several seconds below maxLifetime.
 # Hikari default is 10 minutes.
-jdbc.idleTimeout=600000
+jdbc.idleTimeout={{ perun_postgresql_db_idleTimeout }}
 
 # Log connections which are stuck in the process of closing and before their returning to the pool for specified time.
 # Value is in millis.

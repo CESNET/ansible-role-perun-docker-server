@@ -9,11 +9,14 @@ perun.principal.extSourceName=INTERNAL
 perun.principal.extSourceType=cz.metacentrum.perun.core.impl.ExtSourceInternal
 
 # number of hours before DONE tasks are propagated again
-dispatcher.rescheduleInterval=48
+dispatcher.rescheduleInterval={{ perun_dispatcher_reschedule_interval }}
 
 {% if perun_dispatcher_task_delay_time is defined %}
 dispatcher.task.delay.time={{ perun_dispatcher_task_delay_time }}
 {% endif %}
 {% if perun_dispatcher_task_delay_count is defined %}
 dispatcher.task.delay.count={{ perun_dispatcher_task_delay_count }}
+{% endif %}
+{% if perun_dispatcher_propagation_timeout is defined %}
+dispatcher.task.delay.timeout={{ perun_dispatcher_propagation_timeout }}
 {% endif %}

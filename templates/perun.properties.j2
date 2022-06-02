@@ -19,13 +19,16 @@ perun.rpc.principal = perunRpc
 perun.dont.lookup.users={{ perun_rpc_dont_lookup_users|join(', ') }}
 
 # Default group synchronization interval in fold of 5 minutes
-perun.group.synchronization.interval = 1
+perun.group.synchronization.interval = {{ perun_rpc_group_sync_interval }}
 
 # Timeout for group synchronization in minutes
-perun.group.synchronization.timeout = 10
+perun.group.synchronization.timeout = {{ perun_rpc_group_sync_timeout }}
+
+# Timeout for group structure synchronization in minutes
+perun.group.structure.synchronization.timeout={{ perun_rpc_group_structure_sync_timeout }}
 
 # Users who can do delegation
-perun.rpc.powerusers = perun
+perun.rpc.powerusers = {{ perun_rpc_powerusers }}
 
 # Perun DB Name
 perun.perun.db.name = perun
@@ -83,7 +86,7 @@ perun.sms.program = /home/perun/send_sms.sh
 perun.readOnlyPerun=false
 
 # Set true if Perun should update DB version when new version of code is present (item is optional, defualt is false).
-perun.DBInitializatorEnabled=true
+perun.DBInitializatorEnabled={{ perun_rpc_db_initializator_enabled|bool|to_json }}
 
 # Perun instance name
 perun.instanceName = {{ perun_rpc_instance_name }}
@@ -95,6 +98,11 @@ perun.instanceId = {{ perun_rpc_instance_id }}
 # If ',' character is present, everything after is considered as regex and applied to user login in ext. source (such logins/dentities are then non removable).
 # Example:   ExtSourceName1;ExtSourceName2,regex2;ExtSourceName3
 perun.userExtSources.persistent={{ perun_rpc_userExtSources_persistent }}
+
+{% if perun_rpc_id_salt is defined %}
+# Perun ID salt for login-namespace:kypo
+perun.id.salt={{ perun_rpc_id_salt }}
+{% endif %}
 
 # Comma separated list of entityIDs of proxy IdPs which is infront of Perun. So Perun can work with them differently.
 perun.proxyIdPs={{ perun_rpc_proxy_idps }}

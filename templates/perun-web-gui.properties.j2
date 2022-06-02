@@ -94,8 +94,8 @@ privacyPolicyLink={{ perun_oldgui_privacyPolicyLink }}
 {{ perun_oldgui_wayf }}
 {% endif %}
 wayf.cert.hosts={{ perun_oldgui_cert_hosts|join(',') }}
-wayf.spLogoutUrl=/Consolidator.sso/Logout
-wayf.spLoginUrl=/Consolidator.sso/Login
+wayf.spLogoutUrl={{ perun_oldgui_wayf_spLogoutUrl }}
+wayf.spLoginUrl={{ perun_oldgui_wayf_spLoginUrl }}
 
 {% if perun_oldgui_wayf_idpTranslations is defined %}
 # custom IdP translations like: scope or entityID|name#scope or entityID|name#...

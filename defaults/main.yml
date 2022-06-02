@@ -19,6 +19,9 @@ perun_email: "perun@example.org"
 # whether to use Let's Encrypt (certbot) certificates
 perun_use_certbot_certificates: no
 
+# perun dispatcher
+perun_dispatcher_reschedule_interval: 48
+
 # perun RPC settings
 perun_rpc_hostname: "{{ inventory_hostname }}"
 perun_rpc_hostname_aliases: []
@@ -85,6 +88,11 @@ perun_rpc_attributesToKeep:
 perun_rpc_ajp_secret: "xpRrA7UNrT7c"
 perun_rpc_sendIdentityAlerts: 'false'
 perun_rpc_registrar_findSimilarUsers_disabled: 'false'
+perun_rpc_group_sync_interval: 1
+perun_rpc_group_sync_timeout: 10
+perun_rpc_group_structure_sync_timeout: 10
+perun_rpc_powerusers: "perun"
+perun_rpc_db_initializator_enabled: yes
 
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
@@ -117,6 +125,8 @@ perun_oldgui_rt_defaultQueue: "perun"
 perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
 perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
+perun_oldgui_wayf_spLogoutUrl: "/Consolidator.sso/Logout"
+perun_oldgui_wayf_spLoginUrl: "/Consolidator.sso/Login"
 
 #perun-roles.yml
 perun_roles: []
@@ -172,6 +182,8 @@ perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostnam
 perun_ngui_admin_oauth_load_user_info: false
 perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin offline_access"
 perun_ngui_admin_oauth_response_type: "code"
+perun_ngui_admin_supported_languages: ['en']
+perun_ngui_admin_member_profile_attributes_friendly_names: []
 perun_ngui_admin_login_namespace_attributes: []
 perun_ngui_admin_password_namespace_attributes: []
 perun_ngui_admin_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
@@ -201,29 +213,22 @@ perun_ngui_profile_password_namespace_attributes: []
 perun_ngui_profile_consolidator_base_url: "https://{{ perun_rpc_hostname }}/"
 perun_ngui_profile_registrar_base_url: "https://{{ perun_rpc_hostname }}/fed/registrar/"
 perun_ngui_profile_pwd_reset_base_url: "https://{{ perun_rpc_hostname }}/fed/pwd-reset/"
-perun_ngui_profile_page_attributes: [
-  {
-    "friendly_name": "organization",
-    "display_name_en": "Organization",
-    "display_name_cs": "Organizace",
-    "tooltip_en": "",
-    "tooltip_cs": ""
-  },
-  {
-    "friendly_name": "preferredLanguage",
-    "display_name_en": "Preferred language",
-    "display_name_cs": "Preferovaný jazyk",
-    "tooltip_en": "",
-    "tooltip_cs": ""
-  },
-  {
-    "friendly_name": "preferredMail",
-    "display_name_en": "Preferred mail",
-    "display_name_cs": "Preferovaný mail",
-    "tooltip_en": "",
-    "tooltip_cs": ""
-  }
-]
+perun_ngui_profile_page_attributes:
+  - friendly_name: organization
+    display_name_en: Organization
+    display_name_cs: Organizace
+    tooltip_en: ''
+    tooltip_cs: ''
+  - friendly_name: preferredLanguage
+    display_name_en: Preferred language
+    display_name_cs: Preferovaný jazyk
+    tooltip_en: ''
+    tooltip_cs: ''
+  - friendly_name: preferredMail
+    display_name_en: Preferred mail
+    display_name_cs: Preferovaný mail
+    tooltip_en: ''
+    tooltip_cs: ''
 perun_ngui_profile_mfa: {}
 perun_ngui_profile_display_identity_certificates: true
 perun_ngui_profile_external_services: []
@@ -314,6 +319,8 @@ perun_notification_fromText: "Test message"
 perun_notification_additional_lines: ""
 
 # LDAP
+perun_ldap_local: true
+perun_ldap_url: "ldap://192.168.0.1:389"
 perun_ldap_domain: "example.org"
 perun_ldap_data_password: "test"
 perun_ldap_config_password: "test"
@@ -326,6 +333,8 @@ perun_ldap_master_replica: no
 # engine ssh key
 perun_engine_ssh_privkey_file: id_ed25519
 perun_engine_ssh_pubkey_file: id_ed25519.pub
+
+perun_engine_mounts_additional: []
 
 ##########
 # Apache #
@@ -399,6 +408,7 @@ perun_apache_mounts_additional: []
 perun_apache_shibboleth_sp_entity_id: "https://{{ perun_rpc_hostname }}/sp/shibboleth"
 perun_apache_shibboleth_sp_remote_user: "eppn epuid persistent-id targeted-id"
 perun_apache_shibboleth_sp_idp_entity_id: "https://login.example.org/idp/"
+perun_apache_shibboleth_sp_discovery_protocol: "SAMLDS"
 perun_apache_shibboleth_sp_metadata_providers: |
   <!-- no metadata provider -->
 perun_apache_shibboleth_sp_attribute_extractors: |
@@ -418,8 +428,12 @@ perun_yubikey_lognames: [ 'tesla', 'einstein' ]
 perun_sudo_root_lognames: [ 'tesla' ]
 perun_sudo_perun_lognames: ['einstein' ]
 
-# password to PostgreSQL DB
+# PostgreSQL DB
 perun_postgresql_db_user_password: "test"
+perun_postgresql_db_minimumIdle: 1
+perun_postgresql_db_maxLifetime: 1800000
+perun_postgresql_db_idleTimeout: 600000
+
 # password for accessing portainer at https://machine:9000/
 perun_portainer_admin_password: "test"
 

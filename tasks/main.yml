@@ -59,8 +59,12 @@
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
 - name: "OpenLDAP directory server installation"
-  import_role:
+  include_role:
     name: cesnet.openldap
+    apply:
+      tags:
+        - perun_ldap
+  when: perun_ldap_local
   vars:
     ldap_domain: "{{ perun_ldap_domain }}"
     ldap_top_organization: perun
@@ -86,11 +90,16 @@
     - perun_ldapc
 
 - name: "OpenLDAP Perun specific settings"
-  import_role:
+  include_role:
     name: cesnet.perun_ldap_config
+    apply:
+      tags:
+        - perun_ldap
+        - perun_config
   tags:
     - perun_ldap
     - perun_config
+  when: perun_ldap_local
 
 - name: "setup of Docker data volumes for Perun containers"
   import_tasks: perun_volumes.yml
@@ -119,10 +128,15 @@
     - perun_config
 
 - name: "perun ldapc setup"
-  import_tasks: perun_ldapc.yml
+  include_tasks: perun_ldapc.yml
+    apply:
+        tags:
+          - perun_ldapc
+          - perun_config
   tags:
     - perun_ldapc
     - perun_config
+  when: perun_ldap_local
 
 - name: "perun apache setup"
   import_tasks: perun_apache.yml
