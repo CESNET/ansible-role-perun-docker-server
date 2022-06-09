@@ -138,26 +138,42 @@ perun_ngui_oauth_offline_access_consent_prompt: true
 perun_ngui_footer:
   columns:
     - title_en: ABOUT
+      title_cs: O PERUNU
       elements:
         - link_en: https://perun-aai.org/
           label_en: Perun website
+          link_cs: https://perun-aai.org/
+          label_cs: Perun web
         - link_en: https://perun-aai.org/team
           label_en: Perun team
+          link_cs: https://perun-aai.org/team
+          label_cs: Perun tým
         - link_en: https://www.example.org/privacy-notice/
           label_en: Privacy policy
+          link_cs: https://www.example.org/privacy-notice/
+          label_cs: Zásady ochrany osobních údajů
     - title_en: HELP
+      title_cs: NÁVODY
       elements:
         - link_en: https://perun-aai.org/documentation/users-documentation
-          label_en: Documentation
+          label_en: User Documentation
+          link_cs: https://perun-aai.org/documentation/users-documentation
+          label_cs: Dokumentace pro uživatele
         - link_en: https://perun-aai.org/documentation/admin-documentation
           label_en: API Documentation
+          link_cs: https://perun-aai.org/documentation/admin-documentation
+          label_cs: Dokumentace API
         - dialog: reportIssue
           label_en: Report issue
+          label_cs: Nahlásit problém
     - title_en: SUPPORT
+      title_cs: PODPORA
       elements:
         - icon: mail
           link_en: 'mailto:perun@example.org'
+          link_cs: 'mailto:perun@example.org'
           label_en: perun@example.org
+          label_cs: perun@example.org
   copyright_items:
     - name: CESNET
       url: 'https://www.cesnet.cz/'
@@ -193,10 +209,8 @@ perun_ngui_admin_enforce_consents: false
 perun_ngui_profile_enabled: no
 perun_ngui_profile_hostname: profile.aai.example.org
 perun_ngui_profile_tls_cert_same_as_host: yes
-perun_ngui_profile_document_title: "User Profile"
 perun_ngui_profile_instance_favicon: false
 perun_ngui_profile_auto_oauth_redirect: true
-perun_ngui_profile_supported_languages: ['en']
 perun_ngui_profile_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/api-callback"
 perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
@@ -237,8 +251,12 @@ perun_ngui_profile_display_identity_certificates: true
 perun_ngui_profile_external_services: []
 perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'settings', 'ssh_keys']
 perun_ngui_profile_custom_labels: []
+perun_ngui_profile_supported_languages: ['en']
 perun_ngui_profile_header_label_en: "User Profile"
-perun_ngui_profile_header_label_cs: "Uživatelský Profil"
+perun_ngui_profile_header_label_cs: "Profil uživatele"
+perun_ngui_profile_document_title:
+  en: "{{ perun_ngui_profile_header_label_en }}"
+  cs: "{{ perun_ngui_profile_header_label_cs }}"
 perun_ngui_profile_admin_gui_label_en: "IAM Administration"
 perun_ngui_profile_admin_gui_label_cs: "Správa IAM"
 perun_ngui_profile_link_to_admin_gui_by_roles: []
