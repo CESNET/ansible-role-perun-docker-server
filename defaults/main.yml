@@ -490,7 +490,8 @@ perun_firewall_open_tcp_ports:
   - { port: 389, ipv4: "192.168.0.0/24", comment: "accept non-encrypted ldap from docker subnet"}
   - { port: 636, comment: "accept encrypted ldaps from everywhere" }
   - { port: 5432, ipv4: "192.168.0.0/24", comment: "accept postgres from docker subnet" }
-  - { port: 5432, ipv6: "2001:718::/32", comment: "accept postgres from all CESNET networks" }
+  - { port: 5432, ipv6: "2001:718:801::/48", comment: "accept postgres from MUNI over IPv6" }
+  - { port: 5432, ipv6: "2001:718:1:13::/64", comment: "accept postgres from CESNET VPN over IPv6" }
   - { port: 5432, ipv4: "195.113.222.0/24", comment: "accept postgres from CESNET VPN" }
   - { port: 5432, ipv4: "147.251.0.0/16", comment: "accept postgres from MUNI" }
   - { port: 9000, ipv6: "2001:718:801::/48", comment: "portainer only from MUNI over IPv6" }
