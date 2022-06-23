@@ -349,6 +349,9 @@ perun_ldap_schemas_perun_version: "{{ perun_ldapc_container_version }}"
 perun_ldap_sasl_login_namespace: ""
 perun_ldap_master_replica: no
 
+# LDAPc
+perun_ldapc_full_sync_on_restart: yes
+
 # engine ssh key
 perun_engine_ssh_privkey_file: id_ed25519
 perun_engine_ssh_pubkey_file: id_ed25519.pub

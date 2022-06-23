@@ -3,4 +3,8 @@
 # Set if you wish to start the LDAPc with specific last processed ID or set "--sync" to enforce full PERUN-LDAP sync on start.
 # Comment it out, if you wish to start LDAPc just from the point it stopped.
 #
+{% if perun_ldapc_full_sync_on_restart %}
 LAST_PROCESSED_ID="--sync"
+{% else %}
+#LAST_PROCESSED_ID="--sync"
+{% endif %}
