@@ -269,6 +269,7 @@ perun_ngui_profile_logo: '{{ perun_ngui_logo }}'
 perun_ngui_profile_brandings: "{ '{{ perun_ngui_profile_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
 # remove this property when url to linker is retrieved from backend
 perun_ngui_profile_link_to_linker: "linker.aai.example.org"
+perun_ngui_profile_local_account_namespace: ""
 
 #new GUI Consolidator
 
