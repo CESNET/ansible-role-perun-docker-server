@@ -34,14 +34,6 @@
     path: /var/log/apache2
     force: yes
 
-- name: "make docker volumes accessible"
-  file:
-    path: /var/lib/docker/volumes
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
 - name: "create directory for shibboleth logs"
   file:
     path: /var/log/apache2/shibboleth
