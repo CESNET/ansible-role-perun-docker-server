@@ -65,7 +65,7 @@
   # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
   Header always set X-XSS-Protection "1; mode=block"
   # https://scotthelme.co.uk/content-security-policy-an-introduction/
-  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: ; script-src 'self' 'unsafe-eval' ; font-src https://fonts.gstatic.com https://fonts.googleapis.com ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; connect-src 'self' {{ perun_rpc_oidc_issuers[0].iss }} https://{{ perun_api_hostname }} ; frame-src 'self' {{ perun_rpc_oidc_issuers[0].iss }} https://{{ perun_api_hostname }} "
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: ; script-src 'self' 'unsafe-eval' ; font-src https://fonts.gstatic.com https://fonts.googleapis.com ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; connect-src 'self' {{ perun_ngui_oauth_authority }} https://{{ perun_api_hostname }} ; frame-src 'self' {{ perun_ngui_oauth_authority }} https://{{ perun_api_hostname }} "
   # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
   Header always set Referrer-Policy "no-referrer-when-downgrade"
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
