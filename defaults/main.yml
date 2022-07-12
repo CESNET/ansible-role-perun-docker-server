@@ -466,7 +466,8 @@ perun_postgresql_db_maxLifetime: 1800000
 perun_postgresql_db_idleTimeout: 600000
 
 # password for accessing portainer at https://machine:9000/
-perun_portainer_admin_password: "test"
+# since portainer:2.14.0 must be at least 12 characters
+perun_portainer_admin_password: "testtesttest"
 
 
 # email alias for root

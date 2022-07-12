@@ -128,11 +128,12 @@
     - perun_config
 
 - name: "perun ldapc setup"
-  include_tasks: perun_ldapc.yml
+  include_tasks:
+    file: perun_ldapc.yml
     apply:
-        tags:
-          - perun_ldapc
-          - perun_config
+      tags:
+        - perun_ldapc
+        - perun_config
   tags:
     - perun_ldapc
     - perun_config

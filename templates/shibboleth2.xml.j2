@@ -35,15 +35,15 @@
             entityID property and adjust discoveryURL to point to discovery service.
             You can also override entityID on /Login query string, or in RequestMap/htaccess.
             -->
-            {% if perun_apache_shibboleth_sp_discovery_url is defined %}
+{% if perun_apache_shibboleth_sp_discovery_url is defined %}
                 <SSO discoveryProtocol="{{ perun_apache_shibboleth_sp_discovery_protocol }}" discoveryURL="{{ perun_apache_shibboleth_sp_discovery_url }}">
                     SAML2
                 </SSO>
-            {% else %}
+{% else %}
                 <SSO entityID="{{ perun_apache_shibboleth_sp_idp_entity_id }}">
                     SAML2
                 </SSO>
-            {% endif %}
+{% endif %}
 
             <!-- LogoutInitiators enable SP-initiated local or global/single logout of sessions. -->
             <LogoutInitiator type="Chaining" Location="/Logout">
