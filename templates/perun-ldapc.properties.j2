@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 
-ldap.url=ldap://192.168.0.1:389
+ldap.url={{ perun_ldap_url }}
 ldap.base={{ perun_ldap_basedn }}
 ldap.userDn={{ perun_ldap_data_admin_dn }}
 ldap.password={{ perun_ldap_data_password }}

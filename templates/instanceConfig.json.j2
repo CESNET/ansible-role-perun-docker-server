@@ -24,6 +24,8 @@
 {% if perun_rpc_group_nameErrorMessage is defined %}
   "group_name_error_message": {{ perun_rpc_group_nameErrorMessage|to_json }},
 {% endif %}
+  "supported_languages": {{ perun_ngui_admin_supported_languages }}
+  "member_profile_attributes_friendly_names": {{ perun_ngui_admin_member_profile_attributes_friendly_names }}
   "footer": {{ perun_ngui_footer|to_nice_json }},
   "log_out_enabled": {{ perun_ngui_admin_log_out_enabled|bool|to_json }},
   "logo": {{ perun_ngui_logo|to_json }},
