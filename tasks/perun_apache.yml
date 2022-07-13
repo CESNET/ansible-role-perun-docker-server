@@ -241,6 +241,12 @@
       - "{{ perun_instance_hostname }}/sp-cert.pem"
       - "sp-cert.pem"
 
+- name: "create apache_custom_vars containing changes to apache2.conf"
+  copy:
+    dest: /etc/perun/apache/apache_custom_vars.conf
+    content: "{{ perun_apache_custom_vars }}"
+  when: perun_apache_custom_vars is defined and perun_apache_custom_vars
+
 - name: "create additional files for Shibboleth"
   copy:
     src: "{{ item }}"
