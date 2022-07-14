@@ -2,6 +2,9 @@
   import_role:
     name: martin_kuba.work_env
 
+- import_role:
+    name: cesnet.ntp
+
 - name: "set firewall"
   import_role:
     name: cesnet.firewall
