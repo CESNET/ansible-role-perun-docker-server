@@ -89,7 +89,9 @@ ShibCompatValidUser on
   # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
   Header always set Referrer-Policy "no-referrer-when-downgrade"
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
-  Header always set Feature-Policy "microphone 'none'; camera 'none'; geolocation 'none'; payment 'none'"
+  Header always set Feature-Policy "accelerometer 'none'; autoplay 'none'; camera 'none'; geolocation 'none'; microphone 'none'; payment 'none'"
+  # https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), geolocation=(), microphone=(), payment=()"
 
   # Disable browser caching for our html/rpc resources
   Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"

@@ -63,11 +63,13 @@
   # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
   Header always set X-XSS-Protection "1; mode=block"
   # https://scotthelme.co.uk/content-security-policy-an-introduction/
-  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https: ; script-src 'self' 'unsafe-eval' ; font-src https://fonts.gstatic.com https://fonts.googleapis.com ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; connect-src 'self' {{ perun_ngui_consolidator_oauth_authority }} https://{{ perun_api_hostname }} ; frame-src 'self' {{ perun_ngui_consolidator_oauth_authority }} https://{{ perun_api_hostname }} "
+  Header always set Content-Security-Policy "default-src 'self' ; connect-src 'self' {{ perun_ngui_consolidator_oauth_authority }} https://{{ perun_api_hostname }}; img-src 'self' data: https: ; font-src https://fonts.gstatic.com https://fonts.googleapis.com ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
   # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
   Header always set Referrer-Policy "no-referrer-when-downgrade"
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
-  Header always set Feature-Policy "microphone 'none'; camera 'none'; geolocation 'none'; payment 'none'"
+  Header always set Feature-Policy "accelerometer 'none'; autoplay 'none'; camera 'none'; geolocation 'none'; microphone 'none'; payment 'none'"
+  # https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), geolocation=(), microphone=(), payment=()"
 
   # Disable caching for HTML files (our index.html)
   Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{CONTENT_TYPE} == 'text/html'"
