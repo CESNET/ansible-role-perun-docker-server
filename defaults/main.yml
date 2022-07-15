@@ -441,16 +441,18 @@ perun_apache_mounts_additional: []
 
 perun_apache_shibboleth_sp_entity_id: "https://{{ perun_rpc_hostname }}/sp/shibboleth"
 perun_apache_shibboleth_sp_remote_user: "eppn epuid persistent-id targeted-id"
+perun_apache_shibboleth_sp_session_timeout: 3600
 perun_apache_shibboleth_sp_idp_entity_id: "https://login.example.org/idp/"
-perun_apache_shibboleth_sp_discovery_protocol: "SAMLDS"
-perun_apache_shibboleth_sp_metadata_providers: |
-  <!-- no metadata provider -->
-perun_apache_shibboleth_sp_attribute_extractors: |
-  <!-- no extractors -->
-perun_apache_shibboleth_sp_application_overrides: |
-  <!-- no overrides -->
-perun_apache_shibboleth_sp_attribute_map_additions: |
-  <!-- no additional attributes -->
+perun_apache_shibboleth_sp_session_initiators: |2
+          <!-- no special session initiators -->
+perun_apache_shibboleth_sp_metadata_providers: |2
+          <!-- no metadata provider -->
+perun_apache_shibboleth_sp_attribute_extractors: |2
+          <!-- no extractors -->
+perun_apache_shibboleth_sp_application_overrides: |2
+          <!-- no overrides -->
+perun_apache_shibboleth_sp_attribute_map_additions: |2
+          <!-- no additional attributes -->
 perun_apache_shibboleth_scoped_eppn: yes
 perun_apache_shibboleth_remap_assurance: ""
 perun_apache_shibboleth_remap_additionalIdentifiers: no

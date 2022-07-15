@@ -137,7 +137,6 @@
   tags:
     - perun_ldapc
     - perun_config
-  when: perun_ldap_local
 
 - name: "perun apache setup"
   import_tasks: perun_apache.yml

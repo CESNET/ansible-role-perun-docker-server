@@ -28,7 +28,7 @@
         cookieProps to "https" for SSL-only sites. Note that while we default checkAddress to
         "false", this makes an assertion stolen in transit easier for attackers to misuse.
         -->
-        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem" checkAddress="false" consistentAddress="false" handlerSSL="true" cookieProps="https">
+        <Sessions lifetime="28800" timeout="{{ perun_apache_shibboleth_sp_session_timeout }}" relayState="ss:mem" checkAddress="false" consistentAddress="false" handlerSSL="true" cookieProps="https">
 
             <!--
             Configures SSO for a default IdP. To properly allow for >1 IdP, remove
@@ -36,15 +36,16 @@
             You can also override entityID on /Login query string, or in RequestMap/htaccess.
             -->
 {% if perun_apache_shibboleth_sp_discovery_url is defined %}
-                <SSO discoveryProtocol="{{ perun_apache_shibboleth_sp_discovery_protocol }}" discoveryURL="{{ perun_apache_shibboleth_sp_discovery_url }}">
-                    SAML2
-                </SSO>
+            <SSO discoveryProtocol="SAMLDS" discoveryURL="{{ perun_apache_shibboleth_sp_discovery_url }}">
+                SAML2
+            </SSO>
 {% else %}
-                <SSO entityID="{{ perun_apache_shibboleth_sp_idp_entity_id }}">
-                    SAML2
-                </SSO>
+            <SSO entityID="{{ perun_apache_shibboleth_sp_idp_entity_id }}">
+                SAML2
+            </SSO>
 {% endif %}
 
+{{ perun_apache_shibboleth_sp_session_initiators }}
             <!-- LogoutInitiators enable SP-initiated local or global/single logout of sessions. -->
             <LogoutInitiator type="Chaining" Location="/Logout">
                 <LogoutInitiator type="SAML2" template="bindingTemplate.html"/>
