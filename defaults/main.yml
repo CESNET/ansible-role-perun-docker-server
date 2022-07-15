@@ -99,6 +99,7 @@ perun_rpc_registrar_findSimilarUsers_disabled: 'false'
 perun_rpc_group_sync_interval: 1
 perun_rpc_group_sync_timeout: 10
 perun_rpc_group_structure_sync_timeout: 10
+perun_rpc_group_maxConcurentGroupsToSynchronize: 10
 perun_rpc_powerusers: "perun"
 perun_rpc_db_initializator_enabled: yes
 
@@ -115,10 +116,11 @@ perun_oldgui_getAttributesListForUserTables:
 perun_oldgui_getSupportedPasswordNamespaces: ""
 perun_oldgui_getReCaptchaPublicKey: '6Lf0eUYUAAAAAAQuoyjZCrK9DztF4e-wF23PBPFR'
 perun_oldgui_language_switch_disabled: 'false'
+perun_oldgui_header_disabled: 'false'
 perun_oldgui_footer_disabled: 'false'
 perun_oldgui_cert_hosts:
   - "https://{{ perun_rpc_hostname }}"
-perun_oldgui_logoUrl: 'img/logo.png'
+perun_oldgui_logoUrl: '/img/logo.png'
 perun_oldgui_nativeLanguage: 'cs,\u010Cesky,Czech'
 perun_oldgui_language_supported: 'cs'
 perun_oldgui_registrar_findSimilarUsers_disabled: '{{ perun_rpc_registrar_findSimilarUsers_disabled }}'
@@ -132,6 +134,7 @@ perun_oldgui_profile_settings_hidePages: [ 'sshkeys', 'dataquotas']
 perun_oldgui_disableCreateVo: 'false'
 perun_oldgui_rt_defaultQueue: "perun"
 perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
+perun_oldgui_report_email_address: "{{ perun_email }}"
 perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 perun_oldgui_wayf_spLogoutUrl: "/Consolidator.sso/Logout"

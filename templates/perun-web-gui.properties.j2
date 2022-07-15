@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 
-perunReportEmailAddress={{ perun_email }}
+perunReportEmailAddress={{ perun_oldgui_report_email_address }}
 pwdreset.support.mail={{ perun_email }}
 defaultRtQueue={{ perun_oldgui_defaultRtQueue }}
 vosManagerMembersGroup=members
@@ -81,7 +81,7 @@ brand.profile.unknownUsersRedirect.en={{ perun_oldgui_brand_profile_unknownUsers
 
 footer.disabled={{ perun_oldgui_footer_disabled }}
 language.switch.disabled={{ perun_oldgui_language_switch_disabled }}
-header.disabled=false
+header.disabled={{ perun_oldgui_header_disabled }}
 
 fedAuthz={{ perun_oldgui_fedAuthz|join(',') }}
 

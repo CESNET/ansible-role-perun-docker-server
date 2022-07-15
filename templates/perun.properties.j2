@@ -27,6 +27,9 @@ perun.group.synchronization.timeout = {{ perun_rpc_group_sync_timeout }}
 # Timeout for group structure synchronization in minutes
 perun.group.structure.synchronization.timeout={{ perun_rpc_group_structure_sync_timeout }}
 
+# Limit on number of concurrently running synchronizations (default 10)
+perun.group.maxConcurentGroupsToSynchronize={{ perun_rpc_group_maxConcurentGroupsToSynchronize }}
+
 # Users who can do delegation
 perun.rpc.powerusers = {{ perun_rpc_powerusers }}
 
