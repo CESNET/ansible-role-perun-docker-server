@@ -133,41 +133,6 @@
         - { src: "hostcert.pem", dest: "perun-send.pem" }
         - { src: "hostchain.pem", dest: "perun-send.chain" }
 
-- name: "list normal engine mounts"
-  set_fact:
-    engine_mounts:
-      - { type: volume, source: perun_logs, target: /var/log/perun }
-      - { type: volume, source: peruneng_home, target: /home/perun }
-      - { type: volume, source: peruneng_etc,  target: /etc/perun }
-      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
-      - { type: bind, source: /dev/log, target: /dev/log }
-      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
-
-- name: "add perun_engine_mounts_additional to engine mounts"
-  when: perun_engine_mounts_additional|length > 0
-  set_fact:
-    engine_mounts: "{{ engine_mounts + perun_engine_mounts_additional }}"
-
-- name: "create Perun engine container"
-  docker_container:
-    name: perun_engine
-    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
-    pull: yes
-    restart_policy: unless-stopped
-    mounts: "{{ engine_mounts}}"
-    networks_cli_compatible: yes
-    networks:
-      - name: perun_net
-    network_mode: perun_net
-    container_default_behavior: no_defaults
-  register: perun_engine_container
-
-- name: "put container IP into /etc/hosts"
-  lineinfile:
-    dest: /etc/hosts
-    regexp: 'perun_engine'
-    line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_engine"
-
 - name: "detect local directory perun_engine_etc/"
   local_action:
     module: stat
@@ -183,3 +148,40 @@
     group: peruneng
     directory_mode: '0550'
     mode: '0440'
+
+- name: "list normal engine mounts"
+  set_fact:
+    engine_mounts:
+      - { type: volume, source: perun_logs, target: /var/log/perun }
+      - { type: volume, source: peruneng_home, target: /home/perun }
+      - { type: volume, source: peruneng_etc,  target: /etc/perun }
+      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
+      - { type: bind, source: /dev/log, target: /dev/log }
+      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+
+- name: "add perun_engine_mounts_additional to engine mounts"
+  when: perun_engine_mounts_additional|length > 0
+  set_fact:
+    engine_mounts: "{{ engine_mounts + perun_engine_mounts_additional }}"
+
+- name: "{{ 'create' if perun_engine_enabled else 'remove' }} Perun engine container"
+  docker_container:
+    name: perun_engine
+    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
+    pull: yes
+    restart_policy: unless-stopped
+    mounts: "{{ engine_mounts}}"
+    networks_cli_compatible: yes
+    networks:
+      - name: perun_net
+    network_mode: perun_net
+    container_default_behavior: no_defaults
+    state: "{{ 'present' if perun_engine_enabled else 'absent' }}"
+  register: perun_engine_container
+
+- name: "put container IP into /etc/hosts"
+  when: perun_engine_enabled
+  lineinfile:
+    dest: /etc/hosts
+    regexp: 'perun_engine'
+    line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_engine"

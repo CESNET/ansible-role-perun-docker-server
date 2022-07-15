@@ -366,11 +366,12 @@ perun_ldap_master_replica: no
 
 # LDAPc
 perun_ldapc_full_sync_on_restart: yes
+perun_ldapc_enabled: yes
 
-# engine ssh key
+# engine
+perun_engine_enabled: yes
 perun_engine_ssh_privkey_file: id_ed25519
 perun_engine_ssh_pubkey_file: id_ed25519.pub
-
 perun_engine_mounts_additional: []
 
 ##########

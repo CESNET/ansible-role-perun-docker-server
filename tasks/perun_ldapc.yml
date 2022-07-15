@@ -94,7 +94,7 @@
     owner: perunldc
     group: perunldc
 
-- name: "create Perun LDAPc container"
+- name: "{{ 'create' if perun_ldapc_enabled else 'remove' }} Perun LDAPc container"
   docker_container:
     name: perun_ldapc
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_ldapc:{{ perun_ldapc_container_version }}"
@@ -109,9 +109,11 @@
       - name: perun_net
     network_mode: perun_net
     container_default_behavior: no_defaults
+    state: "{{ 'present' if perun_ldapc_enabled else 'absent' }}"
   register: perun_ldapc_container
 
 - name: "put container IP into /etc/hosts"
+  when: perun_ldapc_enabled
   lineinfile:
     dest: /etc/hosts
     regexp: 'perun_ldapc'
