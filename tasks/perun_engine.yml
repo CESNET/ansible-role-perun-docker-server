@@ -86,7 +86,7 @@
     dest: /etc/perun/engine/gen-local/
     owner: root
     group: peruneng
-    mode: '0550'
+    mode: '0750'
   with_fileglob:
     - "files/{{ perun_instance_hostname }}/gen-local/*"
   notify: "restart perun_engine"
@@ -97,7 +97,7 @@
     state: directory
     owner: root
     group: peruneng
-    mode: '0550'
+    mode: '0750'
 
 - name: "copy send-local"
   copy:
