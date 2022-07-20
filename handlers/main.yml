@@ -20,7 +20,7 @@
     state: started
     restart: yes
     container_default_behavior: no_defaults
-  when: perun_engine_container is defined and not perun_engine_container.changed
+  when: perun_engine_enabled and perun_engine_container is defined and not perun_engine_container.changed
 
 - name: "restart perun_ldapc"
   docker_container:
@@ -28,7 +28,7 @@
     state: started
     restart: yes
     container_default_behavior: no_defaults
-  when: perun_ldapc_container is defined and not perun_ldapc_container.changed
+  when: perun_ldapc_enabled and perun_ldapc_container is defined and not perun_ldapc_container.changed
 
 - name: "restart portainer"
   docker_container:
