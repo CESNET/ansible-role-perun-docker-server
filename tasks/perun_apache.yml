@@ -291,6 +291,7 @@
     name: perun_apache
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_apache:{{ perun_apache_container_version }}"
     pull: yes
+    state: started
     restart_policy: unless-stopped
     mounts: "{{ apache_mounts }}"
     networks_cli_compatible: yes

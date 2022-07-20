@@ -176,7 +176,7 @@
       - name: perun_net
     network_mode: perun_net
     container_default_behavior: no_defaults
-    state: "{{ 'present' if perun_engine_enabled else 'absent' }}"
+    state: "{{ 'started' if perun_engine_enabled else 'absent' }}"
   register: perun_engine_container
 
 - name: "put container IP into /etc/hosts"

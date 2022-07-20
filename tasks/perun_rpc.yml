@@ -183,6 +183,7 @@
     name: perun_rpc
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_rpc:{{ perun_rpc_container_version }}"
     pull: yes
+    state: started
     restart_policy: unless-stopped
     mounts:
       - { type: volume, source: perun_logs, target: /var/log/perun }
