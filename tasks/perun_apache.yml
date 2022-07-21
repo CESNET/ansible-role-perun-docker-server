@@ -269,6 +269,21 @@
     - "{{ perun_instance_hostname }}/shibboleth/*"
   notify: "restart perun_apache"
 
+- name: "detect apache_init.sh on controller machine"
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/apache_init.sh"
+  register: apache_init
+
+- name: "copy apache_init.sh"
+  when: apache_init.stat.exists
+  copy:
+    src: "files/{{ perun_instance_hostname }}/apache_init.sh"
+    dest: /etc/perun/apache/apache_init.sh
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: "list normal apache mounts"
   set_fact:
     apache_mounts:
