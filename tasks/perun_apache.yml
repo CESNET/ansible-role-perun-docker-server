@@ -290,6 +290,8 @@
       - { type: volume, source: apache_logs, target: /var/log/apache2 }
       - { type: bind, source: /etc/perun/ssl, target: /etc/perun/ssl, read_only: yes }
       - { type: bind, source: /etc/perun/apache, target: /etc/perun/apache, read_only: yes }
+      # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
+      - { type: tmpfs, target: /tmp }
 
 - name: "add perun_apache_mounts_additional to apache mounts"
   when: perun_apache_mounts_additional|length > 0

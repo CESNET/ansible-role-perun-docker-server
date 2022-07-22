@@ -149,12 +149,28 @@
     directory_mode: '0550'
     mode: '0440'
 
+- name: "create expected directories in perun home"
+  file:
+    path: "{{ item.dir }}"
+    state: directory
+    owner: peruneng
+    group: peruneng
+    mode: "{{ item.mode }}"
+  loop:
+    - { dir: "/home/peruneng/gen/spool", mode: '0755' }
+    - { dir: "/home/peruneng/gen/logs", mode: '0755' }
+    - { dir: "/home/peruneng/send/spool", mode: '0755' }
+    - { dir: "/home/peruneng/send/logs", mode: '0755' }
+    - { dir: "/home/peruneng/cache", mode: '0755' }
+
 - name: "list normal engine mounts"
   set_fact:
     engine_mounts:
       - { type: volume, source: perun_logs, target: /var/log/perun }
       - { type: volume, source: peruneng_home, target: /home/perun }
       - { type: volume, source: peruneng_etc,  target: /etc/perun }
+      # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
+      - { type: tmpfs, target: /tmp }
       # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
       - { type: bind, source: /dev/log, target: /dev/log }
       - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
