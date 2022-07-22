@@ -18,6 +18,9 @@
       # runs an interactive container with current working dir and all arguments are passed to "bash -c " as a single long string
       if [[ -z $* ]] ; then ARGS="bash" ; else ARGS="$*" ; fi
       docker run -it --rm --name cli_$$ --volume /home/perun:/home/perun \
+      {% for host, ip in perun_containers_etc_hosts.items() %}
+        --add-host {{ host }}:{{ ip }} \
+      {% endfor %}
         --env-file /etc/perun/perun-cli-env -w $PWD ${PERUN_DOCKER_OPTS} \
         registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }} "$ARGS"
 
@@ -31,6 +34,9 @@
       #!/bin/bash
       # runs non-interactive container with working dir /home/perun and arguments are passed as an array to exec
       docker run --rm --name script_cli_$$ --volume /home/perun:/home/perun \
+      {% for host, ip in perun_containers_etc_hosts.items() %}
+        --add-host {{ host }}:{{ ip }} \
+      {% endfor %}
         --env-file /etc/perun/perun-cli-env --entrypoint="" ${PERUN_DOCKER_OPTS} \
         registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_cli_perl:{{ perun_cli_container_version }} "$@"
 

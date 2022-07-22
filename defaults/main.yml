@@ -30,6 +30,9 @@ perun_use_certbot_certificates: no
 # perun dispatcher
 perun_dispatcher_reschedule_interval: 48
 
+# host-to-IP mappings to be added to /etc/hosts in each container
+perun_containers_etc_hosts: {}
+
 # perun RPC settings
 perun_rpc_hostname: "{{ inventory_hostname }}"
 perun_rpc_hostname_aliases: []

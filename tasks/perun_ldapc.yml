@@ -108,6 +108,7 @@
     networks:
       - name: perun_net
     network_mode: perun_net
+    etc_hosts: "{{ perun_containers_etc_hosts }}"
     container_default_behavior: no_defaults
     state: "{{ 'started' if perun_ldapc_enabled else 'absent' }}"
   register: perun_ldapc_container
