@@ -70,6 +70,7 @@ perun_rpc_userExtSources_persistent: "PERUN;"
 perun_rpc_extsources_multiple_identifiers: ""
 perun_rpc_lookup_user_by_identifiers_and_extSourceLogin: 'false'
 perun_rpc_force_consents: 'false'
+perun_rpc_requestUserInfoEndpoint: 'false'
 perun_rpc_defaultLoa_idp: "2"
 perun_rpc_recaptcha_privatekey: '6Lf0eUYUAAAAAIBxpRrA7UNrT7czQ28IoH9yiDBE'
 perun_rpc_mailchange_secretKey: "test"
@@ -105,6 +106,9 @@ perun_rpc_group_structure_sync_timeout: 10
 perun_rpc_group_maxConcurentGroupsToSynchronize: 10
 perun_rpc_powerusers: "perun"
 perun_rpc_db_initializator_enabled: yes
+perun_rpc_userInfoEndpoint_extSourceLogin: ""
+perun_rpc_userInfoEndpoint_extSourceName: ""
+perun_rpc_userInfoEndpoint_extSourceFriendlyName: ""
 
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
@@ -282,8 +286,7 @@ perun_ngui_profile_log_out_enabled: true
 perun_ngui_profile_logo_padding: ""
 perun_ngui_profile_logo: '{{ perun_ngui_logo }}'
 perun_ngui_profile_brandings: "{ '{{ perun_ngui_profile_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
-# remove this property when url to linker is retrieved from backend
-perun_ngui_profile_link_to_linker: "linker.aai.example.org"
+perun_ngui_profile_use_new_consolidator: false,
 perun_ngui_profile_local_account_namespace: ""
 
 #new GUI Consolidator
@@ -301,7 +304,10 @@ perun_ngui_consolidator_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_consolidator_oauth_response_type: "code"
 perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
 perun_ngui_consolidator_instance_favicon: false
-perun_ngui_consolidator_link_to_linker: "linker.aai.example.org"
+perun_ngui_consolidator_path_to_idp_provider_userinfo: ["target_backend", "display_name", "text"],
+perun_ngui_consolidator_path_to_idp_logo_userinfo: ["target_backend", "logo", "text"],
+perun_ngui_consolidator_path_to_idp_logo_width_userinfo: ["target_backend", "logo", "width"],
+perun_ngui_consolidator_path_to_idp_logo_height_userinfo: ["target_backend", "logo", "height"],
 
 #new GUI Linker
 
