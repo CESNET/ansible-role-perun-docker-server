@@ -1,6 +1,21 @@
+# this is a Docker environment file, not a shell file, no shell substitution happens
+# no special handling of quotation marks, they are part of the value!
+# see https://docs.docker.com/compose/env-file/#syntax-rules
+# and https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file
+
+# Perun agent variables
 PERUN_URL=https://{{ perun_api_hostname }}/ba/rpc/
 PERUN_USER=perun/{{ perun_apache_basicAuth_user_perun_password }}
 PERUN_COOKIE=/tmp/perun-cli-cookie.txt
 PERL5LIB=/opt/perun-cli/:/opt/perun-cli/Perun/
+
+# inherit these variables from the calling environment
+LOGNAME
+USER
+
+# system locale
 LANG=en_US.UTF-8
 LANGUAGE=en_US:en
+
+# Oracle locale https://www.oracle.com/cz/database/technologies/faq-nls-lang.html
+NLS_LANG=CZECH_CZECH REPUBLIC.AL32UTF8
