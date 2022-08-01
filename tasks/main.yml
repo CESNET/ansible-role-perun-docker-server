@@ -112,8 +112,10 @@
     apply:
       tags:
         - site_specific
+        - site_specific_before
   tags:
     - site_specific
+    - site_specific_before
 
 - name: "perun rpc setup"
   import_tasks: perun_rpc.yml
@@ -157,5 +159,7 @@
     apply:
       tags:
         - site_specific
+        - site_specific_after
   tags:
     - site_specific
+    - site_specific_after
