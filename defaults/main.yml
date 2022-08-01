@@ -304,10 +304,10 @@ perun_ngui_consolidator_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_consolidator_oauth_response_type: "code"
 perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
 perun_ngui_consolidator_instance_favicon: false
-perun_ngui_consolidator_path_to_idp_provider_userinfo: ["target_backend", "display_name", "text"],
-perun_ngui_consolidator_path_to_idp_logo_userinfo: ["target_backend", "logo", "text"],
-perun_ngui_consolidator_path_to_idp_logo_width_userinfo: ["target_backend", "logo", "width"],
-perun_ngui_consolidator_path_to_idp_logo_height_userinfo: ["target_backend", "logo", "height"],
+perun_ngui_consolidator_path_to_idp_provider_userinfo: ["target_backend", "display_name", "text"]
+perun_ngui_consolidator_path_to_idp_logo_userinfo: ["target_backend", "logo", "text"]
+perun_ngui_consolidator_path_to_idp_logo_width_userinfo: ["target_backend", "logo", "width"]
+perun_ngui_consolidator_path_to_idp_logo_height_userinfo: ["target_backend", "logo", "height"]
 
 #new GUI Linker
 
