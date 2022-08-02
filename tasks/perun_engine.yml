@@ -180,6 +180,34 @@
   set_fact:
     engine_mounts: "{{ engine_mounts + perun_engine_mounts_additional }}"
 
+- name: "create /home/peruneng/.bash_profile"
+  copy:
+    dest: /home/peruneng/.bash_profile
+    owner: peruneng
+    group: peruneng
+    mode: '0550'
+    content: |2
+      # set environment
+      source /etc/perun/perun-engine
+      
+      # replace scripts from gen-local
+      if [[ -n $(ls -A /etc/perun/gen-local) ]] ; then
+        cd /etc/perun/gen-local
+        for i in * ; do
+          echo "replacing from gen-local/$i"
+          cp $i "/opt/perun-engine/gen/$i"
+        done
+      fi
+      
+      # replace scripts from send-local
+      if [[ -n $(ls -A /etc/perun/send-local) ]] ; then
+        cd /etc/perun/send-local
+        for i in * ; do
+          echo "replacing from send-local/$i"
+          cp $i "/opt/perun-engine/send/$i"
+        done
+      fi
+
 - name: "{{ 'create' if perun_engine_enabled else 'remove' }} Perun engine container"
   docker_container:
     name: perun_engine
@@ -220,13 +248,5 @@
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
         -w /home/perun \
-        registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }} /bin/bash
+        registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }} /bin/bash --login
 
-- name: "create /home/peruneng/.bashrc sourcing /etc/perun/perun-engine"
-  copy:
-    dest: /home/peruneng/.bashrc
-    owner: peruneng
-    group: peruneng
-    mode: '0550'
-    content: |2
-      source /etc/perun/perun-engine
