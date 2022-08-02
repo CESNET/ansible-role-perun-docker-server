@@ -212,6 +212,7 @@
     content: |
       #!/bin/bash
       docker run -it --rm --name engine_test_$$ --hostname engine_test_$$ \
+        --network perun_net \
       {% for m in engine_mounts %}
         --mount type={{ m.type }},target={{ m.target }}{% if m.source is defined %},source={{ m.source }}{% endif %} \
       {% endfor %}
