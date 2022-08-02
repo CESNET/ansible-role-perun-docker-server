@@ -181,6 +181,7 @@
 - name: "create Perun RPC container"
   docker_container:
     name: perun_rpc
+    hostname: perun_rpc
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_rpc:{{ perun_rpc_container_version }}"
     pull: yes
     state: started

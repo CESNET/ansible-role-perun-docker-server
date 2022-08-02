@@ -211,6 +211,7 @@
 - name: "{{ 'create' if perun_engine_enabled else 'remove' }} Perun engine container"
   docker_container:
     name: perun_engine
+    hostname: perun_engine
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
     pull: yes
     restart_policy: unless-stopped

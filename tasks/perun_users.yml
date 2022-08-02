@@ -41,3 +41,15 @@
     owner: perun
     group: perun
     mode: '0544'
+
+- name: "create /root/.bash_profile with aliases"
+  copy:
+    dest: /root/.bash_profile
+    content: |
+      alias apache-bash='docker exec -it perun_apache bash'
+      alias engine-bash='docker exec -it perun_engine bash'
+      alias engine-bash-root='docker exec -u root -it perun_engine bash'
+      alias rpc-bash='docker exec -it perun_rpc bash'
+      alias rpc-bash-root='docker exec -u root -it perun_rpc bash'
+      alias ldapc-bash='docker exec -it perun_ldapc bash'
+      alias ldapc-bash-root='docker exec -u root -it perun_ldapc bash'
