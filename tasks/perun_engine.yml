@@ -202,3 +202,19 @@
     dest: /etc/hosts
     regexp: 'perun_engine'
     line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_engine"
+
+- name: "create /usr/local/bin/perun-engine-test"
+  copy:
+    dest: /usr/local/bin/perun-engine-test
+    owner: perun
+    group: perun
+    mode: '0550'
+    content: |
+      #!/bin/bash
+      docker run -it --rm --name engine_test_$$ --hostname engine_test_$$ \
+        --volume /home/peruneng:/home/perun \
+      {% for host, ip in perun_containers_etc_hosts.items() %}
+        --add-host {{ host }}:{{ ip }} \
+      {% endfor %}
+        -w /home/perun \
+        registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }} /bin/bash

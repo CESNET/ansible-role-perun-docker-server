@@ -32,6 +32,8 @@
 - name: "prevent changing permissions when mounted to a container"
   copy:
     dest: "{{ vlm.volume.Mountpoint }}/README.txt"
-    content: "this Docker volume is linked from {{ volume.link }} "
+    content: |
+      this Docker volume is linked from {{ volume.link }} on the host system
+
     owner: "{{ volume.owner }}"
     group: "{{ volume.group }}"
