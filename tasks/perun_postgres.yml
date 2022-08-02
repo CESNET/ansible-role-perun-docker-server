@@ -9,6 +9,7 @@
       FILENAME=perun_for_test_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
       echo "dumping PostgreSQL database perun into $PWD/$FILENAME ..."
       export LANG=cs_CZ.UTF-8
+      umask 0027
       pg_dump \
         --exclude-table-data=perun.auditer_log \
         --exclude-table-data=perun.pn_receiver \
@@ -16,6 +17,7 @@
         --exclude-table-data=perun.facility_service_destinations \
         --exclude-table-data=perun.tasks_results \
         --exclude-table-data=perun.destinations \
+        --exclude-table-data=perun.service_denials \
         perun | zstdmt -10 --quiet --force -o "$FILENAME"
 
 - name: "add extensions"

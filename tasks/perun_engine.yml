@@ -212,9 +212,20 @@
     content: |
       #!/bin/bash
       docker run -it --rm --name engine_test_$$ --hostname engine_test_$$ \
-        --volume /home/peruneng:/home/perun \
+      {% for m in engine_mounts %}
+        --mount type={{ m.type }},target={{ m.target }}{% if m.source is defined %},source={{ m.source }}{% endif %} \
+      {% endfor %}
       {% for host, ip in perun_containers_etc_hosts.items() %}
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
         -w /home/perun \
         registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }} /bin/bash
+
+- name: "create /home/peruneng/.bashrc sourcing /etc/perun/perun-engine"
+  copy:
+    dest: /home/peruneng/.bashrc
+    owner: peruneng
+    group: peruneng
+    mode: '0550'
+    content: |2
+      source /etc/perun/perun-engine
