@@ -186,20 +186,21 @@ ShibCompatValidUser on
   </LocationMatch>
 {% endif %}
 
+{% if  perun_apache_consolidator_rewrite_rules is defined %}
+{{ perun_apache_consolidator_rewrite_rules }}
+{% else %}
   RewriteRule ^/(krb|cert)-ic/ic$ https://%{HTTP_HOST}/$1/ic/ [L,R=301]
   RewriteRule ^/(krb|cert)-ic/ic/$ /var/www/perun-wui/PerunConsolidator{{ perun_apache_consolidator_html_suffix }}.html [L]
   RewriteRule ^/(krb|cert)-ic/ic/(.+)$ /var/www/perun-wui/$2 [L]
 
   RewriteRule ^/(.*)-ic/ic$ https://%{HTTP_HOST}/$1/ic/ [L,R=301]
-{% if  perun_apache_consolidator_rewrite_rules is defined %}
-{{ perun_apache_consolidator_rewrite_rules }}
-{% endif %}
   RewriteRule ^/(.*)-ic/ic/$ /var/www/perun-wui/PerunConsolidator{{ perun_apache_consolidator_html_suffix }}.html [L]
   RewriteRule ^/(.*)-ic/ic/(.+)$ /var/www/perun-wui/$2 [L]
 
   #must be last
   RewriteRule ^/(.*)/ic$ https://%{HTTP_HOST}/$1-ic/ic/ [L,NE,R=301]
   RewriteRule ^/(.*)/ic/(.*)$ https://%{HTTP_HOST}/$1-ic/ic/$2 [L,NE,R=301]
+{% endif %}
 
   ####################################
   ##     PROFILE                  ####
