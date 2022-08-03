@@ -42,9 +42,9 @@
     group: perun
     mode: '0544'
 
-- name: "create /root/.bash_profile with aliases"
+- name: "create useful aliases"
   copy:
-    dest: /root/.bash_profile
+    dest: /etc/profile.d/perun_aliases.sh
     content: |
       alias apache-bash='docker exec -it perun_apache bash'
       alias engine-bash='docker exec -it perun_engine bash'
