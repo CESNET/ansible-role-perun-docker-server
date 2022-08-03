@@ -3,6 +3,10 @@
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
   "document_title": "{{ perun_ngui_admin_document_title }}",
   "instance_favicon": {{ perun_ngui_admin_instance_favicon|to_json }},
+{% if perun_ngui_admin_warning_message %}
+  "display_warning": true,
+  "warning_message": "{{ perun_ngui_admin_warning_message }}",
+{% endif %}
   "oidc_client" : {
     "oauth_authority": "{{ perun_ngui_oauth_authority }}",
     "oauth_callback": "{{ perun_ngui_admin_oauth_callback }}",
