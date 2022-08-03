@@ -194,10 +194,18 @@
   copy:
     src: "{{ perun_instance_hostname }}/krb5.http.keytab"
     dest: "/etc/perun/apache/krb5.http.keytab"
-    owner: root
+    owner: www-data
     group: root
     mode: 0400
   when:  perun_apache_kerberos_enabled
+
+- name: "create directory for shibboleth cache"
+  file:
+    path: /var/log/apache2/shibboleth_cache
+    state: directory
+    owner: _shibd
+    group: _shibd
+    mode: '0755'
 
 - name: "create /etc/perun/apache/shibboleth directory"
   file:
