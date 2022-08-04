@@ -109,6 +109,7 @@ perun_rpc_db_initializator_enabled: yes
 perun_rpc_userInfoEndpoint_extSourceLogin: ""
 perun_rpc_userInfoEndpoint_extSourceName: ""
 perun_rpc_userInfoEndpoint_extSourceFriendlyName: ""
+perun_rpc_mounts_additional: []
 
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"

@@ -178,6 +178,21 @@
     owner: perunrpc
     group: perunrpc
 
+- name: "list normal rpc mounts"
+  set_fact:
+    rpc_mounts:
+      - { type: volume, source: perun_logs, target: /var/log/perun }
+      - { type: volume, source: perunrpc_home, target: /home/perun }
+      - { type: volume, source: perunrpc_etc, target: /etc/perun }
+      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
+      - { type: bind, source: /dev/log, target: /dev/log }
+      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+
+- name: "add perun_rpc_mounts_additional to rpc mounts"
+  when: perun_rpc_mounts_additional|length > 0
+  set_fact:
+    rpc_mounts: "{{ rpc_mounts + perun_rpc_mounts_additional }}"
+
 - name: "create Perun RPC container"
   docker_container:
     name: perun_rpc
@@ -186,13 +201,7 @@
     pull: yes
     state: started
     restart_policy: unless-stopped
-    mounts:
-      - { type: volume, source: perun_logs, target: /var/log/perun }
-      - { type: volume, source: perunrpc_home, target: /home/perun }
-      - { type: volume, source: perunrpc_etc, target: /etc/perun }
-      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
-      - { type: bind, source: /dev/log, target: /dev/log }
-      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+    mounts: "{{ rpc_mounts }}"
     networks_cli_compatible: yes
     networks:
       - name: perun_net
