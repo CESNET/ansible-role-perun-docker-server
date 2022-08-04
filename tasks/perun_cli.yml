@@ -18,6 +18,7 @@
       # runs an interactive container with current working dir and all arguments are passed to "bash -c " as a single long string
       if [[ -z $* ]] ; then ARGS="bash" ; else ARGS="$*" ; fi
       docker run -it --rm --name cli_$$ --hostname cli_$$ \
+        --network host \
         --volume /home/perun:/home/perun \
       {% for host, ip in perun_containers_etc_hosts.items() %}
         --add-host {{ host }}:{{ ip }} \
@@ -35,6 +36,7 @@
       #!/bin/bash
       # runs non-interactive container with working dir /home/perun and arguments are passed as an array to exec
       docker run --rm --name script_cli_$$ --volume /home/perun:/home/perun \
+        --network host \
       {% for host, ip in perun_containers_etc_hosts.items() %}
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
