@@ -279,7 +279,21 @@ perun_ngui_profile_document_title:
   cs: "{{ perun_ngui_profile_header_label_cs }}"
 perun_ngui_profile_admin_gui_label_en: "IAM Administration"
 perun_ngui_profile_admin_gui_label_cs: "Správa IAM"
-perun_ngui_profile_link_to_admin_gui_by_roles: []
+perun_ngui_profile_link_to_admin_gui_by_roles: [
+    "PERUNADMIN",
+    "PERUNOBSERVER",
+    "VOADMIN",
+    "VOOBSERVER",
+    "GROUPADMIN",
+    "GROUPOBSERVER",
+    "RESOURCEADMIN",
+    "RESOURCEOBSERVER",
+    "FACILITYADMIN",
+    "FACILITYOBSERVER",
+    "TRUSTEDFACILITYADMIN",
+    "SPONSOR",
+    "TOPGROUPCREATOR"
+]
 perun_ngui_profile_preferred_unix_group_names: []
 perun_ngui_profile_footer: '{{ perun_ngui_footer }}'
 perun_ngui_profile_theme: '{{ perun_ngui_theme }}'
