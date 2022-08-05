@@ -207,6 +207,9 @@
           cp $i "/opt/perun-engine/send/$i"
         done
       fi
+      
+      # go home
+      cd /home/perun
 
 - name: "{{ 'create' if perun_engine_enabled else 'remove' }} Perun engine container"
   docker_container:
