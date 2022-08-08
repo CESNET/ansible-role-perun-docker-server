@@ -7,55 +7,34 @@
     path: "{{ perun_certs_dir }}"
     state: directory
 
-- set_fact:
-    other_certs:
-      - cond: perun_api_enabled
-        hostname: perun_api_hostname
-        prefix: api
-        same: perun_api_tls_cert_same_as_host
-      - cond: perun_ngui_enabled
-        hostname: perun_ngui_admin_hostname
-        prefix: ngui
-        same: perun_ngui_admin_tls_cert_same_as_host
-      - cond: perun_ngui_profile_enabled
-        hostname: perun_ngui_profile_hostname
-        prefix: profile
-        same: perun_ngui_profile_tls_cert_same_as_host
-      - cond: perun_ngui_pwdreset_enabled
-        hostname: perun_ngui_pwdreset_hostname
-        prefix: pwdreset
-        same: perun_ngui_pwdreset_tls_cert_same_as_host
-      - cond: perun_ngui_publications_enabled
-        hostname: perun_ngui_publications_hostname
-        prefix: pubs
-        same: perun_ngui_publications_tls_cert_same_as_host
-      - cond: perun_ngui_consolidator_enabled
-        hostname: perun_ngui_consolidator_hostname
-        prefix: consolidator
-        same: perun_ngui_consolidator_tls_cert_same_as_host
-      - cond: perun_ngui_linker_enabled
-        hostname: perun_ngui_linker_hostname
-        prefix: linker
-        same: perun_ngui_linker_tls_cert_same_as_host
-
 - name: "use certbot certificates"
   when: perun_use_certbot_certificates
   block:
-    - name: "create certbot cert for  {{ perun_rpc_hostname }}"
+    - name: "collect alternative DNS names for multicert"
+      loop: "{{ other_certs }}"
+      loop_control:
+        loop_var: cert_item
+        label: "{{ cert_item.prefix }}"
+      when: lookup('vars', cert_item.cond)
+      set_fact:
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ lookup('vars', cert_item.hostname) ] }}"
+
+    - name: "create certbot cert for all DNS names"
       include_role:
         name: cesnet.certbot_certs
         apply:
           tags: [ 'perun_certs' ]
       vars:
+        certbot_certname: multi
         certbot_hostname: "{{ perun_rpc_hostname }}"
+        certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames }}"
         certbot_prehook: perun_prehook.sh
         certbot_posthook: perun_posthook.sh
-
 
     - name: "create link to host key"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/privkey.pem"
+        src: "/etc/letsencrypt/live/multi/privkey.pem"
         dest: "{{ perun_certificate_key_file }}"
         force: yes
       notify:
@@ -67,71 +46,33 @@
     - name: "create link to host cert"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/cert.pem"
+        src: "/etc/letsencrypt/live/multi/cert.pem"
         dest: "{{ perun_certificate_file }}"
         force: yes
 
     - name: "create link to host chain"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/chain.pem"
+        src: "/etc/letsencrypt/live/multi/chain.pem"
         dest: "{{ perun_certificate_chain_file }}"
         force: yes
 
     - name: "create link to host full chain"
       file:
         state: link
-        src: "/etc/letsencrypt/live/{{ perun_rpc_hostname }}/fullchain.pem"
+        src: "/etc/letsencrypt/live/multi/fullchain.pem"
         dest: "{{ perun_certificate_fullchain_file }}"
         force: yes
 
-    - name: "create other certbot certs"
-      loop: "{{ other_certs }}"
-      loop_control:
-        loop_var: cert_item
-        label: "{{ cert_item.prefix }}"
-      when: lookup('vars', cert_item.cond)
-      include_role:
-        name: cesnet.certbot_certs
-        apply:
-          tags: [ 'perun_certs' ]
-      vars:
-        certbot_hostname: "{{ lookup('vars', cert_item.hostname) }}"
-        certbot_prehook: perun_prehook.sh
-        certbot_posthook: perun_posthook.sh
-
-    - name: "create links to keys"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
-      file:
-        state: link
-        src: "/etc/letsencrypt/live/{{ lookup('vars', item.hostname) }}/privkey.pem"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
-        force: yes
-
-    - name: "create links to certs"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
-      file:
-        state: link
-        src: "/etc/letsencrypt/live/{{ lookup('vars', item.hostname) }}/cert.pem"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
-        force: yes
-
-    - name: "create links to chains"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
-      file:
-        state: link
-        src: "/etc/letsencrypt/live/{{ lookup('vars', item.hostname) }}/chain.pem"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
-        force: yes
+    - name: "clean old links"
+      block:
+        - name: "clean old keys links"
+          loop: "{{ ['ngui', 'profile', 'api'] | product(['key', 'cert', 'chain']) | list }}"
+          loop_control:
+            label: "{{ item[0] }}{{ item[1] }}.pem"
+          file:
+            state: absent
+            path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
 
 - name: "use issued certificates"
   when: not perun_use_certbot_certificates
@@ -196,7 +137,7 @@
       loop: "{{ other_certs }}"
       loop_control:
         label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
+      when: lookup('vars', item.cond) and not lookup('vars', item.same)
       copy:
         src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}key.pem"
         dest: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
@@ -210,7 +151,7 @@
       loop: "{{ other_certs }}"
       loop_control:
         label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
+      when: lookup('vars', item.cond) and not lookup('vars', item.same)
       copy:
         src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}cert.pem"
         dest: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
@@ -224,7 +165,7 @@
       loop: "{{ other_certs }}"
       loop_control:
         label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond)
+      when: lookup('vars', item.cond) and not lookup('vars', item.same)
       copy:
         src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}chain.pem"
         dest: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
@@ -233,6 +174,43 @@
         mode: 0644
       notify:
         - "restart perun_apache"
+
+    - name: "clean unnecessary old links"
+      block:
+        - name: "clean old links to keys"
+          loop: "{{ other_certs }}"
+          loop_control:
+            label: "{{ item.prefix }}"
+          when: lookup('vars', item.cond) and lookup('vars', item.same)
+          file:
+            path: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
+            state: absent
+
+        - name: "clean old links to certs"
+          loop: "{{ other_certs }}"
+          loop_control:
+            label: "{{ item.prefix }}"
+          when: lookup('vars', item.cond) and lookup('vars', item.same)
+          file:
+            path: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
+            state: absent
+
+        - name: "clean old links to chains"
+          loop: "{{ other_certs }}"
+          loop_control:
+            label: "{{ item.prefix }}"
+          when: lookup('vars', item.cond) and lookup('vars', item.same)
+          file:
+            path: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
+            state: absent
+
+        - name: "clean renamed ngui to admin"
+          loop: "{{ ['ngui' ] | product(['key', 'cert', 'chain']) | list }}"
+          loop_control:
+            label: "{{ item[0] }}{{ item[1] }}.pem"
+          file:
+            state: absent
+            path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
 
 - name: "prereq for docker_container_info task"
   apt:

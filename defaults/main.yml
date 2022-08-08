@@ -26,6 +26,8 @@ perun_security_preferred_languages: "en, cs, sk"
 
 # whether to use Let's Encrypt (certbot) certificates
 perun_use_certbot_certificates: no
+# alternative DNS names to include into certificate
+perun_certbot_alt_hostnames: []
 
 # perun dispatcher
 perun_dispatcher_reschedule_interval: 48
@@ -345,6 +347,7 @@ perun_ngui_linker_instance_favicon: false
 # perun-apps-config.yml
 perun_ngui_pwdreset_enabled: no
 perun_ngui_pwdreset_hostname: pwdreset.aai.example.org
+perun_ngui_pwdreset_hostname_aliases: []
 perun_ngui_pwdreset_tls_cert_same_as_host: yes
 perun_ngui_publications_enabled: no
 perun_ngui_publications_hostname: publications.aai.example.org
@@ -530,6 +533,37 @@ perun_certificate_fullchain_file: "{{ perun_certs_dir }}/hostfullchain.pem"
 perun_certbot_mounts:
   - { type: bind, source: /etc/letsencrypt/live, target: /etc/letsencrypt/live, read_only: yes }
   - { type: bind, source: /etc/letsencrypt/archive, target: /etc/letsencrypt/archive, read_only: yes }
+
+# structure for looping over alternative hostnames and their certificates
+other_certs:
+  - cond: perun_api_enabled
+    hostname: perun_api_hostname
+    prefix: api
+    same: perun_api_tls_cert_same_as_host
+  - cond: perun_ngui_enabled
+    hostname: perun_ngui_admin_hostname
+    prefix: admin
+    same: perun_ngui_admin_tls_cert_same_as_host
+  - cond: perun_ngui_profile_enabled
+    hostname: perun_ngui_profile_hostname
+    prefix: profile
+    same: perun_ngui_profile_tls_cert_same_as_host
+  - cond: perun_ngui_pwdreset_enabled
+    hostname: perun_ngui_pwdreset_hostname
+    prefix: pwdreset
+    same: perun_ngui_pwdreset_tls_cert_same_as_host
+  - cond: perun_ngui_publications_enabled
+    hostname: perun_ngui_publications_hostname
+    prefix: pubs
+    same: perun_ngui_publications_tls_cert_same_as_host
+  - cond: perun_ngui_consolidator_enabled
+    hostname: perun_ngui_consolidator_hostname
+    prefix: consolidator
+    same: perun_ngui_consolidator_tls_cert_same_as_host
+  - cond: perun_ngui_linker_enabled
+    hostname: perun_ngui_linker_hostname
+    prefix: linker
+    same: perun_ngui_linker_tls_cert_same_as_host
 
 # firewall settings
 # CESNET VPN info https://wiki.cesnet.cz/doku.php?id=interni_sluzby:openvpn

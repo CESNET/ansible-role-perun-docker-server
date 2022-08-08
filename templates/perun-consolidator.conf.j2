@@ -44,9 +44,19 @@
   RewriteRule ^ /index.html
 
   SSLEngine on
+{% if perun_use_certbot_certificates %}
+  SSLCertificateFile /etc/letsencrypt/live/multi/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/multi/privkey.pem
+{% elif perun_ngui_consolidator_tls_cert_same_as_host %}
+  SSLCertificateFile /etc/perun/ssl/hostcert.pem
+  SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
+  SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
+{% else %}
   SSLCertificateFile /etc/perun/ssl/consolidatorcert.pem
   SSLCertificateKeyFile /etc/perun/ssl/consolidatorkey.pem
   SSLCertificateChainFile /etc/perun/ssl/consolidatorchain.pem
+{% endif %}
+
 
   LogLevel warn ssl:warn rewrite:warn
 
