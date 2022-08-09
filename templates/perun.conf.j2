@@ -6,6 +6,9 @@ ServerName {{ perun_rpc_hostname }}
 
   ServerAdmin {{ perun_email }}
   ServerName {{ perun_rpc_hostname }}
+{% for item in perun_rpc_hostname_aliases %}
+  ServerAlias {{ item }}
+{% endfor %}
   RewriteEngine On
   RewriteCond %{HTTPS} !=on
   RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]

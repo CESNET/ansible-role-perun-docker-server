@@ -1,7 +1,7 @@
 # add host names to CORS domains if not present
 
 - name: "add {{ 'https://' + perun_ngui_admin_hostname }} to CORS domains"
-  when: perun_ngui_enabled and ('https://' + perun_ngui_admin_hostname) not in perun_rpc_cors_domains
+  when: perun_ngui_admin_enabled and ('https://' + perun_ngui_admin_hostname) not in perun_rpc_cors_domains
   set_fact:
     perun_rpc_cors_domains: "{{ perun_rpc_cors_domains + [ 'https://' + perun_ngui_admin_hostname ] }}"
 

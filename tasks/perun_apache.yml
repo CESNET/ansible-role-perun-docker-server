@@ -72,7 +72,7 @@
 
 # docs at https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications
 - name: "generate /etc/perun/apache/instanceConfig.json"
-  when: perun_ngui_enabled
+  when: perun_ngui_admin_enabled
   template:
     src: instanceConfig.json.j2
     dest: /etc/perun/apache/instanceConfig.json
@@ -104,11 +104,16 @@
     mode: '0400'
   notify: "restart perun_apache"
 
-- name: "create /etc/perun/apache/sites-enabled/perun-ngui.conf"
-  when: perun_ngui_enabled
+- name: "clean old file for perun-admin.conf"
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-ngui.conf
+    state: absent
+
+- name: "create /etc/perun/apache/sites-enabled/perun-admin.conf"
+  when: perun_ngui_admin_enabled
   template:
-    src: perun-ngui.conf.j2
-    dest: /etc/perun/apache/sites-enabled/perun-ngui.conf
+    src: perun-admin.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-admin.conf
     owner: root
     group: root
     mode: '0400'

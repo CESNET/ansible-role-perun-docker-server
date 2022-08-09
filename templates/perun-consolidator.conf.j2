@@ -7,12 +7,18 @@
 <VirtualHost *:80>
   ServerAdmin {{ perun_email }}
   ServerName {{ perun_ngui_consolidator_hostname }}
+{% for alias in perun_ngui_consolidator_hostname_aliases %}
+  ServerAlias {{ alias }}
+{% endfor %}
   Redirect / https://{{ perun_ngui_consolidator_hostname }}/
 </VirtualHost>
 
 <VirtualHost *:443>
   ServerAdmin {{ perun_email }}
   ServerName {{ perun_ngui_consolidator_hostname }}
+{% for alias in perun_ngui_consolidator_hostname_aliases %}
+  ServerAlias {{ alias }}
+{% endfor %}
   DocumentRoot /var/www/perun-web-apps/consolidator
   <Directory "/var/www/perun-web-apps/consolidator">
     Options -Indexes +FollowSymLinks -MultiViews

@@ -7,12 +7,18 @@
 <VirtualHost *:80>
     ServerAdmin {{ perun_email }}
     ServerName {{ perun_api_hostname }}
+{% for alias in perun_api_hostname_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
     Redirect / https://{{ perun_api_hostname }}/
 </VirtualHost>
 
 <VirtualHost *:443>
     ServerAdmin {{ perun_email }}
     ServerName {{ perun_api_hostname }}
+{% for alias in perun_api_hostname_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
 
     DocumentRoot /var/www/html
     <Directory "/var/www/html">

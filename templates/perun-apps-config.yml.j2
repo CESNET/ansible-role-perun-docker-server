@@ -5,7 +5,7 @@ brands:
   - name: default
     new_apps:
       api: "https://{{ perun_api_hostname }}"
-{% if perun_ngui_enabled %}
+{% if perun_ngui_admin_enabled %}
       admin: "https://{{ perun_ngui_admin_hostname }}"
 {% endif %}
 {% if perun_ngui_profile_enabled %}

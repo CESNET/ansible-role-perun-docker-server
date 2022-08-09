@@ -10,14 +10,22 @@
 - name: "use certbot certificates"
   when: perun_use_certbot_certificates
   block:
-    - name: "collect alternative DNS names for multicert"
+    - name: "collect DNS names for multicert"
       loop: "{{ other_certs }}"
       loop_control:
         loop_var: cert_item
         label: "{{ cert_item.prefix }}"
       when: lookup('vars', cert_item.cond)
       set_fact:
-        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ lookup('vars', cert_item.hostname) ] }}"
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ lookup('vars', cert_item.hostname) ] + lookup('vars', cert_item.aliases) }}"
+
+    - name: "add rpc aliases for multicert"
+      set_fact:
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + perun_rpc_hostname_aliases }}"
+
+    - name: "collected DNS names"
+      debug:
+        var: perun_certbot_alt_hostnames
 
     - name: "create certbot cert for all DNS names"
       include_role:

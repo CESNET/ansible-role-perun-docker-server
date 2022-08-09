@@ -156,7 +156,7 @@ perun_policies: {}
 perun_roles_management: {}
 
 # new GUI common
-perun_ngui_enabled: false
+perun_ngui_admin_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
 perun_ngui_oauth_offline_access_consent_prompt: true
 perun_ngui_footer:
@@ -311,6 +311,7 @@ perun_ngui_profile_local_account_namespace: ""
 
 perun_ngui_consolidator_enabled: no
 perun_ngui_consolidator_hostname: "perun.aai.example.org"
+perun_ngui_consolidator_hostname_aliases: []
 perun_ngui_consolidator_tls_cert_same_as_host: yes
 perun_ngui_consolidator_document_title: "Consolidator"
 perun_ngui_consolidator_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
@@ -331,6 +332,7 @@ perun_ngui_consolidator_path_to_idp_logo_height_userinfo: ["target_backend", "lo
 
 perun_ngui_linker_enabled: no
 perun_ngui_linker_hostname: "perun.aai.example.org"
+perun_ngui_linker_hostname_aliases: []
 perun_ngui_linker_tls_cert_same_as_host: yes
 perun_ngui_linker_document_title: "Linker"
 perun_ngui_linker_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
@@ -351,15 +353,19 @@ perun_ngui_pwdreset_hostname_aliases: []
 perun_ngui_pwdreset_tls_cert_same_as_host: yes
 perun_ngui_publications_enabled: no
 perun_ngui_publications_hostname: publications.aai.example.org
+perun_ngui_publications_hostname_aliases: []
 perun_ngui_publications_tls_cert_same_as_host: yes
 
 # virtual host for API
 perun_api_enabled: no
 perun_api_hostname: "{{ perun_rpc_hostname }}"
+perun_api_hostname_aliases: []
 perun_api_tls_cert_same_as_host: yes
 # second API with other OIDC
 perun_api_alternative_enabled: no
 perun_api_alternative_hostname: perun-api-second.example.org
+perun_api_alternative_hostname_aliases: []
+perun_api_alternative_tls_cert_same_as_host: yes
 perun_apache_oauth_alternative_introspection_url: https://other.oidc.provider/oidc/introspection
 perun_apache_oauth_alternative_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
 perun_apache_oauth_alternative_client_secret: "YYYYYYYYYYYYYYYYY"
@@ -538,30 +544,49 @@ perun_certbot_mounts:
 other_certs:
   - cond: perun_api_enabled
     hostname: perun_api_hostname
+    aliases: perun_api_hostname_aliases
     prefix: api
     same: perun_api_tls_cert_same_as_host
-  - cond: perun_ngui_enabled
+
+  - cond: perun_api_alternative_enabled
+    hostname: perun_api_alternative_hostname
+    aliases: perun_api_alternative_hostname_aliases
+    prefix: altapi
+    same: perun_api_alternative_tls_cert_same_as_host
+
+  - cond: perun_ngui_admin_enabled
     hostname: perun_ngui_admin_hostname
+    aliases: perun_ngui_admin_hostname_aliases
     prefix: admin
     same: perun_ngui_admin_tls_cert_same_as_host
+
   - cond: perun_ngui_profile_enabled
     hostname: perun_ngui_profile_hostname
+    aliases: perun_ngui_profile_hostname_aliases
     prefix: profile
     same: perun_ngui_profile_tls_cert_same_as_host
+
   - cond: perun_ngui_pwdreset_enabled
     hostname: perun_ngui_pwdreset_hostname
+    aliases: perun_ngui_pwdreset_hostname_aliases
     prefix: pwdreset
     same: perun_ngui_pwdreset_tls_cert_same_as_host
+
   - cond: perun_ngui_publications_enabled
     hostname: perun_ngui_publications_hostname
+    aliases: perun_ngui_publications_hostname_aliases
     prefix: pubs
     same: perun_ngui_publications_tls_cert_same_as_host
+
   - cond: perun_ngui_consolidator_enabled
     hostname: perun_ngui_consolidator_hostname
+    aliases: perun_ngui_consolidator_hostname_aliases
     prefix: consolidator
     same: perun_ngui_consolidator_tls_cert_same_as_host
+
   - cond: perun_ngui_linker_enabled
     hostname: perun_ngui_linker_hostname
+    aliases: perun_ngui_linker_hostname_aliases
     prefix: linker
     same: perun_ngui_linker_tls_cert_same_as_host
 
