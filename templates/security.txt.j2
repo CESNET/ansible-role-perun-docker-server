@@ -8,25 +8,12 @@ Encryption: {{ perun_security_encryption }}
 Expires: {{ lookup('pipe','date --iso-8601=seconds --date=+year') }}
 Policy: {{ perun_security_policy }}
 Preferred-Languages: {{ perun_security_preferred_languages }}
-# old GUI
 Canonical: https://{{ perun_rpc_hostname }}/.well-known/security.txt
-{% if perun_api_enabled %}
-# RPC API
-Canonical: https://{{ perun_api_hostname }}/.well-known/security.txt
+{% for cert_item in other_certs %}
+{% if lookup('vars', cert_item.cond) %}
+Canonical: https://{{ lookup('vars', cert_item.hostname) }}/.well-known/security.txt
 {% endif %}
-{% if perun_ngui_admin_enabled %}
-# admin GUI
-Canonical: https://{{ perun_ngui_admin_hostname }}/.well-known/security.txt
-{% endif %}
-{% if perun_ngui_profile_enabled %}
-# user profile
-Canonical: https://{{ perun_ngui_profile_hostname }}/.well-known/security.txt
-{% endif %}
-{% if perun_ngui_linker_enabled %}
-# identity linker
-Canonical: https://{{ perun_ngui_linker_hostname }}/.well-known/security.txt
-{% endif %}
-{% if perun_ngui_consolidator_enabled %}
-# consolidator
-Canonical: https://{{ perun_ngui_consolidator_hostname }}/.well-known/security.txt
-{% endif %}
+{% for alias in lookup('vars', cert_item.aliases) %}
+Canonical: https://{{ alias }}/.well-known/security.txt
+{% endfor %}
+{% endfor %}
