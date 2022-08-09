@@ -139,6 +139,8 @@
     mode: '0400'
   vars:
     perun_api_hostname: "{{ perun_api_alternative_hostname }}"
+    perun_api_hostname_aliases: "{{ perun_api_alternative_hostname_aliases }}"
+    perun_api_tls_cert_same_as_host: "{{ perun_api_alternative_tls_cert_same_as_host }}"
     perun_apache_oauth_introspection_url: "{{ perun_apache_oauth_alternative_introspection_url }}"
     perun_apache_oauth_client_id: "{{ perun_apache_oauth_alternative_client_id }}"
     perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative_client_secret }}"
