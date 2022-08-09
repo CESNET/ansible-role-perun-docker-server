@@ -74,30 +74,30 @@
 - name: "generate /etc/perun/apache/instanceConfig.json"
   when: perun_ngui_admin_enabled
   template:
-    src: instanceConfig.json.j2
+    src: instance_configs/instanceConfig.json.j2
     dest: /etc/perun/apache/instanceConfig.json
 
 - name: "generate /etc/perun/apache/profileInstanceConfig.json"
   when: perun_ngui_profile_enabled
   template:
-    src: profileInstanceConfig.json.j2
+    src: instance_configs/profileInstanceConfig.json.j2
     dest: /etc/perun/apache/profileInstanceConfig.json
 
 - name: "generate /etc/perun/apache/consolidatorInstanceConfig.json"
   when: perun_ngui_consolidator_enabled
   template:
-    src: consolidatorInstanceConfig.json.j2
+    src: instance_configs/consolidatorInstanceConfig.json.j2
     dest: /etc/perun/apache/consolidatorInstanceConfig.json
 
 - name: "generate /etc/perun/apache/linkerInstanceConfig.json"
   when: perun_ngui_linker_enabled
   template:
-    src: linkerInstanceConfig.json.j2
+    src: instance_configs/linkerInstanceConfig.json.j2
     dest: /etc/perun/apache/linkerInstanceConfig.json
 
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
-    src: perun.conf.j2
+    src: sites-enabled/perun.conf.j2
     dest: /etc/perun/apache/sites-enabled/000-perun.conf
     owner: root
     group: root
@@ -112,7 +112,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-admin.conf"
   when: perun_ngui_admin_enabled
   template:
-    src: perun-admin.conf.j2
+    src: sites-enabled/perun-admin.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-admin.conf
     owner: root
     group: root
@@ -122,7 +122,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-api.conf"
   when: perun_api_enabled
   template:
-    src: perun-api.conf.j2
+    src: sites-enabled/perun-api.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-api.conf
     owner: root
     group: root
@@ -132,7 +132,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-api-alt.conf"
   when: perun_api_alternative_enabled
   template:
-    src: perun-api.conf.j2
+    src: sites-enabled/perun-api.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-api-alt.conf
     owner: root
     group: root
@@ -149,7 +149,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"
   when: perun_ngui_profile_enabled
   template:
-    src: perun-profile.conf.j2
+    src: sites-enabled/perun-profile.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-profile.conf
     owner: root
     group: root
@@ -159,7 +159,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-pwdreset.conf"
   when: perun_ngui_pwdreset_enabled
   template:
-    src: perun-pwdreset.conf.j2
+    src: sites-enabled/perun-pwdreset.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-pwdreset.conf
     owner: root
     group: root
@@ -169,7 +169,8 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-publications.conf"
   when: perun_ngui_publications_enabled
   template:
-    src: perun-publications.conf.j2
+    #TODO does not exist
+    src: sites-enabled/perun-publications.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-publications.conf
     owner: root
     group: root
@@ -179,7 +180,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-consolidator.conf"
   when: perun_ngui_consolidator_enabled
   template:
-    src: perun-consolidator.conf.j2
+    src: sites-enabled/perun-consolidator.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-consolidator.conf
     owner: root
     group: root
@@ -189,7 +190,7 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-linker.conf"
   when: perun_ngui_linker_enabled
   template:
-    src: perun-linker.conf.j2
+    src: sites-enabled/perun-linker.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-linker.conf
     owner: root
     group: root
@@ -227,19 +228,19 @@
 
 - name: "create attribute-map.xml"
   template:
-    src:  attribute-map.xml.j2
+    src:  shibboleth/attribute-map.xml.j2
     dest: /etc/perun/apache/shibboleth/attribute-map.xml
   notify: "restart perun_apache"
 
 - name: "create attribute-policy.xml"
   template:
-    src:  attribute-policy.xml.j2
+    src:  shibboleth/attribute-policy.xml.j2
     dest: /etc/perun/apache/shibboleth/attribute-policy.xml
   notify: "restart perun_apache"
 
 - name: "create shibboleth2.xml"
   template:
-    src:  shibboleth2.xml.j2
+    src:  shibboleth/shibboleth2.xml.j2
     dest: /etc/perun/apache/shibboleth/shibboleth2.xml
   notify: "restart perun_apache"
 
