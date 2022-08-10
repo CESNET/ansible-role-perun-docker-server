@@ -246,7 +246,7 @@ perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/ap
 perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_profile_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_profile_hostname }}"
 perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
-perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access authn_details"
+perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_profile_password_namespace_attributes: []
