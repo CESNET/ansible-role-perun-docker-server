@@ -456,6 +456,7 @@ perun_apache_kerberos_realms:
   - name: ADMIN.META
     urlmatch: '^/krbam/'
 perun_apache_oauth_introspection_url: https://login.example.org/oidc/introspection
+perun_apache_oauth_introspection_cache_timeout_seconds: 300
 perun_apache_oauth_client_id: xxx-xxxx-xxx-xxx-x-x-x-x-xxxx
 perun_apache_oauth_client_secret: XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 perun_apache_csp_script_src: ""

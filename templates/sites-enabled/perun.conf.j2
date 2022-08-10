@@ -329,6 +329,7 @@ ShibCompatValidUser on
   ###########################
 
   OIDCOAuthIntrospectionEndpoint    {{ perun_apache_oauth_introspection_url }}
+  OIDCOAuthTokenIntrospectionInterval {{ perun_apache_oauth_introspection_cache_timeout_seconds }}
   OIDCOAuthClientID      {{ perun_apache_oauth_client_id }}
   OIDCOAuthClientSecret  {{ perun_apache_oauth_client_secret }}
   OIDCOAuthAcceptTokenAs header

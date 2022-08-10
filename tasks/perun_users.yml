@@ -53,3 +53,4 @@
       alias rpc-bash-root='docker exec -u root -it perun_rpc bash'
       alias ldapc-bash='docker exec -it perun_ldapc bash'
       alias ldapc-bash-root='docker exec -u root -it perun_ldapc bash'
+      alias x509='openssl x509 -noout -nameopt compat -subject -issuer -dates -ext subjectAltName -in'
