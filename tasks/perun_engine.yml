@@ -72,43 +72,43 @@
     directory_mode: '0550'
     mode: '0440'
 
-- name: "create /etc/perun/engine/gen-local"
+- name: "create /etc/perun/engine/(gen|send)-local"
+  loop: [ 'gen-local', 'send-local']
   file:
-    path: /etc/perun/engine/gen-local
+    path: "/etc/perun/engine/{{ item }}"
     state: directory
     owner: root
     group: peruneng
     mode: '0550'
 
-- name: "copy gen-local"
-  copy:
-    src: "{{ item }}"
-    dest: /etc/perun/engine/gen-local/
-    owner: root
-    group: peruneng
-    mode: '0750'
-  with_fileglob:
-    - "files/{{ perun_instance_hostname }}/gen-local/*"
+- name: "synchronize (gen|send)-local"
+  loop: [ 'gen-local', 'send-local']
+  synchronize:
+    src: "files/{{ perun_instance_hostname }}/{{ item }}/"
+    dest: "/etc/perun/engine/{{ item }}/"
+    delete: yes
+    archive: no
+    recursive: yes
+    checksum: yes
   notify: "restart perun_engine"
 
-- name: "create /etc/perun/engine/send-local"
+- name: "find (gen|send)-local files"
+  find:
+    paths:
+      - /etc/perun/engine/gen-local
+      - /etc/perun/engine/send-local
+    file_type: file
+  register: localfiles
+
+- name: "set owner and permissions for (gen|send)-local files"
   file:
-    path: /etc/perun/engine/send-local
-    state: directory
-    owner: root
-    group: peruneng
-    mode: '0550'
-
-- name: "copy send-local"
-  copy:
-    src: "{{ item }}"
-    dest: /etc/perun/engine/send-local/
+    path: "{{ item.path }}"
     owner: root
     group: peruneng
     mode: '0750'
-  with_fileglob:
-    - "files/{{ perun_instance_hostname }}/send-local/*"
-  notify: "restart perun_engine"
+  loop: "{{ localfiles.files }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: "make key, cert and chain for generic_send script with curl"
   block:
@@ -180,6 +180,17 @@
   set_fact:
     engine_mounts: "{{ engine_mounts + perun_engine_mounts_additional }}"
 
+- name: "create dirs for gen/send-local-dev"
+  loop:
+    - gen-local-dev
+    - send-local-dev
+  file:
+    state: directory
+    path: "/home/peruneng/{{ item }}"
+    owner: peruneng
+    group: peruneng
+    mode: '0750'
+
 - name: "create /home/peruneng/.bash_profile"
   copy:
     dest: /home/peruneng/.bash_profile
@@ -198,12 +209,30 @@
           cp $i "/opt/perun-engine/gen/$i"
         done
       fi
+
+      # replace scripts from gen-local-dev
+      if [[ -n $(ls -A /home/perun/gen-local-dev) ]] ; then
+        cd /home/perun/gen-local-dev
+        for i in * ; do
+          echo "replacing from gen-local-dev/$i"
+          cp $i "/opt/perun-engine/gen/$i"
+        done
+      fi
       
       # replace scripts from send-local
       if [[ -n $(ls -A /etc/perun/send-local) ]] ; then
         cd /etc/perun/send-local
         for i in * ; do
           echo "replacing from send-local/$i"
+          cp $i "/opt/perun-engine/send/$i"
+        done
+      fi
+
+      # replace scripts from send-local-dev
+      if [[ -n $(ls -A /home/perun/send-local-dev) ]] ; then
+        cd /home/perun/send-local-dev
+        for i in * ; do
+          echo "replacing from send-local-dev/$i"
           cp $i "/opt/perun-engine/send/$i"
         done
       fi
