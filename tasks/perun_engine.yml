@@ -72,6 +72,11 @@
     directory_mode: '0550'
     mode: '0440'
 
+- name: "install rsync for synchronization"
+  apt:
+    name: rsync
+    state: present
+
 - name: "create /etc/perun/engine/(gen|send)-local"
   loop: [ 'gen-local', 'send-local']
   file:
