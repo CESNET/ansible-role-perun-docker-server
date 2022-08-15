@@ -190,3 +190,18 @@ perun.userInfoEndpoint.extSourceName={{ perun_rpc_userInfoEndpoint_extSourceName
 
 # properties that are path in the userInfo to the extSourceFriendlyName
 perun.userInfoEndpoint.extSourceFriendlyName={{ perun_rpc_userInfoEndpoint_extSourceFriendlyName }}
+
+# name of the property in userInfo that could contain MFA timestamp
+perun.userInfoEndpoint.mfaAuthTimestampPropertyName={{ perun_rpc_userInfoEndpoint_mfaAuthTimestampPropertyName }}
+
+# timeout limit (hours) for the MFA to be valid (timestamp cannot be older than the limit)
+perun.userInfoEndpoint.mfaAuthTimeout={{ perun_rpc_userInfoEndpoint_mfaAuthTimeout }}
+
+# name of the property in userInfo that should contain acr
+perun.userInfoEndpoint.acrPropertyName={{ perun_rpc_userInfoEndpoint_acrPropertyName }}
+
+# expected acr value to be returned from userInfo if MFA was performed
+perun.userInfoEndpoint.mfaAcrValue={{ perun_rpc_userInfoEndpoint_mfaAcrValue }}
+
+# when set to true, MFA is required for critical operations and attribute actions
+perun.enforceMfa={{ perun_enforceMfa }}
