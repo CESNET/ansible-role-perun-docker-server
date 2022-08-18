@@ -322,6 +322,7 @@ perun_ngui_consolidator_oauth_load_user_info: true
 perun_ngui_consolidator_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_consolidator_oauth_response_type: "code"
 perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
+perun_ngui_consolidator_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_consolidator_instance_favicon: false
 perun_ngui_consolidator_path_to_idp_provider_userinfo: ["target_backend", "display_name", "text"]
 perun_ngui_consolidator_path_to_idp_logo_userinfo: ["target_backend", "logo", "text"]
@@ -343,6 +344,7 @@ perun_ngui_linker_oauth_load_user_info: true
 perun_ngui_linker_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_linker_oauth_response_type: "code"
 perun_ngui_linker_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
+perun_ngui_linker_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_linker_instance_favicon: false
 
 
