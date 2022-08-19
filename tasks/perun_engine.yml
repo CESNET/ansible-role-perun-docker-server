@@ -86,16 +86,60 @@
     group: peruneng
     mode: '0550'
 
+- name: "detect local directories gen-local and send-local"
+  loop: [ 'gen-local', 'send-local' ]
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/{{ item }}/"
+  register: gsl
+
 - name: "synchronize (gen|send)-local"
-  loop: [ 'gen-local', 'send-local']
+  loop: "{{ gsl.results }}"
+  loop_control:
+    loop_var: result
+    label: "{{ result.item }}"
+  when: result.stat.exists
   synchronize:
-    src: "files/{{ perun_instance_hostname }}/{{ item }}/"
-    dest: "/etc/perun/engine/{{ item }}/"
+    src: "files/{{ perun_instance_hostname }}/{{ result.item }}/"
+    dest: "/etc/perun/engine/{{ result.item }}/"
     delete: yes
     archive: no
     recursive: yes
     checksum: yes
   notify: "restart perun_engine"
+
+- name: "deal with previously existing but removed local gen-local or send-local"
+  block:
+    - name: "find superfluous remote files for non-existent local gen-local or send-local"
+      loop: "{{ gsl.results }}"
+      loop_control:
+        loop_var: result
+        label: "{{ result.item }}"
+      when: not result.stat.exists
+      find:
+        paths:
+          - "/etc/perun/engine/{{ result.item }}"
+        file_type: file
+      register: gsl_files
+    - name: "make empty list of files for removal"
+      set_fact:
+        files_to_remove: []
+    - name: "add found files to the list"
+      loop: "{{ gsl_files.results }}"
+      loop_control:
+        loop_var: fr
+        label: "{{ fr.result.item }}"
+      when: fr.files is defined
+      set_fact:
+        files_to_remove: "{{ files_to_remove +  fr.files }}"
+    - name: "remove superfluous remote files"
+      loop: "{{ files_to_remove }}"
+      loop_control:
+        loop_var: file
+        label: "{{ file.path }}"
+      file:
+        path: "{{ file.path }}"
+        state: absent
 
 - name: "find (gen|send)-local files"
   find:
