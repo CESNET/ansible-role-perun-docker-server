@@ -86,9 +86,17 @@
     group: peruneng
     mode: '0550'
 
+- name: "detect local directories gen-local and send-local"
+  loop: [ 'gen-local', 'send-local']
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/{{ item }}/"
+  register: gsl
+
 - name: "synchronize (gen|send)-local"
   loop: [ 'gen-local', 'send-local']
   synchronize:
+    when: gsl.results.stat.exists
     src: "files/{{ perun_instance_hostname }}/{{ item }}/"
     dest: "/etc/perun/engine/{{ item }}/"
     delete: yes
