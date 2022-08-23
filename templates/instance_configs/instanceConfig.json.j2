@@ -1,6 +1,10 @@
 {
   "config": "admin {{ perun_ngui_admin_hostname }}",
+{% if perun_ngui_admin_api_url is defined %}
+  "api_url": "https://{{ perun_ngui_admin_api_url }}/oauth/rpc",
+{% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
+{% endif %}
   "document_title": "{{ perun_ngui_admin_document_title }}",
   "instance_favicon": {{ perun_ngui_admin_instance_favicon|to_json }},
 {% if perun_ngui_admin_warning_message %}
