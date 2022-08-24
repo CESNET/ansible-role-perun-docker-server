@@ -1,6 +1,10 @@
 {
   "config": "{{ perun_ngui_linker_hostname }}",
+{% if perun_ngui_linker_api_url is defined %}
+  "api_url": "https://{{ perun_ngui_linker_api_url }}/oauth/rpc",
+{% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
+{% endif %}
   "oidc_client" : {
       "oauth_authority": "{{ perun_ngui_linker_oauth_authority }}",
       "oauth_callback": "{{ perun_ngui_linker_oauth_callback }}",
