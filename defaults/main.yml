@@ -304,7 +304,7 @@ perun_ngui_profile_log_out_enabled: true
 perun_ngui_profile_logo_padding: ""
 perun_ngui_profile_logo: '{{ perun_ngui_logo }}'
 perun_ngui_profile_brandings: "{ '{{ perun_ngui_profile_hostname}}': {} }" #Ansible cannot substitute variables in dictionary keys, this is a workaround
-perun_ngui_profile_use_new_consolidator: false,
+perun_ngui_profile_use_new_consolidator: false
 perun_ngui_profile_local_account_namespace: ""
 
 #new GUI Consolidator
