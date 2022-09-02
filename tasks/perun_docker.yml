@@ -32,6 +32,7 @@
       - docker-ce
       - docker-ce-cli
       - docker-ce-rootless-extras
+      - containerd.io
 
 - name: "install docker packages"
   apt:
@@ -45,10 +46,9 @@
     selection: hold
   loop: "{{ docker_packages }}"
 
-- name: "install Docker"
+- name: "install python-docker"
   apt:
     name:
-      - containerd.io
       - python3-docker
       - pass
     state: present
