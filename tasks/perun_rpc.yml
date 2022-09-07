@@ -137,6 +137,29 @@
     - "files/{{ perun_instance_hostname }}/modules/*"
   notify: "restart perun_rpc"
 
+- name: "make key, cert and chain for purpose of password managers in rpc"
+  block:
+    - name: "create rpc ssl dir"
+      file:
+        state: directory
+        path: /etc/perun/rpc/ssl
+        owner: root
+        group: perunrpc
+        mode: '0550'
+
+    - name: "copy host certificates for pwd managers in rpc"
+      copy:
+        remote_src: yes
+        src: "/etc/perun/ssl/{{ item.src }}"
+        dest: "/etc/perun/rpc/ssl/{{ item.dest }}"
+        owner: root
+        group: perunrpc
+        mode: '0550'
+      loop:
+        - { src: "hostkey.pem", dest: "perun-host.key" }
+        - { src: "hostcert.pem", dest: "perun-host.pem" }
+        - { src: "hostchain.pem", dest: "perun-host.chain" }
+
 - name: "detect local directory perun_rpc_etc/"
   local_action:
     module: stat

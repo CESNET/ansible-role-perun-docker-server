@@ -7,6 +7,9 @@ systemctl restart slapd
 cp /etc/perun/ssl/hostcert.pem /etc/perun/engine/ssl/perun-send.pem
 cp /etc/perun/ssl/hostkey.pem /etc/perun/engine/ssl/perun-send.key
 cp /etc/perun/ssl/hostchain.pem /etc/perun/engine/ssl/perun-send.chain
+cp /etc/perun/ssl/hostcert.pem /etc/perun/rpc/ssl/perun-host.pem
+cp /etc/perun/ssl/hostkey.pem /etc/perun/rpc/ssl/perun-host.key
+cp /etc/perun/ssl/hostchain.pem /etc/perun/rpc/ssl/perun-host.chain
 docker start perun_rpc
 docker start perun_engine
 docker start perun_ldapc
