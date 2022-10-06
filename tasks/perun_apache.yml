@@ -300,6 +300,15 @@
     group: root
     mode: '0644'
 
+- name: "install IGTF CAs certificates"
+  when: perun_apache_igtf_certs
+  include_role:
+    name: cesnet.igtf_cas
+    apply:
+      tags:
+        - perun_apache
+        - perun_config
+
 - name: "list normal apache mounts"
   set_fact:
     apache_mounts:
@@ -311,6 +320,11 @@
       # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
       - { type: bind, source: /dev/log, target: /dev/log }
       - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+
+- name: "add /etc/grid-security to apache mounts"
+  when: perun_apache_igtf_certs
+  set_fact:
+    apache_mounts: "{{ apache_mounts + [ { 'type': 'bind', 'source': '/etc/grid-security', 'target': '/etc/grid-security', 'read_only': 'yes' } ] }}"
 
 - name: "add perun_apache_mounts_additional to apache mounts"
   when: perun_apache_mounts_additional|length > 0
