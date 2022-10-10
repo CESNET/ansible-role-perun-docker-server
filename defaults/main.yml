@@ -163,6 +163,7 @@ perun_roles_management: {}
 # new GUI common
 perun_ngui_admin_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
+perun_ngui_oauth_csp_url: "{{ perun_ngui_oauth_authority }}"
 perun_ngui_oauth_offline_access_consent_prompt: true
 perun_ngui_footer:
   columns:
@@ -246,6 +247,7 @@ perun_ngui_profile_tls_cert_same_as_host: yes
 perun_ngui_profile_instance_favicon: false
 perun_ngui_profile_auto_oauth_redirect: true
 perun_ngui_profile_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_profile_oauth_csp_url: '{{ perun_ngui_profile_oauth_authority }}'
 perun_ngui_profile_csp_connect_src: ''
 perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/api-callback"
 perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
@@ -321,6 +323,7 @@ perun_ngui_consolidator_tls_cert_same_as_host: yes
 perun_ngui_consolidator_document_title: "Consolidator"
 perun_ngui_consolidator_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_consolidator_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_consolidator_oauth_csp_url: '{{ perun_ngui_consolidator_oauth_authority }}'
 perun_ngui_consolidator_oauth_callback: "https://{{ perun_ngui_consolidator_hostname }}/api-callback"
 perun_ngui_consolidator_oauth_redirect_uri: "https://{{ perun_ngui_consolidator_hostname }}/api-callback"
 perun_ngui_consolidator_oauth_load_user_info: true
@@ -343,6 +346,7 @@ perun_ngui_linker_tls_cert_same_as_host: yes
 perun_ngui_linker_document_title: "Linker"
 perun_ngui_linker_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_linker_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_linker_oauth_csp_url: '{{ perun_ngui_linker_oauth_authority }}'
 perun_ngui_linker_oauth_callback: "https://{{ perun_ngui_linker_hostname }}/api-callback"
 perun_ngui_linker_oauth_redirect_uri: "https://{{ perun_ngui_linker_hostname }}/api-callback"
 perun_ngui_linker_oauth_load_user_info: true
