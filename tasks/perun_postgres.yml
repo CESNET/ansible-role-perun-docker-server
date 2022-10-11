@@ -48,11 +48,11 @@
 - name: "create perun tables"
   become: yes
   become_user: postgres
-  postgresql_query:
+  community.postgresql.postgresql_script:
     session_role: perun
     db: perun
-    path_to_script: /tmp/postgres.sql
-    as_single_query: yes
+    path: /tmp/postgres.sql
+    encoding: UTF-8
   when: not table_users.query_result[0].exists
 
 - name: "create /etc/cron.d/perundb-backup"

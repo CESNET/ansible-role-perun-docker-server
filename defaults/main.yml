@@ -130,6 +130,7 @@ perun_oldgui_getAttributesListForUserTables:
   - urn:perun:user:attribute-def:def:preferredMail
 perun_oldgui_getSupportedPasswordNamespaces: ""
 perun_oldgui_getReCaptchaPublicKey: '6Lf0eUYUAAAAAAQuoyjZCrK9DztF4e-wF23PBPFR'
+perun_oldgui_isDevel: no
 perun_oldgui_language_switch_disabled: 'false'
 perun_oldgui_header_disabled: 'false'
 perun_oldgui_footer_disabled: 'false'
