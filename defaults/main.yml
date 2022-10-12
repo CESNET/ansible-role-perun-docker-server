@@ -138,6 +138,7 @@ perun_oldgui_cert_hosts:
   - "https://{{ perun_rpc_hostname }}"
 perun_oldgui_logoUrl: '/img/logo.png'
 perun_oldgui_nativeLanguage: 'cs,\u010Cesky,Czech'
+perun_oldgui_getIdentityConsolidatorUrl: ''
 perun_oldgui_language_supported: 'cs'
 perun_oldgui_registrar_findSimilarUsers_disabled: '{{ perun_rpc_registrar_findSimilarUsers_disabled }}'
 perun_oldgui_registrar_hide_proxy: []
@@ -517,6 +518,7 @@ perun_sudo_perun_lognames: ['einstein' ]
 
 # PostgreSQL DB
 perun_postgresql_db_user_password: "test"
+perun_postgresql_db_maximumPoolSize: 150
 perun_postgresql_db_minimumIdle: 1
 perun_postgresql_db_maxLifetime: 1800000
 perun_postgresql_db_idleTimeout: 600000

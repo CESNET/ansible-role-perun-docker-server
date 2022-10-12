@@ -7,8 +7,8 @@ jdbc.password={{ perun_postgresql_db_user_password }}
 
 # HikariCP suggest to match number of connections with number of CPUs available.
 # minimumIdle means that number unused connections will be maintained all the time
-# Max. should be below DB limit (which si by default 150 for Perun).
-jdbc.maximumPoolSize=150
+# Max. should be below DB limit (which is {{ perun_postgresql_settings.max_connections }} on this machine).
+jdbc.maximumPoolSize={{ perun_postgresql_db_maximumPoolSize }}
 jdbc.minimumIdle={{ perun_postgresql_db_minimumIdle }}
 
 # How long Perun waits for connection from the pool before exception is thrown. Value is in millis.
