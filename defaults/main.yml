@@ -433,6 +433,8 @@ perun_apache_default_gui_enabled: yes
 perun_apache_default_profile_enabled: no
 # whether to activate CSRF protection in Perun RPC on main hostname
 perun_apache_csrf_protection_enabled: no
+# whether to add CORS headers by Apache
+perun_apache_cors_headers_enabled: no
 
 # passwords for basic authentication, expected to be redefined in an encrypted vault
 perun_apache_basicAuth_user_perun_password: "test"

@@ -88,6 +88,7 @@
     - perun_config
     - perun_rpc
     - perun_ldapc
+    - perun_apache
 
 - name: "OpenLDAP Perun specific settings"
   include_role:

@@ -101,6 +101,24 @@ ShibCompatValidUser on
   Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
   Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
 
+{% if perun_apache_cors_headers_enabled %}
+  # CORS headers
+  # match Origin header value against list of allowed domains
+  SetEnvIfExpr "%{HTTP:Origin} in { {% for i in perun_rpc_cors_domains %}'{{ i }}'{% if not loop.last %},{% endif %}{% endfor %} }" cors_origin_matched
+  # sets Access-Control-Allow-Origin and Vary if Origin value matched
+  Header onsuccess unset Access-Control-Allow-Origin "env=cors_origin_matched"
+  Header always set Access-Control-Allow-Origin "expr=%{HTTP:Origin}" "env=cors_origin_matched"
+  # for pre-fly requests set more headers
+  <If "-T reqenv('cors_origin_matched') && %{REQUEST_METHOD} == 'OPTIONS'">
+    Header onsuccess unset Access-Control-Allow-Methods
+    Header onsuccess unset Access-Control-Allow-Headers
+    Header onsuccess unset Access-Control-Max-Age
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Authorization, Content-Type"
+    Header always set Access-Control-Max-Age "86400"
+  </If>
+{% endif %}
+
   #### REWRITE
 
   RewriteEngine On
