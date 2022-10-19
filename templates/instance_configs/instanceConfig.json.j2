@@ -11,6 +11,7 @@
   "display_warning": true,
   "warning_message": "{{ perun_ngui_admin_warning_message }}",
 {% endif %}
+  "isDevel": {{ perun_oldgui_isDevel|bool|to_json }},
   "oidc_client" : {
     "oauth_authority": "{{ perun_ngui_oauth_authority }}",
     "oauth_callback": "{{ perun_ngui_admin_oauth_callback }}",
