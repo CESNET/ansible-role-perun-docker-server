@@ -1,8 +1,8 @@
 {
   "document_title": {{ perun_ngui_profile_document_title|to_json }},
   "instance_favicon": {{ perun_ngui_profile_instance_favicon|to_json }},
-{% if perun_ngui_profile_api_url is defined %}
-  "api_url": "https://{{ perun_ngui_profile_api_url }}/oauth/rpc",
+{% if perun_ngui_profile_api_hostname is defined %}
+  "api_url": "https://{{ perun_ngui_profile_api_hostname }}/oauth/rpc",
 {% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
 {% endif %}
