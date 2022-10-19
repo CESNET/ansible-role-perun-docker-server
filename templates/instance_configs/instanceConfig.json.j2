@@ -1,3 +1,4 @@
+{# https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications #}
 {
   "config": "admin {{ perun_ngui_admin_hostname }}",
 {% if perun_ngui_admin_api_hostname is defined %}
@@ -11,7 +12,7 @@
   "display_warning": true,
   "warning_message": "{{ perun_ngui_admin_warning_message }}",
 {% endif %}
-  "isDevel": {{ perun_oldgui_isDevel|bool|to_json }},
+  "is_devel": {{ perun_oldgui_isDevel|bool|to_json }},
   "oidc_client" : {
     "oauth_authority": "{{ perun_ngui_oauth_authority }}",
     "oauth_callback": "{{ perun_ngui_admin_oauth_callback }}",

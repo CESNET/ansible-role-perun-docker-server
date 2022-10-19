@@ -1,3 +1,4 @@
+{# https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications #}
 {
   "document_title": {{ perun_ngui_profile_document_title|to_json }},
   "instance_favicon": {{ perun_ngui_profile_instance_favicon|to_json }},
@@ -6,7 +7,7 @@
 {% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
 {% endif %}
-  "isDevel": {{ perun_oldgui_isDevel|bool|to_json }},
+  "is_devel": {{ perun_oldgui_isDevel|bool|to_json }},
   "auto_auth_redirect": {{ perun_ngui_profile_auto_oauth_redirect|to_json }},
   "supported_languages": {{ perun_ngui_profile_supported_languages|to_nice_json }},
   "oidc_client" : {
