@@ -383,6 +383,9 @@ perun_apache_oauth_alternative_introspection_url: https://other.oidc.provider/oi
 perun_apache_oauth_alternative_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
 perun_apache_oauth_alternative_client_secret: "YYYYYYYYYYYYYYYYY"
 
+# pointers to API for CLI and Engine
+perun_api_for_cli_hostname: "{{ perun_api_hostname }}"
+perun_api_for_engine_hostname: "{{ perun_api_hostname }}"
 
 # perun-registrar-lib.properties
 perun_registrar_secretKey: "test"
