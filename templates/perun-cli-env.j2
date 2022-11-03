@@ -4,7 +4,13 @@
 # and https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file
 
 # Perun agent variables
+{% if perun_api_enabled %}
 PERUN_URL=https://{{ perun_api_hostname }}/ba/rpc/
+{% elif perun_api_alternative_enabled %}
+PERUN_URL=https://{{ perun_api_alternative_hostname }}/ba/rpc/
+{% else %}
+PERUN_URL=https://{{ perun_api_hostname }}/ba/rpc/
+{% endif %}
 PERUN_USER=perun/{{ perun_apache_basicAuth_user_perun_password }}
 PERUN_COOKIE=/tmp/perun-cli-cookie.txt
 PERL5LIB=/opt/perun-cli/:/opt/perun-cli/Perun/
