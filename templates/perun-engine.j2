@@ -2,6 +2,6 @@
 
 # Allow perun-engine to call Perun
 export PERUN_USER=perun-engine/{{ perun_apache_basicAuth_common['perun-engine'] }}
-export PERUN_URL=https://{{ perun_api_hostname }}/ba/rpc/
+export PERUN_URL=https://{{ perun_api_for_engine_hostname }}/ba/rpc/
 export PERUN_COOKIE=/tmp/.perun-engine-cookie.txt
 export PERL5LIB=/opt/perun-engine/lib/:.
