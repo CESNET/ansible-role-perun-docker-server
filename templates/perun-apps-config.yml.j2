@@ -36,6 +36,9 @@ brands:
       linker: ""
 {% endif %}
     old_gui_domain: "https://{{ perun_rpc_hostname }}"
+{% if perun_oldgui_alert is defined %}
+    old_gui_alert: {{ perun_oldgui_alert }}
+{% endif %}
 {% for item in perun_rpc_hostname_aliases %}
   - name: {{ item }}
     new_apps:
