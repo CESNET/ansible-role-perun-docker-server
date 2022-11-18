@@ -158,5 +158,5 @@ perun_policies:
 #  skip_mfa is a flag that whether the role should skip MFA check.
 #  display_name is a more user-friendly name
 perun_roles_management:
- {{ perun_roles_management | to_nice_yaml(indent=2) | trim | indent(2) }}
+  {{ perun_roles_management | to_nice_yaml(indent=2) | trim | indent(2) }}
 ...
