@@ -157,6 +157,8 @@ perun_policies:
 #  mfa_critical_role is a flag marking roles always requiring MFA from users having that role
 #  skip_mfa is a flag that whether the role should skip MFA check.
 #  display_name is a more user-friendly name
+#  receive_notifications contains names of objects for which the role should get notifications
+# 			   Example value: Vo ; meaning: will receive notifications when vo application is created/failed
 perun_roles_management:
   {{ perun_roles_management | to_nice_yaml(indent=2) | trim | indent(2) }}
 ...
