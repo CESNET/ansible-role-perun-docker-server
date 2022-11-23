@@ -1,3 +1,4 @@
+{# https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications #}
 {
   "config": "{{ perun_ngui_consolidator_hostname }}",
 {% if perun_ngui_consolidator_api_url is defined %}
@@ -18,12 +19,12 @@
     },
   "document_title": "{{ perun_ngui_consolidator_document_title }}",
   "instance_favicon": {{ perun_ngui_consolidator_instance_favicon|to_json }},
-  "path_to_idp_provider_userinfo": {{ perun_ngui_consolidator_path_to_idp_provider_userinfo|to_nice_json }},
-  "path_to_idp_logo_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_userinfo|to_nice_json }},
-  "path_to_idp_logo_width_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_width_userinfo|to_nice_json }},
-  "path_to_idp_logo_height_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_height_userinfo|to_nice_json }},
+  "path_to_idp_provider_userinfo": {{ perun_ngui_consolidator_path_to_idp_provider_userinfo|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "path_to_idp_logo_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_userinfo|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "path_to_idp_logo_width_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_width_userinfo|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "path_to_idp_logo_height_userinfo": {{ perun_ngui_consolidator_path_to_idp_logo_height_userinfo|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "support_mail": "{{ perun_email }}",
-  "footer": {{ perun_ngui_footer|to_nice_json }},
+  "footer": {{ perun_ngui_footer|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "logo": {{ perun_ngui_logo|to_json }},
-  "theme": {{ perun_ngui_theme|to_nice_json }}
+  "theme": {{ perun_ngui_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }}
 }

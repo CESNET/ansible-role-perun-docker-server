@@ -29,10 +29,10 @@
     "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}",
     "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }}
   },
-  "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json }},
-  "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json }},
+  "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "pwd_reset_base_url": "{{ perun_ngui_admin_pwd_reset_base_url }}",
-  "password_help": {{ perun_ngui_admin_password_help|to_nice_json }},
+  "password_help": {{ perun_ngui_admin_password_help|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
 {% if perun_rpc_group_nameSecondaryRegex is defined %}
   "group_name_secondary_regex": {{ perun_rpc_group_nameSecondaryRegex|to_json }},
 {% endif %}
@@ -41,10 +41,10 @@
 {% endif %}
   "supported_languages": {{ perun_ngui_admin_supported_languages|to_json }},
   "member_profile_attributes_friendly_names": {{ perun_ngui_admin_member_profile_attributes_friendly_names|to_json }},
-  "footer": {{ perun_ngui_footer|to_nice_json }},
+  "footer": {{ perun_ngui_footer|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "log_out_enabled": {{ perun_ngui_admin_log_out_enabled|bool|to_json }},
   "logo": {{ perun_ngui_logo|to_json }},
-  "theme": {{ perun_ngui_theme|to_nice_json }},
-  "brandings": {{ perun_ngui_admin_brandings|to_nice_json }},
+  "theme": {{ perun_ngui_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "brandings": {{ perun_ngui_admin_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "enforce_consents": {{ perun_ngui_admin_enforce_consents|bool|to_json }}
 }
