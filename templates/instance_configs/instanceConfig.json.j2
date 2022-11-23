@@ -32,6 +32,7 @@
   "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json }},
   "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json }},
   "pwd_reset_base_url": "{{ perun_ngui_admin_pwd_reset_base_url }}",
+  "password_help": {{ perun_ngui_admin_password_help|to_nice_json }},
 {% if perun_rpc_group_nameSecondaryRegex is defined %}
   "group_name_secondary_regex": {{ perun_rpc_group_nameSecondaryRegex|to_json }},
 {% endif %}
