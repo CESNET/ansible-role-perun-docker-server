@@ -28,7 +28,8 @@
         cookieProps to "https" for SSL-only sites. Note that while we default checkAddress to
         "false", this makes an assertion stolen in transit easier for attackers to misuse.
         -->
-        <Sessions lifetime="28800" timeout="{{ perun_apache_shibboleth_sp_session_timeout }}" relayState="ss:mem" checkAddress="false" consistentAddress="false" handlerSSL="true" cookieProps="https">
+        <Sessions lifetime="28800" timeout="{{ perun_apache_shibboleth_sp_session_timeout }}" relayState="ss:mem"
+                  checkAddress="false" consistentAddress="false" handlerSSL="true" cookieProps="https" redirectLimit="exact">
 
             <!--
             Configures SSO for a default IdP. To properly allow for >1 IdP, remove
