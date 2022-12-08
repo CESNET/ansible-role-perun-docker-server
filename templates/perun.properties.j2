@@ -205,3 +205,9 @@ perun.userInfoEndpoint.mfaAcrValue={{ perun_rpc_userInfoEndpoint_mfaAcrValue }}
 
 # when set to true, MFA is required for critical operations and attribute actions
 perun.enforceMfa={{ perun_enforceMfa }}
+
+# how many months is lastAccess of user IdP extSource valid for attributes retrieval
+perun.idpLoginValidity={{ perun_idpLoginValidity }}
+
+# which virtual attributes should skip lastAccess check of user's IdP extsources
+perun.idpLoginValidityExceptions={{ perun_idpLoginValidityExceptions|join(',') }}
