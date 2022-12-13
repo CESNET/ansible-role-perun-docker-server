@@ -14,7 +14,6 @@
   "display_warning": true,
   "warning_message": "{{ perun_ngui_admin_warning_message }}",
 {% endif %}
-  "is_devel": {{ perun_oldgui_isDevel|bool|to_json }},
   "auto_auth_redirect": {{ perun_ngui_admin_auto_oauth_redirect|to_json }},
   "auto_service_access_redirect": {{ perun_ngui_admin_auto_service_access_redirect|to_json }},
   "oidc_client" : {
