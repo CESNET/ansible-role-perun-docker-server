@@ -117,6 +117,8 @@ perun_rpc_userInfoEndpoint_acrPropertyName: ""
 perun_rpc_userInfoEndpoint_mfaAcrValue: ""
 perun_enforceMfa: 'false'
 perun_rpc_mounts_additional: []
+perun_idpLoginValidity: 24
+perun_idpLoginValidityExceptions: []
 
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
