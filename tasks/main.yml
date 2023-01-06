@@ -49,14 +49,27 @@
   import_tasks: perun_docker.yml
   tags: perun_docker
 
-- name: "SMTP setup for Dockerized environment"
-  import_role:
+- name: "sendmail setup for Dockerized environment (legacy)"
+  when: not perun_smtp_use_msmtp
+  include_role:
     name: cesnet.sendmail_for_docker
+    apply: { tags: [ 'sendmail_for_docker'] }
+  tags: [ 'sendmail_for_docker']
   vars:
     sendmail_for_docker_hostname: "{{ perun_rpc_hostname }}"
     sendmail_for_docker_bridge_network_name: perun_net
     sendmail_for_docker_bridge_network_gateway: 192.168.0.1
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
+
+- name: "msmtp MTA setup (forwarding emails to a SMTP relay)"
+  when: perun_smtp_use_msmtp
+  include_role:
+    name: cesnet.msmtp
+    apply: { tags: [ 'msmtp'] }
+  tags: [ 'msmtp']
+  vars:
+    msmtp_listen_interface: 0.0.0.0
+    msmtp_config: "{{ perun_msmtp_config }}"
 
 - name: "OpenLDAP directory server installation"
   include_role:

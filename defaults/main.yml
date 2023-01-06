@@ -567,6 +567,29 @@ perun_postgresql_settings:
 # sendmail directives to be added to sendmail.mc
 perun_sendmail_config: ""
 
+# switch sendmail/msmtp
+perun_smtp_use_msmtp: no
+perun_smtp_relay: rs.cesnet.cz
+perun_smtp_relay_port: 25
+# default msmtp config directives going to /etc/msmtprc, see https://marlam.de/msmtp/msmtp.html
+perun_msmtp_config: |
+  # default envelope 'MAIL FROM:', %U - username %H - hostname
+  from %U@%H
+  # SMTP relay DNS name
+  host {{ perun_smtp_relay }}
+  # name used in SMTP EHLO command
+  domain {{ perun_instance_hostname }}
+  # TCP port for SMTP
+  port {{ perun_smtp_relay_port }}
+  # encryption on/off
+  tls on
+  # on - connect without TLS then use STARTTLS (port 25), off - start TLS immediately (ports 465 or 587)
+  tls_starttls on
+  # use authentication on/off
+  auth off
+  user test
+  password test
+
 ######################
 # You do not need to modify value below
 ######################
