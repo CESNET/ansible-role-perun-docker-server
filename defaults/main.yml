@@ -573,8 +573,6 @@ perun_smtp_relay: rs.cesnet.cz
 perun_smtp_relay_port: 25
 # default msmtp config directives going to /etc/msmtprc, see https://marlam.de/msmtp/msmtp.html
 perun_msmtp_config: |
-  # default envelope 'MAIL FROM:', %U - username %H - hostname
-  from %U@%H
   # SMTP relay DNS name
   host {{ perun_smtp_relay }}
   # name used in SMTP EHLO command
