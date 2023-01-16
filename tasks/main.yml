@@ -110,9 +110,13 @@
       tags:
         - perun_ldap
         - perun_config
+        - perun_ldap_config
   tags:
     - perun_ldap
     - perun_config
+    - perun_ldap_config
+  vars:
+    perun_ldap_schemas_perun_version: "{{ perun_ldapc_container_version }}"
   when: perun_ldap_local
 
 - name: "setup of Docker data volumes for Perun containers"
