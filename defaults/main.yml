@@ -485,7 +485,7 @@ perun_apache_fed_initiators:
     applicationId: "default"
 # whether to enable authentication with X509 certificates issued by IGTF-accredites CAs
 perun_apache_igtf_certs: no
-perun_apache_non_enabled: no
+perun_apache_non_enabled: yes
 perun_apache_kerberos_enabled: no
 perun_apache_kerberos_realms:
   - name: META
