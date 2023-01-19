@@ -101,7 +101,7 @@ ShibCompatValidUser on
   Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
   Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
 
-{% if perun_apache_cors_headers_enabled %}
+{% if perun_apache_cors_headers_enabled and perun_rpc_cors_domains %}
   # CORS headers
   # match Origin header value against list of allowed domains
   SetEnvIfExpr "%{HTTP:Origin} in { {% for i in perun_rpc_cors_domains %}'{{ i }}'{% if not loop.last %},{% endif %}{% endfor %} }" cors_origin_matched
