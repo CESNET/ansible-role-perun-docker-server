@@ -144,7 +144,7 @@ ShibCompatValidUser on
   ####################################
   ##     Default GUI              ####
   ####################################
-  RewriteRule ^[/]?$ https://%{HTTP_HOST}/fed/gui/ [L]
+  RewriteRule ^[/]?$ https://%{HTTP_HOST}/{{ perun_apache_gui_default_auth }}/gui/ [L]
 {% endif %}
 {% if perun_apache_default_profile_enabled %}
   ####################################
@@ -167,7 +167,7 @@ ShibCompatValidUser on
   ####################################
   ##     GUI                      ####
   ####################################
-  RewriteRule ^/gui[/]?$ https://%{HTTP_HOST}/fed/gui/ [L,R=301]
+  RewriteRule ^/gui[/]?$ https://%{HTTP_HOST}/{{ perun_apache_gui_default_auth }}/gui/ [L,R=301]
   RewriteRule ^/(.*)/gui$ https://%{HTTP_HOST}/$1/gui/ [L,R=301]
   RewriteRule ^/(.*)/gui/$ /var/www/perun-web-gui/PerunWeb.html [L]
   RewriteRule ^/(.*)/gui/(.+)$ /var/www/perun-web-gui/$2 [L]

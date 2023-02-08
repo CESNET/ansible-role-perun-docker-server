@@ -1,6 +1,9 @@
 {{ ansible_managed | comment }}
 
 # Allow perun-engine to call Perun
+{% if perun_engine_verify_hostname_disabled is defined and perun_engine_verify_hostname_disabled %}
+export PERL_LWP_SSL_VERIFY_HOSTNAME=0
+{% endif %}
 export PERUN_USER=perun-engine/{{ perun_apache_basicAuth_common['perun-engine'] }}
 export PERUN_URL=https://{{ perun_api_for_engine_hostname }}/ba/rpc/
 export PERUN_COOKIE=/tmp/.perun-engine-cookie.txt
