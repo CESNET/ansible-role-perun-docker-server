@@ -433,7 +433,6 @@ perun_ldap_data_password: "test"
 perun_ldap_config_password: "test"
 perun_ldap_proxy_password: "test"
 perun_ldap_replication_password: "test"
-perun_ldap_schemas_perun_version: "{{ perun_ldapc_container_version }}"
 perun_ldap_sasl_login_namespace: ""
 perun_ldap_master_replica: no
 

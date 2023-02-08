@@ -116,7 +116,7 @@
     - perun_config
     - perun_ldap_config
   vars:
-    perun_ldap_schemas_perun_version: "{{ perun_ldapc_container_version }}"
+    perun_ldap_schemas_perun_version: "{{ perun_rpc_git_version }}"
   when: perun_ldap_local
 
 - name: "setup of Docker data volumes for Perun containers"
