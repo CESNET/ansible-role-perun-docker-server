@@ -63,7 +63,7 @@
     hour: "23"
     minute: "20"
     user: postgres
-    job: "cd /var/lib/postgresql; ./dump_psql_db.sh perun"
+    job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_psql_db.sh perun"
 
 - name: "detect whether user nagios exists"
   become: yes
