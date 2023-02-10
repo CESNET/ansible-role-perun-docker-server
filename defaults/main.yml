@@ -214,6 +214,7 @@ perun_ngui_footer:
     - name: CERIT-SC
       url: 'https://www.cerit-sc.cz/'
   github_releases: 'https://www.github.com/CESNET/perun-web-apps/releases/'
+  github_backend_releases: https://www.github.com/CESNET/perun/releases/
 
 perun_ngui_logo: "😀"
 perun_ngui_theme: {}
@@ -452,7 +453,7 @@ perun_engine_mounts_additional: []
 
 # whether to set maintenance mode
 perun_apache_in_maintenance: no
-# whether to enable redirect from / to /fed/gui/
+# whether to enable redirect from / to /{{ perun_apache_gui_default_auth }}/gui/
 perun_apache_default_gui_enabled: yes
 # whether to enable redirect from / to /{{ perun_apache_profile_default_auth }}/profile/
 perun_apache_default_profile_enabled: no
@@ -505,6 +506,7 @@ perun_apache_csp_img_src: ""
 perun_apache_csp_connect_src: ""
 perun_apache_special_config1: ""
 perun_apache_other_rewrites: ""
+perun_apache_gui_default_auth: "fed"
 perun_apache_registrar_default_auth: "fed"
 perun_apache_registrar_html_suffix: ""
 perun_apache_consolidator_forceAuthn: no
@@ -547,6 +549,7 @@ perun_postgresql_db_maximumPoolSize: 150
 perun_postgresql_db_minimumIdle: 1
 perun_postgresql_db_maxLifetime: 1800000
 perun_postgresql_db_idleTimeout: 600000
+perun_postgresql_db_leakDetectionThreshold: 30000
 
 # password for accessing portainer at https://machine:9000/
 # since portainer:2.14.0 must be at least 12 characters

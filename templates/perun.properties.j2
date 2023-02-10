@@ -82,9 +82,6 @@ perun.accountActivation.validationWindow = {{ perun_rpc_accountActivation_valida
 perun.loginNamespace.generated={{ perun_rpc_loginNamespace_generated | join(',') }}
 {% endif %}
 
-# Program which sends sms from Perun
-perun.sms.program = /home/perun/send_sms.sh
-
 # Set true if perun DB connection should be read only (item is optional, default is false)
 perun.readOnlyPerun=false
 
@@ -96,6 +93,11 @@ perun.instanceName = {{ perun_rpc_instance_name }}
 
 # Perun instance
 perun.instanceId = {{ perun_rpc_instance_id }}
+
+{% if perun_rpc_pdf_font_path is defined %}
+# PDF font path for password reset
+perun.pdfFontPath={{ perun_rpc_pdf_font_path }}
+{% endif %}
 
 # set which user ext sources are non removable. Ext sources are divided by ';' if only extsource name is present all user extsources are non removable.
 # If ',' character is present, everything after is considered as regex and applied to user login in ext. source (such logins/dentities are then non removable).

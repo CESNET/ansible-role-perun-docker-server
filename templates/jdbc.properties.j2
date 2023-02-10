@@ -29,4 +29,4 @@ jdbc.idleTimeout={{ perun_postgresql_db_idleTimeout }}
 # Log connections which are stuck in the process of closing and before their returning to the pool for specified time.
 # Value is in millis.
 # Hikari default is 0 (disabled), our default is 30 seconds
-jdbc.leakDetectionThreshold=30000
+jdbc.leakDetectionThreshold={{ perun_postgresql_db_leakDetectionThreshold }}
