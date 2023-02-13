@@ -198,6 +198,22 @@
     directory_mode: '0550'
     mode: '0440'
 
+- name: "detect local directory perun_engine_home/"
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/perun_engine_home/"
+  register: enginehome
+
+- name: "recursive copy from perun_engine_home/ to /home/peruneng/"
+  when: enginehome.stat.exists
+  copy:
+    src: "{{ enginehome.stat.path }}"
+    dest: /home/peruneng/
+    owner: peruneng
+    group: peruneng
+    directory_mode: '0550'
+    mode: '0550'
+
 - name: "create expected directories in perun home"
   file:
     path: "{{ item.dir }}"

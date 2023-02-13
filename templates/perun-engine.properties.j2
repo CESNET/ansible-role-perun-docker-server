@@ -16,8 +16,8 @@ dispatcher.ip.address=perun_rpc
 engine.genscript.path=/opt/perun-engine/gen
 engine.sendscript.path=/opt/perun-engine/send
 
-{% if perun_engine_thread_genstasks_max is defined %}
-engine.thread.gentasks.max={{ perun_engine_thread_genstasks_max }}
+{% if perun_engine_thread_gentasks_max is defined %}
+engine.thread.gentasks.max={{ perun_engine_thread_gentasks_max }}
 {% endif %}
 
 {% if perun_engine_propagation_timeout is defined %}
