@@ -36,8 +36,43 @@
         certbot_certname: multi
         certbot_hostname: "{{ perun_rpc_hostname }}"
         certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames }}"
-        certbot_prehook: perun_prehook.sh
-        certbot_posthook: perun_posthook.sh
+        certbot_install_hooks: no
+
+    - name: "create perun_prehook.sh"
+      copy:
+        dest: /etc/letsencrypt/renewal-hooks/pre/perun_prehook.sh
+        content: |2
+          #!/bin/bash
+          docker stop perun_apache
+        mode: '0755'
+
+    - name: "create perun_posthook.sh"
+      copy:
+        dest: /etc/letsencrypt/renewal-hooks/post/perun_posthook.sh
+        content: |2
+          #!/bin/bash
+          docker stop perun_rpc
+          {% if perun_engine_enabled %}
+          docker stop perun_engine
+          {% endif %}
+          {% if perun_ldapc_enabled %}
+          docker stop perun_ldapc
+          {% endif %}
+          systemctl restart postgresql
+          systemctl restart slapd
+          cp /etc/perun/ssl/hostcert.pem /etc/perun/engine/ssl/perun-send.pem
+          cp /etc/perun/ssl/hostkey.pem /etc/perun/engine/ssl/perun-send.key
+          cp /etc/perun/ssl/hostchain.pem /etc/perun/engine/ssl/perun-send.chain
+          docker start perun_rpc
+          {% if perun_engine_enabled %}
+          docker start perun_engine
+          {% endif %}
+          {% if perun_ldapc_enabled %}
+          docker start perun_ldapc
+          {% endif %}
+          docker start perun_apache
+          docker restart portainer
+        mode: '0755'
 
     - name: "create link to host key"
       file:
