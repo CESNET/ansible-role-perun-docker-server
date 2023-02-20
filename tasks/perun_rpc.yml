@@ -84,13 +84,10 @@
     group: perunrpc
     mode: '0440'
 
-- name: "create perun-notification.properties"
-  template:
-    src: perun-notification.properties.j2
-    dest: /etc/perun/rpc/perun-notification.properties
-    owner: root
-    group: perunrpc
-    mode: '0440'
+- name: "delete unused perun-notifications.properties"
+  file:
+    path: /etc/perun/rpc/perun-notification.properties
+    state: absent
 
 - name: "create perun-extSources.xml"
   copy:
