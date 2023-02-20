@@ -512,6 +512,7 @@ perun_apache_profile_html_suffix: ""
 perun_apache_pwdreset_html_suffix: ""
 perun_apache_wui_enabled: yes
 perun_apache_special_config2: ""
+perun_apache_api_special_config: ""
 perun_apache_mounts_additional: []
 
 perun_apache_shibboleth_sp_entity_id: "https://{{ perun_rpc_hostname }}/sp/shibboleth"
