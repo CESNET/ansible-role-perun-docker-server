@@ -1,18 +1,25 @@
 ---
-- name:  "Ansible 2.12+ required"
+- name: "Ansible core version check ({{ ansible_version.full }})"
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.12', '>=')
-    msg: "Required Ansible version is 5 with 2.12+ (core)"
+      - ansible_version.full is version_compare('2.14.2', '>=')
+    msg: "Required version is 2.14.2, this is {{ ansible_version.full }}"
   tags: always
 
-- name: "Debian 10 or 11 required"
+- name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }})"
+  assert:
+    that:
+      - lookup('community.general.collection_version', 'community.general') is version('6.3.0','>=')
+    msg: "Required version is 6.3.0, this is {{lookup('community.general.collection_version', 'community.general') }}"
+  tags: always
+
+- name: "Debian version check ({{ ansible_distribution }} {{ ansible_distribution_major_version }})"
   assert:
     that:
       - ansible_distribution == "Debian"
-      - ansible_distribution_major_version in [ "10", "11" ]
-    msg: "Only Debian 10 adn 11 is supported, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+      - ansible_distribution_major_version is version(10,'>=')
+    msg: "Required version is 10, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
   tags: always
 
 - name: "get OS service facts"
