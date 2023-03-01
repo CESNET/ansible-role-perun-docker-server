@@ -5,6 +5,7 @@
       - ansible_version is defined
       - ansible_version.full is version_compare('2.14.2', '>=')
     msg: "Required version is 2.14.2, this is {{ ansible_version.full }}"
+    quiet: true
   tags: always
 
 - name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }})"
@@ -12,14 +13,16 @@
     that:
       - lookup('community.general.collection_version', 'community.general') is version('6.3.0','>=')
     msg: "Required version is 6.3.0, this is {{lookup('community.general.collection_version', 'community.general') }}"
+    quiet: true
   tags: always
 
-- name: "Debian version check ({{ ansible_distribution }} {{ ansible_distribution_major_version }})"
+- name: "Debian version check"
   assert:
     that:
       - ansible_distribution == "Debian"
-      - ansible_distribution_major_version is version(10,'>=')
+      - ansible_distribution_major_version is version('10','>=')
     msg: "Required version is 10, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+    quiet: true
   tags: always
 
 - name: "get OS service facts"
