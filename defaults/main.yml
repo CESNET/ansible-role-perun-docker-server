@@ -514,6 +514,8 @@ perun_apache_wui_enabled: yes
 perun_apache_special_config2: ""
 perun_apache_api_special_config: ""
 perun_apache_mounts_additional: []
+perun_apache_old_profile_disabled: no
+perun_apache_old_admin_gui_disabled: no
 
 perun_apache_shibboleth_sp_entity_id: "https://{{ perun_rpc_hostname }}/sp/shibboleth"
 perun_apache_shibboleth_sp_remote_user: "eppn epuid persistent-id targeted-id"

@@ -144,13 +144,21 @@ ShibCompatValidUser on
   ####################################
   ##     Default GUI              ####
   ####################################
+{% if perun_apache_old_admin_gui_disabled %}
+  RewriteRule ^[/]?$ https://{{ perun_ngui_admin_hostname }} [L]
+{% else %}
   RewriteRule ^[/]?$ https://%{HTTP_HOST}/{{ perun_apache_gui_default_auth }}/gui/ [L]
+{% endif %}
 {% endif %}
 {% if perun_apache_default_profile_enabled %}
   ####################################
   ##     Default Profile          ####
   ####################################
+{% if perun_apache_old_profile_disabled %}
+  RewriteRule ^[/]?$ https://{{ perun_ngui_profile_hostname }} [L]
+{% else %}
   RewriteRule ^[/]?$ https://%{HTTP_HOST}/{{ perun_apache_profile_default_auth }}/profile/ [L]
+{% endif %}
 {% endif %}
 
   ####################################
@@ -167,10 +175,15 @@ ShibCompatValidUser on
   ####################################
   ##     GUI                      ####
   ####################################
+{% if perun_apache_old_admin_gui_disabled %}
+  RewriteRule ^/gui[/]?$ https://{{ perun_ngui_admin_hostname }} [L,R=301]
+  RewriteRule ^/(.*)/gui(.*)$ https://{{ perun_ngui_admin_hostname }} [L,R=301]
+{% else %}
   RewriteRule ^/gui[/]?$ https://%{HTTP_HOST}/{{ perun_apache_gui_default_auth }}/gui/ [L,R=301]
   RewriteRule ^/(.*)/gui$ https://%{HTTP_HOST}/$1/gui/ [L,R=301]
   RewriteRule ^/(.*)/gui/$ /var/www/perun-web-gui/PerunWeb.html [L]
   RewriteRule ^/(.*)/gui/(.+)$ /var/www/perun-web-gui/$2 [L]
+{% endif %}
 
   ####################################
   ##     Registrar                ####
@@ -226,10 +239,15 @@ ShibCompatValidUser on
   ####################################
   ##     PROFILE                  ####
   ####################################
+{% if perun_apache_old_profile_disabled %}
+  RewriteRule ^/profile[/]?$ https://{{ perun_ngui_profile_hostname }} [L,R=301]
+  RewriteRule ^/(.*)/profile(.*)$ https://{{ perun_ngui_profile_hostname }} [L,R=301]
+{% else %}
   RewriteRule ^/profile[/]?$ https://%{HTTP_HOST}/{{ perun_apache_profile_default_auth }}/profile/ [L,R=301]
   RewriteRule ^/(.*)/profile$ https://%{HTTP_HOST}/$1/profile/ [L,R=301]
   RewriteRule ^/(.*)/profile/$ /var/www/perun-wui/PerunProfile{{ perun_apache_profile_html_suffix }}.html [L]
   RewriteRule ^/(.*)/profile/(.+)$ /var/www/perun-wui/$2 [L]
+{% endif %}
 
 {% if perun_apache_wui_enabled %}
   ####################################
