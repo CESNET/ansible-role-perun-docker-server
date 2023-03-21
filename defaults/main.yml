@@ -71,6 +71,7 @@ perun_rpc_native_language: 'cs,Česky,Czech'
 perun_rpc_userExtSources_persistent: "PERUN;"
 perun_rpc_extsources_multiple_identifiers: ""
 perun_rpc_lookup_user_by_identifiers_and_extSourceLogin: 'false'
+perun_rpc_user_deletion_forced: 'false'
 perun_rpc_force_consents: 'false'
 perun_rpc_requestUserInfoEndpoint: 'false'
 perun_rpc_defaultLoa_idp: "2"
