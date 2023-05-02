@@ -209,7 +209,7 @@
     # JVM then uses -XX:MaxRAMPercentage to compute -XX:MaxHeapSize
     memory: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     #memory_swap: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
-    memory_swappiness: 0
+    #memory_swappiness: 0
     container_default_behavior: no_defaults
   register: perun_rpc_container
 
