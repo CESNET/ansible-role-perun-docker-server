@@ -656,7 +656,8 @@ other_certs:
     same: perun_ngui_linker_tls_cert_same_as_host
 
 # firewall settings
-# CESNET VPN info https://wiki.cesnet.cz/doku.php?id=interni_sluzby:openvpn
+# CESNET OpenVPN info https://wiki.cesnet.cz/doku.php?id=interni_sluzby:openvpn
+# CESNET eduVPN  info https://wiki.cesnet.cz/doku.php?id=interni_sluzby:eduvpn
 # MUNI VPN info https://it.muni.cz/sluzby/vpn/dalsi-informace/casto-kladene-otazky#rozsah-ip
 perun_firewall_open_tcp_ports:
   - { port: 25, ipv4: "192.168.0.0/24", comment: "accept SMTP from docker subnet" }
@@ -666,17 +667,25 @@ perun_firewall_open_tcp_ports:
   - { port: 636, comment: "accept encrypted ldaps from everywhere" }
   - { port: 5432, ipv4: "192.168.0.0/24", comment: "accept postgres from docker subnet" }
   - { port: 5432, ipv6: "2001:718:801::/48", comment: "accept postgres from MUNI over IPv6" }
-  - { port: 5432, ipv6: "2001:718:1:13::/64", comment: "accept postgres from CESNET VPN over IPv6" }
-  - { port: 5432, ipv4: "195.113.222.0/24", comment: "accept postgres from CESNET VPN" }
+  - { port: 5432, ipv6: "2001:718:1:13::/64", comment: "accept postgres from CESNET OpenVPN over IPv6" }
+  - { port: 5432, ipv6: "2001:718:ff05:acb::/64", comment: "accept postgres from CESNET eduVPN over IPv6" }
+  - { port: 5432, ipv6: "2001:718:ff05:acc::/64", comment: "accept postgres from CESNET eduVPN over IPv6" }
+  - { port: 5432, ipv4: "195.113.222.0/24", comment: "accept postgres from CESNET OpenVPN" }
+  - { port: 5432, ipv4: "78.128.246.160/32", comment: "accept postgres from CESNET eduVPN" }
+  - { port: 5432, ipv4: "78.128.247.175/32", comment: "accept postgres from CESNET eduVPN" }
   - { port: 5432, ipv4: "147.251.0.0/16", comment: "accept postgres from MUNI" }
   - { port: 9000, ipv6: "2001:718:801::/48", comment: "portainer only from MUNI over IPv6" }
-  - { port: 9000, ipv6: "2001:718:1:13::/64", comment: "portainer only from CESNET VPN over IPv6" }
+  - { port: 9000, ipv6: "2001:718:1:13::/64", comment: "portainer only from CESNET OpenVPN over IPv6" }
+  - { port: 9000, ipv6: "2001:718:ff05:acb::/64", comment: "portainer only from CESNET eduVPN over IPv6" }
+  - { port: 9000, ipv6: "2001:718:ff05:acc::/64", comment: "portainer only from CESNET eduVPN over IPv6" }
 site_specific_open_tcp_ports: []
 perun_firewall_docker_rules:
   - port: 9000
     only:
       - { ipv4: "147.251.0.0/16", comment: "portainer from MUNI" }
-      - { ipv4: "195.113.222.0/24", comment: "portainer from CESNET VPN" }
+      - { ipv4: "195.113.222.0/24", comment: "portainer from CESNET OpenVPN" }
+      - { ipv4: "78.128.246.160/32", comment: "portainer from CESNET eduVPN" }
+      - { ipv4: "78.128.247.175/32", comment: "portainer from CESNET eduVPN" }
 
 # debian repos to use for automatic updates
 perun_unattended_upgrades_origin_patterns: |2
