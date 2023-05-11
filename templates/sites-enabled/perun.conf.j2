@@ -97,9 +97,9 @@ ShibCompatValidUser on
   Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), geolocation=(), microphone=(), payment=()"
 
   # Disable browser caching for our html/rpc resources
-  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
-  Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
-  Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|wui|ic|registrar|publications|profile|affiliation)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|publications|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|publications|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|publications|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
 
 {% if perun_rpc_cors_domains %}
   # CORS headers
@@ -247,16 +247,6 @@ ShibCompatValidUser on
   RewriteRule ^/(.*)/profile$ https://%{HTTP_HOST}/$1/profile/ [L,R=301]
   RewriteRule ^/(.*)/profile/$ /var/www/perun-wui/PerunProfile{{ perun_apache_profile_html_suffix }}.html [L]
   RewriteRule ^/(.*)/profile/(.+)$ /var/www/perun-wui/$2 [L]
-{% endif %}
-
-{% if perun_apache_wui_enabled %}
-  ####################################
-  ##     WUI                      ####
-  ####################################
-  RewriteRule ^/(.*)/wui$ https://%{HTTP_HOST}/$1/wui/ [L,R=301]
-  RewriteRule ^/(.*)/wui/$ /var/www/perun-wui/PerunAdmin.html [L]
-  RewriteRule ^/(.*)/wui/(.+)$ /var/www/perun-wui/$2 [L]
-
 {% endif %}
 
   ####################################
