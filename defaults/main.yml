@@ -252,6 +252,7 @@ perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostnam
 perun_ngui_admin_oauth_load_user_info: false
 perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin offline_access"
 perun_ngui_admin_oauth_response_type: "code"
+perun_ngui_admin_proxy_logout: true
 perun_ngui_admin_supported_languages: ['en']
 perun_ngui_admin_member_profile_attributes_friendly_names: []
 perun_ngui_admin_login_namespace_attributes: []
@@ -283,6 +284,7 @@ perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }
 perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_profile_proxy_logout: true
 perun_ngui_profile_password_namespace_attributes: []
 perun_ngui_profile_consolidator_base_url: "https://{{ perun_rpc_hostname }}/"
 perun_ngui_profile_registrar_base_url: "https://{{ perun_rpc_hostname }}/fed/registrar/"
@@ -358,6 +360,7 @@ perun_ngui_consolidator_oauth_redirect_uri: "https://{{ perun_ngui_consolidator_
 perun_ngui_consolidator_oauth_load_user_info: true
 perun_ngui_consolidator_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_consolidator_oauth_response_type: "code"
+perun_ngui_consolidator_proxy_logout: true
 perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
 perun_ngui_consolidator_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
 perun_ngui_consolidator_instance_favicon: false
