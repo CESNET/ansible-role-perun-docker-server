@@ -19,6 +19,7 @@
     "oauth_response_type": "{{ perun_ngui_profile_oauth_response_type }}",
     "oauth_offline_access_consent_prompt": {{ perun_ngui_profile_oauth_offline_access_consent_prompt|to_json }}
   },
+  "proxy_logout": {{ perun_ngui_profile_proxy_logout|bool|to_json }},
   "password_namespace_attributes": {{ perun_ngui_profile_password_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "consolidator_base_url": "{{ perun_ngui_profile_consolidator_base_url }}",
   "registrar_base_url": "{{ perun_ngui_profile_registrar_base_url }}",

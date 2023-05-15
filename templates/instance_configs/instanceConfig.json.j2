@@ -28,6 +28,7 @@
     "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}",
     "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }}
   },
+  "proxy_logout": {{ perun_ngui_admin_proxy_logout|bool|to_json }},
   "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "password_namespace_attributes": {{ perun_ngui_admin_password_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "pwd_reset_base_url": "{{ perun_ngui_admin_pwd_reset_base_url }}",
