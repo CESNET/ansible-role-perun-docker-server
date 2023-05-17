@@ -108,6 +108,9 @@ ShibCompatValidUser on
   # sets Access-Control-Allow-Origin and Vary if Origin value matched
   Header onsuccess unset Access-Control-Allow-Origin "env=cors_origin_matched"
   Header always set Access-Control-Allow-Origin "expr=%{HTTP:Origin}" "env=cors_origin_matched"
+  # Allow tomcat session cookie to be sent with a request to API to prevent internal session reinitialization
+  Header onsuccess edit Set-Cookie (.*)Strict(.*) "$1None$2" "env=cors_origin_matched"
+  Header onsuccess set Access-Control-Allow-Credentials "true" "env=cors_origin_matched"
   # for pre-fly requests set more headers
   <If "-T reqenv('cors_origin_matched') && %{REQUEST_METHOD} == 'OPTIONS'">
     Header onsuccess unset Access-Control-Allow-Methods
