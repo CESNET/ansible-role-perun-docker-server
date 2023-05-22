@@ -164,6 +164,9 @@ perun.force.consents={{ perun_rpc_force_consents }}
 # If the call to user info endpoint should be made (on OIDC) when creating PerunPrincipal
 perun.requestUserInfoEndpoint={{ perun_rpc_requestUserInfoEndpoint }}
 
+# If the call to introspection endpoint should be made (on OIDC) when creating PerunPrincipal
+perun.requestIntrospectionEndpoint={{ perun_rpc_requestIntrospectionEndpoint }}
+
 perun.defaultLoa.idp={{ perun_rpc_defaultLoa_idp }}
 
 {% if perun_rpc_group_nameSecondaryRegex is defined %}
@@ -219,3 +222,9 @@ perun.idpLoginValidity={{ perun_rpc_idpLoginValidity }}
 
 # which virtual attributes should skip lastAccess check of user's IdP extsources
 perun.idpLoginValidityExceptions={{ perun_rpc_idpLoginValidityExceptions|join(',') }}
+
+# OAuth client ID of the app
+perun.oidcClientId={{ perun_rpc_oidcClientId }}
+
+# OAuth client secret of the app
+perun.oidcClientId={{ perun_rpc_oidcClientSecret }}
