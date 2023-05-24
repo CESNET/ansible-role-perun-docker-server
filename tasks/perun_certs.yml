@@ -170,15 +170,15 @@
       when: fclnk.stat.exists and fclnk.stat.islnk
 
     - name: "create file with cert header"
+      when: certfile.changed
       shell:
-        creates: "{{ perun_certs_dir }}/cert_header.txt"
         cmd: >-
           openssl x509
           -noout -nameopt compat -subject -issuer -dates -ext subjectAltName
           -in {{ perun_certificate_file}}
           >{{ perun_certs_dir }}/cert_header.txt
 
-    - name: "create file with chain header"
+    - name: "create file with a line break to separate certificate from chain"
       copy:
         dest: "{{ perun_certs_dir }}/chain_header.txt"
         content: |2
