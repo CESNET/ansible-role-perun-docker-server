@@ -112,10 +112,8 @@ perun_rpc_db_initializator_enabled: yes
 perun_rpc_userInfoEndpoint_extSourceLogin: ""
 perun_rpc_userInfoEndpoint_extSourceName: ""
 perun_rpc_userInfoEndpoint_extSourceFriendlyName: ""
-perun_rpc_userInfoEndpoint_mfaAuthTimestampPropertyName: ""
-perun_rpc_userInfoEndpoint_mfaAuthTimeout: 24
-perun_rpc_userInfoEndpoint_acrPropertyName: ""
-perun_rpc_userInfoEndpoint_mfaAcrValue: ""
+perun_rpc_introspectionEndpoint_mfaAuthTimeout: 24
+perun_rpc_introspectionEndpoint_mfaAcrValue: ""
 perun_rpc_enforceMfa: 'false'
 perun_rpc_mounts_additional: []
 perun_rpc_idpLoginValidity: 24
