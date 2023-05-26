@@ -171,8 +171,6 @@ perun_ngui_admin_enabled: false
 perun_ngui_oauth_authority: "{{ perun_rpc_oidc_issuers[0].iss }}"
 perun_ngui_oauth_csp_url: "{{ perun_ngui_oauth_authority }}"
 perun_ngui_oauth_offline_access_consent_prompt: true
-perun_ngui_client_rfc8707_resources:
-  - "urn:perun:client-id:{{ perun_apache_oauth_client_id }}"
 perun_ngui_footer:
   columns:
     - title_en: ABOUT
@@ -247,7 +245,6 @@ perun_ngui_admin_document_title: "Perun Next Generation Web UI"
 perun_ngui_admin_auto_oauth_redirect: true
 perun_ngui_admin_auto_service_access_redirect: false
 perun_ngui_admin_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_admin_client_rfc8707_resources: "{{ perun_ngui_client_rfc8707_resources }}"
 perun_ngui_admin_oauth_callback: "https://{{ perun_ngui_admin_hostname }}/api-callback"
 perun_ngui_admin_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/api-callback"
 perun_ngui_admin_oauth_redirect_uri: "https://{{ perun_ngui_admin_hostname }}/api-callback"
@@ -282,7 +279,6 @@ perun_ngui_profile_oauth_csp_url: '{{ perun_ngui_profile_oauth_authority }}'
 perun_ngui_profile_csp_connect_src: ''
 perun_ngui_profile_oauth_callback: "https://{{ perun_ngui_profile_hostname }}/api-callback"
 perun_ngui_profile_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_profile_client_rfc8707_resources: "{{ perun_ngui_client_rfc8707_resources }}"
 perun_ngui_profile_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_profile_hostname }}"
 perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }}/api-callback"
 perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
@@ -357,7 +353,6 @@ perun_ngui_consolidator_hostname_aliases: []
 perun_ngui_consolidator_tls_cert_same_as_host: yes
 perun_ngui_consolidator_document_title: "Consolidator"
 perun_ngui_consolidator_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_consolidator_client_rfc8707_resources: "{{ perun_ngui_client_rfc8707_resources }}"
 perun_ngui_consolidator_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_consolidator_oauth_csp_url: '{{ perun_ngui_consolidator_oauth_authority }}'
 perun_ngui_consolidator_oauth_callback: "https://{{ perun_ngui_consolidator_hostname }}/api-callback"
@@ -382,7 +377,6 @@ perun_ngui_linker_hostname_aliases: []
 perun_ngui_linker_tls_cert_same_as_host: yes
 perun_ngui_linker_document_title: "Linker"
 perun_ngui_linker_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
-perun_ngui_linker_client_rfc8707_resources: "{{ perun_ngui_client_rfc8707_resources }}"
 perun_ngui_linker_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_linker_oauth_csp_url: '{{ perun_ngui_linker_oauth_authority }}'
 perun_ngui_linker_oauth_callback: "https://{{ perun_ngui_linker_hostname }}/api-callback"
