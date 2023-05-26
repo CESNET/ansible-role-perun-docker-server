@@ -140,6 +140,9 @@ ShibCompatValidUser on
   RewriteCond %{REQUEST_URI} !^/ba/
   RewriteCond %{REQUEST_URI} !^/maintenance/
   RewriteCond %{REQUEST_URI} !^/Shibboleth.sso/
+  RewriteCond %{REQUEST_URI} !^/external/
+  RewriteCond %{REQUEST_URI} !^/static/
+  RewriteCond %{REQUEST_URI} !^/img/
   RewriteRule .* /maintenance/maintenance.html [R,L]
 {% endif %}
 
