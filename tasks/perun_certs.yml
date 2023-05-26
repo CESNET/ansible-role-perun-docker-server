@@ -117,6 +117,51 @@
             state: absent
             path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
 
+- name: "check that cert and key belong together"
+  when: not perun_use_certbot_certificates
+  block:
+    - name: "install python prerequisites"
+      apt:
+        name:
+          - python3-cryptography
+          - python3-idna
+        state: present
+
+    - name: "read cert from file on the controlling host"
+      community.crypto.x509_certificate_info:
+        content: "{{ lookup('ansible.builtin.file', perun_instance_hostname + '/hostcert.pem' ) }}"
+      register: cert
+
+    - name: "read key from file on the controlling host"
+      community.crypto.openssl_privatekey_info:
+        content: "{{ lookup('ansible.builtin.file', perun_instance_hostname + '/hostkey.pem' ) }}"
+      register: privkey
+
+    - name: "read chain from file on the controlling host"
+      community.crypto.x509_certificate_info:
+        content: "{{ lookup('ansible.builtin.file', perun_instance_hostname + '/hostchain.pem' ) }}"
+      register: chain
+
+    - name: "match certificate and private key"
+      assert:
+        that: cert.public_key_fingerprints.md5 == privkey.public_key_fingerprints.md5
+        fail_msg: >-
+          Certificate in files/{{ perun_instance_hostname }}/hostcert.pem
+          and and private key in files/{{ perun_instance_hostname }}/hostkey.pem
+          DO NOT match!
+        success_msg: "cert and private key match"
+
+    - name: "match certificate and chain"
+      assert:
+        that: cert.issuer == chain.subject
+        fail_msg: >-
+          Certificate in files/{{ perun_instance_hostname }}/hostcert.pem
+          and chain in files/{{ perun_instance_hostname }}/hostchain.pem
+          DO NOT match!
+          Certificate issuer is {{ cert.issuer.commonName}} and
+          first subject in chain is {{ chain.subject.commonName }}
+        success_msg: "cert and chain match"
+
 - name: "use issued certificates"
   when: not perun_use_certbot_certificates
   block:
