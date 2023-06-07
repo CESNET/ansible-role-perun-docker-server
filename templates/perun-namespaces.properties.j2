@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+
+# -- example of format --
+# Regex for limiting format of new logins
+#login-namespace\:einfra\:regex=^login[0-9]+$
+# List of prohibited logins
+#login-namespace\:einfra\:reservedNames=login1,login2
+# List of allowed logins even if they violate the regex
+#login-namespace\:einfra\:allowedExceptions=login_violating_regex,loginXY
+
+{{ perun_namespaces_properties }}

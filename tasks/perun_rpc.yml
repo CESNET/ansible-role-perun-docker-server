@@ -84,6 +84,14 @@
     group: perunrpc
     mode: '0440'
 
+- name: "create perun-namespaces.properties"
+  template:
+    src: perun-namespaces.properties.j2
+    dest: /etc/perun/rpc/perun-namespaces.properties
+    owner: root
+    group: perunrpc
+    mode: '0440'
+
 - name: "delete unused perun-notifications.properties"
   file:
     path: /etc/perun/rpc/perun-notification.properties

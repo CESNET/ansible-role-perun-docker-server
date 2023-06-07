@@ -120,6 +120,8 @@ perun_rpc_idpLoginValidity: 24
 perun_rpc_idpLoginValidityExceptions: []
 perun_rpc_notif_send_messages: 'true'
 
+perun_namespaces_properties: ""
+
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
 perun_oldgui_getAttributesListForMemberTables:
