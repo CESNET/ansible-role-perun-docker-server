@@ -49,7 +49,9 @@
 {{ perun_apache_shibboleth_sp_session_initiators }}
             <!-- LogoutInitiators enable SP-initiated local or global/single logout of sessions. -->
             <LogoutInitiator type="Chaining" Location="/Logout">
+{% if not perun_apache_shibboleth_sp_force_local_logout %}
                 <LogoutInitiator type="SAML2" template="bindingTemplate.html"/>
+{% endif %}
                 <LogoutInitiator type="Local"/>
             </LogoutInitiator>
 
@@ -96,7 +98,7 @@
 
 {{ perun_apache_shibboleth_sp_application_overrides  }}
     </ApplicationDefaults>
-    
+
     <!-- Policies that determine how to process and authenticate runtime messages. -->
     <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
 

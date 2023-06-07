@@ -525,6 +525,8 @@ perun_apache_shibboleth_sp_entity_id: "https://{{ perun_rpc_hostname }}/sp/shibb
 perun_apache_shibboleth_sp_remote_user: "eppn epuid persistent-id targeted-id"
 perun_apache_shibboleth_sp_session_timeout: 3600
 perun_apache_shibboleth_sp_idp_entity_id: "https://login.example.org/idp/"
+# disable SAML 2 logout (for instances with SP on multiple hostnames like EGI/CESNET, since proxy will call redirect only on primary domain)
+perun_apache_shibboleth_sp_force_local_logout: no
 perun_apache_shibboleth_sp_session_initiators: |2
           <!-- no special session initiators -->
 perun_apache_shibboleth_sp_metadata_providers: |2
