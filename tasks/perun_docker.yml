@@ -53,17 +53,14 @@
       - pass
     state: present
 
-- name: "set Docker's MTU to match MTU of the machine (needed on OpenStack)"
-  copy:
+- name: "change /etc/docker/daemon.json"
+  template:
+    src: templates/docker/daemon.json.j2
     dest: /etc/docker/daemon.json
-    content: |
-      {
-       "mtu": {{ ansible_default_ipv4.mtu }}
-      }
-  register: mtu
+  register: daemon_json
 
-- name: "restart Docker after changing MTU"
-  when: mtu.changed
+- name: "restart Docker after changing daemon.json"
+  when: daemon_json.changed
   service:
     name: docker
     state: restarted
