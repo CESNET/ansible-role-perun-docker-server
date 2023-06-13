@@ -60,6 +60,7 @@
           {% endif %}
           systemctl restart postgresql
           systemctl restart slapd
+          systemctl restart syslog-ng
           cp /etc/perun/ssl/hostcert.pem /etc/perun/engine/ssl/perun-send.pem
           cp /etc/perun/ssl/hostkey.pem /etc/perun/engine/ssl/perun-send.key
           cp /etc/perun/ssl/hostchain.pem /etc/perun/engine/ssl/perun-send.chain

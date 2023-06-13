@@ -43,6 +43,10 @@
   import_tasks: os_setup.yml
   tags: os_setup
 
+- name: "syslog setup"
+  import_tasks: perun_syslog.yml
+  tags: perun_syslog
+
 - name: "creation of users perun, peruneng, etc."
   import_tasks: perun_users.yml
   tags: perun_users

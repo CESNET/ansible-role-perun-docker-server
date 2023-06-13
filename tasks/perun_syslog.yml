@@ -1,0 +1,31 @@
+- name: "install syslog-ng"
+  apt:
+    name: syslog-ng
+    state: present
+
+- name: "create vinovago.conf for syslog-ng"
+  when: perun_syslog_vinovago_enabled
+  template:
+    src: vinovago.conf.j2
+    dest: /etc/syslog-ng/conf.d/vinovago.conf
+  register: vinovago_conf
+
+- name: "remove vinovago.conf"
+  when: not perun_syslog_vinovago_enabled
+  file:
+    path: /etc/syslog-ng/conf.d/vinovago.conf
+    state: absent
+
+- name: "set FQDN in syslog"
+  lineinfile:
+    path: /etc/syslog-ng/syslog-ng.conf
+    regexp: '^options { (.*) use_fqdn\((\w)+\);$'
+    line: 'options { \1 use_fqdn(yes);'
+    backrefs: yes
+  register: syslog_fqdn
+
+- name: "reload syslog-ng"
+  when: vinovago_conf.changed or syslog_fqdn.changed
+  service:
+    name: syslog-ng
+    state: reloaded

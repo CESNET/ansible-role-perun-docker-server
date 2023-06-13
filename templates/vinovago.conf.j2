@@ -1,0 +1,19 @@
+# Configure the remote destination
+# see https://www.syslog-ng.com/technical-documents/doc/syslog-ng-open-source-edition/3.25/administration-guide/tls-encrypted-message-transfer/tls-options/
+destination d_vinovago {
+    network(
+        "vinovago.cesnet.cz"
+        port(514)
+        transport("tls")
+        tls(
+            key_file("/etc/perun/ssl/hostkey.pem")
+            cert_file("/etc/perun/ssl/hostcert.pem")
+            ca_dir("/etc/ssl/certs")
+            trusted-dn("CN=vinovago.cesnet.cz, *")
+        )
+        flush_lines(100)
+    );
+};
+
+# Define log channel, no filtering
+log { source(s_src); destination(d_vinovago); };

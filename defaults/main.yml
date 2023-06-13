@@ -729,3 +729,5 @@ perun_ldap_users:
   - user: proxy
     password: "{{ perun_ldap_proxy_password }}"
     description: "user for IdP Proxy"
+
+perun_syslog_vinovago_enabled: false
