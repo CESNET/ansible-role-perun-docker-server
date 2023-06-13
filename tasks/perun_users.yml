@@ -47,10 +47,10 @@
     dest: /etc/profile.d/perun_aliases.sh
     content: |
       alias apache-bash='docker exec -it perun_apache bash'
-      alias engine-bash='docker exec -it perun_engine bash'
+      alias engine-bash='docker exec -it -w /home/perun perun_engine bash'
       alias engine-bash-root='docker exec -u root -it perun_engine bash'
-      alias rpc-bash='docker exec -it perun_rpc bash'
+      alias rpc-bash='docker exec -it -w /home/perun perun_rpc bash'
       alias rpc-bash-root='docker exec -u root -it perun_rpc bash'
-      alias ldapc-bash='docker exec -it perun_ldapc bash'
+      alias ldapc-bash='docker exec -it -w /home/perun perun_ldapc bash'
       alias ldapc-bash-root='docker exec -u root -it perun_ldapc bash'
       alias x509='openssl x509 -noout -nameopt compat -subject -issuer -dates -ext subjectAltName -in'
