@@ -596,7 +596,7 @@ perun_msmtp_config: |
 ######################
 # You do not need to modify value below
 ######################
-perun_postgresql_version: 14
+perun_postgresql_version: 15
 
 # directory with SSL/TLS certificates and keys
 perun_certs_dir: "/etc/perun/ssl"
