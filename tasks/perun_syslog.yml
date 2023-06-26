@@ -8,13 +8,14 @@
   template:
     src: vinovago.conf.j2
     dest: /etc/syslog-ng/conf.d/vinovago.conf
-  register: vinovago_conf
+  notify: "reload syslog-ng"
 
 - name: "remove vinovago.conf"
   when: not perun_syslog_vinovago_enabled
   file:
     path: /etc/syslog-ng/conf.d/vinovago.conf
     state: absent
+  notify: "reload syslog-ng"
 
 - name: "set FQDN in syslog"
   lineinfile:
@@ -22,10 +23,45 @@
     regexp: '^options { (.*) use_fqdn\((\w)+\);$'
     line: 'options { \1 use_fqdn(yes);'
     backrefs: yes
-  register: syslog_fqdn
+  notify: "reload syslog-ng"
 
-- name: "reload syslog-ng"
-  when: vinovago_conf.changed or syslog_fqdn.changed
-  service:
-    name: syslog-ng
-    state: reloaded
+- name: "create README_journal.txt"
+  copy:
+    dest: /var/log/perun/README_journal.txt
+    content: |
+      Use journalctl with filters for tags (syslog identifiers):
+      
+      journalctl -t perun_ldapc
+      journalctl -t perun_engine
+      journalctl -t perun_rpc
+      journalctl -t perun_apache
+
+      Other options:
+      
+      journalctl -p [debug|info|warning|error]    ... filter for higher levels of priority
+      journalctl -n 50                            ... last 50 lines
+      journalctl --since="2 hours ago"            ... filter for time
+      journalctl --no-pager                       ... full non-truncated lines
+      journalctl --grep "<PERL regex>"            ... grep for substring
+      journalctl -f                               ... wait for more lines like "tail -f"
+
+      Use the command "man journalctl" to get all options.
+
+- name: "create txt files"
+  loop:
+    - old: perun-ldapc
+      new: perun_ldapc
+    - old: perun-engine
+      new: perun_engine
+  copy:
+    dest: "/var/log/perun/{{ item.old }}-README.txt"
+    content: |
+      Logs for {{ item.new }} are now written into systemd-journald.
+      Use the command "journalctl" with filter for tag {{ item.new }}:
+      
+      journalctl -t {{ item.new }}
+
+      See the file README_journal.txt for more options.
+
+- name: "flush handlers"
+  meta: flush_handlers

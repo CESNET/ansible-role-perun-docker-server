@@ -28,12 +28,14 @@
 	<!-- variable defining the max number of rotated files -->
 	<variable name="MAXHISTORY" value="14"/>
 
-	<!-- logging to console -->
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
+    <!-- systemd-journald appender -->
+    <appender class="org.gnieh.logback.SystemdJournalAppender" name="journal">
+        <syslogIdentifier>perun_rpc</syslogIdentifier>
+        <logLoggerName>true</logLoggerName>
+        <encoder>
+            <pattern>%-5level %logger{35} - %msg</pattern>
+        </encoder>
+    </appender>
 
 	<!-- logging to file perun.log rotated daily or when it exceeds 100MB size -->
 	<!-- see https://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy -->
@@ -54,6 +56,7 @@
 	<!-- the main logger and its level -->
 	<root level="warn">
 		<appender-ref ref="main"/>
+        <appender-ref ref="journal"/>
 	</root>
 	<!-- keep Spring quiet -->
 	<logger name="org.springframework" level="warn"/>
@@ -79,6 +82,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.core.impl.Auditer" level="error" additivity="false">
 		<appender-ref ref="perun-auditer"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-cabinet">
@@ -95,6 +99,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.cabinet" level="debug" additivity="false">
 		<appender-ref ref="perun-cabinet"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender name="perun-core" class="ch.qos.logback.classic.sift.SiftingAppender">
@@ -119,9 +124,11 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.core" level="debug" additivity="false">
 		<appender-ref ref="perun-core"/>
+        <appender-ref ref="journal"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.rpclib" level="info" additivity="false">
 		<appender-ref ref="perun-core"/>
+        <appender-ref ref="journal"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.core.impl.JdbcPerunTemplate" level="error"/>
 	<logger name="cz.metacentrum.perun.core.impl.PerunTransactionManager" level="error"/>
@@ -141,6 +148,7 @@
 	</appender>
 	<logger name="ultimate_logger" level="debug" additivity="false">
 		<appender-ref ref="perun-ultimate"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-events">
@@ -157,6 +165,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.processing" level="debug" additivity="false">
 		<appender-ref ref="perun-dispatcher-events"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-jms">
@@ -173,6 +182,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.jms" level="debug" additivity="false">
 		<appender-ref ref="perun-dispatcher-jms"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher">
@@ -189,9 +199,11 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher" level="info" additivity="false">
 		<appender-ref ref="perun-dispatcher"/>
+        <appender-ref ref="journal"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.taskslib" level="info" additivity="false">
 		<appender-ref ref="perun-dispatcher"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-registrar">
@@ -208,6 +220,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.registrar" level="debug" additivity="false">
 		<appender-ref ref="perun-registrar"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-rpc">
@@ -224,6 +237,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.rpc" level="debug" additivity="false">
 		<appender-ref ref="perun-rpc"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="notification">
@@ -240,6 +254,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.notif" level="debug" additivity="false">
 		<appender-ref ref="notification"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-notif-sended">
@@ -256,6 +271,7 @@
 	</appender>
 	<logger name="sendMessages" level="debug" additivity="false">
 		<appender-ref ref="perun-notif-sended"/>
+        <appender-ref ref="journal"/>
 	</logger>
 
 </configuration>

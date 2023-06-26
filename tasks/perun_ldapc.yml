@@ -64,6 +64,7 @@
     owner: root
     group: perunldc
     mode: 0440
+  notify: "restart perun_ldapc"
 
 - name: "create perun-ldapc"
   template:
@@ -72,6 +73,7 @@
     owner: root
     group: perunldc
     mode: 0440
+  notify: "restart perun_ldapc"
 
 - name: "create perun-ldapc-attributes.xml"
   copy:
@@ -102,9 +104,11 @@
     pull: yes
     restart_policy: unless-stopped
     mounts:
-      - { type: volume, source: perun_logs, target: /var/log/perun }
       - { type: volume, source: perunldc_home, target: /home/perun }
       - { type: volume, source: perunldc_etc,  target: /etc/perun }
+      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
+      - { type: bind, source: /dev/log, target: /dev/log }
+      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
     networks_cli_compatible: yes
     networks:
       - name: perun_net

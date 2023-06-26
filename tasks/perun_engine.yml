@@ -14,6 +14,7 @@
     owner: root
     group: peruneng
     mode: 0440
+  notify: "restart perun_engine"
 
 - name: "create perun-engine (contains password)"
   template:
@@ -231,7 +232,6 @@
 - name: "list normal engine mounts"
   set_fact:
     engine_mounts:
-      - { type: volume, source: perun_logs, target: /var/log/perun }
       - { type: volume, source: peruneng_home, target: /home/perun }
       - { type: volume, source: peruneng_etc,  target: /etc/perun }
       # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
