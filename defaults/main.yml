@@ -429,7 +429,7 @@ perun_cabinet_mu_password: ""
 
 # LDAP
 perun_ldap_local: true
-perun_ldap_url: "ldap://192.168.0.1:389"
+perun_ldap_url: "ldap://perun_host:389"
 perun_ldap_domain: "example.org"
 perun_ldap_data_password: "test"
 perun_ldap_config_password: "test"
@@ -664,12 +664,9 @@ other_certs:
 # CESNET eduVPN  info https://wiki.cesnet.cz/doku.php?id=interni_sluzby:eduvpn
 # MUNI VPN info https://it.muni.cz/sluzby/vpn/dalsi-informace/casto-kladene-otazky#rozsah-ip
 perun_firewall_open_tcp_ports:
-  - { port: 25, ipv4: "192.168.0.0/24", comment: "accept SMTP from docker subnet" }
   - { port: 80, comment: "accept http from everywhere" }
   - { port: 443, comment: "accept https from everywhere" }
-  - { port: 389, ipv4: "192.168.0.0/24", comment: "accept non-encrypted ldap from docker subnet"}
   - { port: 636, comment: "accept encrypted ldaps from everywhere" }
-  - { port: 5432, ipv4: "192.168.0.0/24", comment: "accept postgres from docker subnet" }
   - { port: 5432, ipv6: "2001:718:801::/48", comment: "accept postgres from MUNI over IPv6" }
   - { port: 5432, ipv6: "2001:718:1:13::/64", comment: "accept postgres from CESNET OpenVPN over IPv6" }
   - { port: 5432, ipv6: "2001:718:ff05:acb::/64", comment: "accept postgres from CESNET eduVPN over IPv6" }

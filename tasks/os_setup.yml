@@ -5,14 +5,6 @@
 - import_role:
     name: cesnet.ntp
 
-- name: "set firewall"
-  import_role:
-    name: cesnet.firewall
-  vars:
-    firewall_rules_type: iptables
-    firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + site_specific_open_tcp_ports }}"
-    firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
-
 - name: "set up monitoring by MetaCentrum's Nagios"
   import_role:
     name: cesnet.metacentrum_monitoring

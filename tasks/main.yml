@@ -63,6 +63,28 @@
   import_tasks: perun_docker.yml
   tags: perun_docker
 
+- name: "compute firewall rules"
+  tags: firewall
+  block:
+    - name: "get perun_net info"
+      docker_network_info:
+        name: perun_net
+      register: perun_net_info
+    - name: "compute facts"
+      set_fact:
+        perun_firewall_perun_net_related_rules:
+          - { port: 25, ipv4: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}", comment: "accept SMTP from docker subnet" }
+          - { port: 389, ipv4: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}", comment: "accept non-encrypted ldap from docker subnet"}
+          - { port: 5432, ipv4: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}", comment: "accept postgres from docker subnet" }
+
+- name: "set firewall"
+  import_role:
+    name: cesnet.firewall
+  vars:
+    firewall_rules_type: iptables
+    firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
+    firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
+
 - name: "sendmail setup for Dockerized environment (legacy)"
   when: not perun_smtp_use_msmtp
   include_role:
@@ -72,7 +94,6 @@
   vars:
     sendmail_for_docker_hostname: "{{ perun_rpc_hostname }}"
     sendmail_for_docker_bridge_network_name: perun_net
-    sendmail_for_docker_bridge_network_gateway: 192.168.0.1
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
 - name: "msmtp MTA setup (forwarding emails to a SMTP relay)"

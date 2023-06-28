@@ -337,6 +337,11 @@
   set_fact:
     apache_mounts: "{{ apache_mounts + perun_certbot_mounts }}"
 
+- name: "get perun_net info"
+  docker_network_info:
+    name: perun_net
+  register: perun_net_info
+
 - name: "create Perun Apache container"
   docker_container:
     name: perun_apache
@@ -350,7 +355,7 @@
     networks:
       - name: perun_net
     network_mode: perun_net
-    etc_hosts: "{{ perun_containers_etc_hosts }}"
+    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun_host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
     container_default_behavior: no_defaults
     ports:
       - 80:80
