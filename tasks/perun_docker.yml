@@ -8,24 +8,31 @@
       - software-properties-common
     state: present
 
+- name: "create /etc/apt/keyrings"
+  file:
+    state: directory
+    path: /etc/apt/keyrings
+    owner: root
+    group: root
+    mode: '0755'
+
 - name: "add Docker repository key"
-  apt_key:
-    id: 0EBFCD88
-    keyring: /etc/apt/trusted.gpg.d/docker.gpg
+  get_url:
     url: "https://download.docker.com/linux/debian/gpg"
-    state: present
+    dest: /etc/apt/keyrings/docker.asc
+    force: false
+
+- name: "clean old line without signed-by"
+  lineinfile:
+    path: /etc/apt/sources.list.d/docker.list
+    line: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: absent
 
 - name: "add Docker repository"
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     filename: 'docker'
     state: present
-  register: dockerrepo
-
-- name: "update from new repo"
-  when: dockerrepo.changed
-  apt:
-    update_cache: yes
 
 - set_fact:
     docker_packages:
