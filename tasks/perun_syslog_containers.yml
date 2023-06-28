@@ -1,0 +1,38 @@
+- name: "create README_journal.txt"
+  copy:
+    dest: /var/log/perun/README_journal.txt
+    content: |
+      Use journalctl with filters for tags (syslog identifiers):
+      
+      journalctl -t perun_ldapc
+      journalctl -t perun_engine
+      journalctl -t perun_rpc
+      journalctl -t perun_apache
+
+      Other options:
+      
+      journalctl -p [debug|info|warning|error]    ... filter for higher levels of priority
+      journalctl -n 50                            ... last 50 lines
+      journalctl --since="2 hours ago"            ... filter for time
+      journalctl --no-pager                       ... full non-truncated lines
+      journalctl --grep "<PERL regex>"            ... grep for substring
+      journalctl -f                               ... wait for more lines like "tail -f"
+
+      Use the command "man journalctl" to get all options.
+
+- name: "create txt files"
+  loop:
+    - old: perun-ldapc
+      new: perun_ldapc
+    - old: perun-engine
+      new: perun_engine
+  copy:
+    dest: "/var/log/perun/{{ item.old }}-README.txt"
+    content: |
+      Logs for {{ item.new }} are now written into systemd-journald.
+      Use the command "journalctl" with filter for tag {{ item.new }}:
+      
+      journalctl -t {{ item.new }}
+
+      See the file README_journal.txt for more options.
+
