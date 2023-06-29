@@ -1,3 +1,8 @@
+- name: "get container info"
+  docker_container_info:
+    name: perun_rpc
+  register: perun_rpc_container
+
 - name: "create perun-engine.properties"
   template:
     src: perun-engine.properties.j2
@@ -235,7 +240,8 @@
       - { type: volume, source: peruneng_home, target: /home/perun }
       - { type: volume, source: peruneng_etc,  target: /etc/perun }
       # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
-      - { type: tmpfs, target: /tmp }
+      # causes /tmp to be mounted with noexec flag, disables logging into journald from java
+      #- { type: tmpfs, target: /tmp }
       # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
       - { type: bind, source: /dev/log, target: /dev/log }
       - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
@@ -313,7 +319,7 @@
 - name: "{{ 'create' if perun_engine_enabled else 'remove' }} Perun engine container"
   docker_container:
     name: perun_engine
-    hostname: perun_engine
+    hostname: perun-engine
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_engine:{{ perun_engine_container_version }}"
     pull: yes
     restart_policy: unless-stopped
@@ -322,17 +328,23 @@
     networks:
       - name: perun_net
     network_mode: perun_net
-    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun_host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
+    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
     container_default_behavior: no_defaults
     state: "{{ 'started' if perun_engine_enabled else 'absent' }}"
   register: perun_engine_container
+
+- name: "remove old hostname"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: 'perun_engine'
+    state: absent
 
 - name: "put container IP into /etc/hosts"
   when: perun_engine_enabled
   lineinfile:
     dest: /etc/hosts
-    regexp: 'perun_engine'
-    line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_engine"
+    regexp: "{{ perun_engine_container.container.Config.Hostname }}"
+    line: "{{ perun_engine_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_engine_container.container.Config.Hostname }}"
 
 - name: "create /usr/local/bin/perun-engine-test"
   copy:

@@ -171,11 +171,11 @@ ShibCompatValidUser on
   ##     RPC                      ####
   ####################################
 
-  <Proxy "ajp://perun_rpc:8009/">
+  <Proxy "ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/">
     ProxySet secret={{ perun_rpc_ajp_secret }}
   </Proxy>
   # General rewrite rule
-  RewriteRule ^/(.*)/rpc/(.*)$ ajp://perun_rpc:8009/perun-rpc/$2 [P,QSA,E=AJP_CSRF_PROTECTION_ENABLED:{{ perun_apache_csrf_protection_enabled | bool | to_json }},E=AJP_SSL_CLIENT_VERIFY:%{SSL:SSL_CLIENT_VERIFY},E=AJP_SSL_CLIENT_I_DN:%{SSL:SSL_CLIENT_I_DN},E=AJP_SSL_CLIENT_S_DN:%{SSL:SSL_CLIENT_S_DN},E=AJP_SSL_CLIENT_CERT:%{SSL:SSL_CLIENT_CERT}]
+  RewriteRule ^/(.*)/rpc/(.*)$ ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/perun-rpc/$2 [P,QSA,E=AJP_CSRF_PROTECTION_ENABLED:{{ perun_apache_csrf_protection_enabled | bool | to_json }},E=AJP_SSL_CLIENT_VERIFY:%{SSL:SSL_CLIENT_VERIFY},E=AJP_SSL_CLIENT_I_DN:%{SSL:SSL_CLIENT_I_DN},E=AJP_SSL_CLIENT_S_DN:%{SSL:SSL_CLIENT_S_DN},E=AJP_SSL_CLIENT_CERT:%{SSL:SSL_CLIENT_CERT}]
 
 {{ perun_apache_other_rewrites }}
   ####################################

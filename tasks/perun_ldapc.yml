@@ -104,7 +104,7 @@
 - name: "{{ 'create' if perun_ldapc_enabled else 'remove' }} Perun LDAPc container"
   docker_container:
     name: perun_ldapc
-    hostname: perun_ldapc
+    hostname: perun-ldapc
     image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_ldapc:{{ perun_ldapc_container_version }}"
     pull: yes
     restart_policy: unless-stopped
@@ -118,14 +118,20 @@
     networks:
       - name: perun_net
     network_mode: perun_net
-    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun_host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
+    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
     container_default_behavior: no_defaults
     state: "{{ 'started' if perun_ldapc_enabled else 'absent' }}"
   register: perun_ldapc_container
+
+- name: "remove old hostname"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: 'perun_ldapc'
+    state: absent
 
 - name: "put container IP into /etc/hosts"
   when: perun_ldapc_enabled
   lineinfile:
     dest: /etc/hosts
-    regexp: 'perun_ldapc'
-    line: "{{ perun_ldapc_container.container.NetworkSettings.Networks.perun_net.IPAddress }} perun_ldapc"
+    regexp: "{{ perun_ldapc_container.container.Config.Hostname }}"
+    line: "{{ perun_ldapc_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_ldapc_container.container.Config.Hostname }}"

@@ -9,7 +9,7 @@
 #engine.unique.id=1
 
 # Set where to find Dispatcher
-dispatcher.ip.address=perun_rpc
+dispatcher.ip.address={{ perun_rpc_container.container.Config.Hostname }}
 #dispatcher.port=6071
 
 # paths

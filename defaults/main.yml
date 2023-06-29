@@ -429,7 +429,7 @@ perun_cabinet_mu_password: ""
 
 # LDAP
 perun_ldap_local: true
-perun_ldap_url: "ldap://perun_host:389"
+perun_ldap_url: "ldap://perun-host:389"
 perun_ldap_domain: "example.org"
 perun_ldap_data_password: "test"
 perun_ldap_config_password: "test"

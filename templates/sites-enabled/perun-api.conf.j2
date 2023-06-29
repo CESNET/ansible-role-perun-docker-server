@@ -105,11 +105,11 @@
     ##     RPC                      ####
     ####################################
 
-    <Proxy "ajp://perun_rpc:8009/">
+    <Proxy "ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/">
         ProxySet secret={{ perun_rpc_ajp_secret }}
     </Proxy>
 
-    RewriteRule ^/(.*)/rpc/(.*)$ ajp://perun_rpc:8009/perun-rpc/$2 [P,QSA]
+    RewriteRule ^/(.*)/rpc/(.*)$ ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/perun-rpc/$2 [P,QSA]
 
     ####################################
     ##     AuthN Methods            ####
