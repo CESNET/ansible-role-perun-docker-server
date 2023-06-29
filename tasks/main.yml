@@ -16,7 +16,7 @@
     quiet: true
   tags: always
 
-- name: "Debian version check"
+- name: "Debian version check ({{ ansible_distribution_major_version }})"
   assert:
     that:
       - ansible_distribution == "Debian"
