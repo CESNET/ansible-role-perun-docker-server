@@ -1,4 +1,4 @@
-- name: "prereqs"
+- name: "install prereq packages for Docker"
   apt:
     name:
       - apt-transport-https
@@ -34,7 +34,8 @@
     filename: 'docker'
     state: present
 
-- set_fact:
+- name: "make list of docker packages"
+  set_fact:
     docker_packages:
       - docker-ce
       - docker-ce-cli

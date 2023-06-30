@@ -39,9 +39,16 @@
   import_tasks: perun_certs.yml
   tags: perun_certs
 
-- name: "Operating System setup (firewall, yubikeys, monitoring)"
+- name: "Operating System setup (yubikeys, monitoring)"
   import_tasks: os_setup.yml
   tags: os_setup
+
+- name: "install firewall"
+  import_role:
+    name: cesnet.firewall
+  vars:
+    firewall_do_install: true
+    firewall_do_config: false
 
 - name: "syslog setup"
   import_tasks: perun_syslog.yml
@@ -77,11 +84,12 @@
           - { port: 389, ipv4: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}", comment: "accept non-encrypted ldap from docker subnet"}
           - { port: 5432, ipv4: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}", comment: "accept postgres from docker subnet" }
 
-- name: "set firewall"
+- name: "set firewall rules"
   import_role:
     name: cesnet.firewall
   vars:
-    firewall_rules_type: iptables
+    firewall_do_install: false
+    firewall_do_config: true
     firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
     firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
 
