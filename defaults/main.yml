@@ -3,6 +3,11 @@
 # used for finding files in folder files/{{ perun_instance_hostname }}
 perun_instance_hostname: "{{ inventory_hostname }}"
 
+# used by:
+# syslog-ng for identifying machine in syslog
+# sendmail (if installed) in email headers
+etc_hostname_hostname: "{{ perun_instance_hostname }}"
+
 # version of containers to deploy
 perun_rpc_container_version: latest
 perun_engine_container_version: latest

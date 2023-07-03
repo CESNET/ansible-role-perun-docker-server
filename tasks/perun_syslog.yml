@@ -1,3 +1,12 @@
+- name: "set hostname"
+  hostname:
+    name: "{{ etc_hostname_hostname }}"
+
+- name: "set /etc/hostname"
+  copy:
+    dest: /etc/hostname
+    content: "{{ etc_hostname_hostname }}"
+
 - name: "install syslog-ng"
   apt:
     name: syslog-ng
