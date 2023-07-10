@@ -39,7 +39,6 @@
     docker_packages:
       - docker-ce
       - docker-ce-cli
-      - docker-ce-rootless-extras
       - containerd.io
 
 - name: "install docker packages"
