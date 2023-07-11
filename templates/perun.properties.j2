@@ -199,8 +199,13 @@ perun.userInfoEndpoint.extSourceName={{ perun_rpc_userInfoEndpoint_extSourceName
 # properties that are path in the userInfo to the extSourceFriendlyName
 perun.userInfoEndpoint.extSourceFriendlyName={{ perun_rpc_userInfoEndpoint_extSourceFriendlyName }}
 
-# timeout limit (hours) for the MFA to be valid (timestamp cannot be older than the limit)
+# timeout limit (minutes) for the MFA to be valid (timestamp cannot be older than the limit)
 perun.introspectionEndpoint.mfaAuthTimeout={{ perun_rpc_introspectionEndpoint_mfaAuthTimeout }}
+
+# percentage of mfaAuthTimeout when the MFA login will be forced for SFA session - use number between 0 and 100
+# we want to avoid situation when the validity is e.g. 60 minutes, user executes MFA (just second factor)
+# after 59 minutes and after one minute he/she would need to log in again with both factors
+perun.introspectionEndpoint.mfaAuthTimeoutPercentageForceLogIn={{ perun_rpc_introspectionEndpoint_mfaAuthTimeoutPercentageForceLogIn }}
 
 # expected acr value to be returned from introspection endpoint if MFA was performed
 perun.introspectionEndpoint.mfaAcrValue={{ perun_rpc_introspectionEndpoint_mfaAcrValue }}
@@ -213,3 +218,6 @@ perun.idpLoginValidity={{ perun_rpc_idpLoginValidity }}
 
 # which virtual attributes should skip lastAccess check of user's IdP extsources
 perun.idpLoginValidityExceptions={{ perun_rpc_idpLoginValidityExceptions|join(',') }}
+
+# force HTML sanitization
+perun.forceHtmlSanitization={{ perun_rpc_force_html_sanitization|bool|to_json }}
