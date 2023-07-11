@@ -19,23 +19,21 @@
 	<!-- variable defining the directory where log files will be put, takes system property perun.log -->
 	<variable name="LOGDIR" value="${perun.log:-/var/log/perun/}"/>
 
-	<!-- production setting for format of log lines -->
+	<!-- setting for format of log lines in FileAppenders -->
 	<variable name="ENCODER_PATTERN" value="%date [%thread] %-5level %logger{35} - %msg%n"/>
-	<!-- debug setting - warning - it is slow to generate %file:%line and %caller
-	<variable name="ENCODER_PATTERN" value="%d [%t] %-5level %file:%line %method\\(\\) %X{req.remoteHost} %X{req.requestURL} - %msg%n"/>
-	-->
+
+	<!-- setting for format of log lines in SystemdJournalAppender which already adds timestamps and thread names-->
+	<variable name="JOURNAL_PATTERN" value="%-5level %logger{35} - %msg"/>
 
 	<!-- variable defining the max number of rotated files -->
 	<variable name="MAXHISTORY" value="14"/>
 
-    <!-- systemd-journald appender -->
-    <appender class="org.gnieh.logback.SystemdJournalAppender" name="journal">
-        <syslogIdentifier>perun_rpc</syslogIdentifier>
-        <logLoggerName>true</logLoggerName>
-        <encoder>
-            <pattern>%-5level %logger{35} - %msg</pattern>
-        </encoder>
-    </appender>
+	<!-- systemd-journald appender -->
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal">
+		<syslogIdentifier>perun_rpc</syslogIdentifier>
+		<logLoggerName>true</logLoggerName>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 
 	<!-- logging to file perun.log rotated daily or when it exceeds 100MB size -->
 	<!-- see https://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy -->
@@ -56,7 +54,7 @@
 	<!-- the main logger and its level -->
 	<root level="warn">
 		<appender-ref ref="main"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal"/>
 	</root>
 	<!-- keep Spring quiet -->
 	<logger name="org.springframework" level="warn"/>
@@ -80,9 +78,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-auditer">
+		<syslogIdentifier>perun-auditer</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.core.impl.Auditer" level="error" additivity="false">
 		<appender-ref ref="perun-auditer"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-auditer"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-cabinet">
@@ -97,9 +99,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-cabinet">
+		<syslogIdentifier>perun-cabinet</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.cabinet" level="debug" additivity="false">
 		<appender-ref ref="perun-cabinet"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-cabinet"/>
 	</logger>
 
 	<appender name="perun-core" class="ch.qos.logback.classic.sift.SiftingAppender">
@@ -122,13 +128,17 @@
 		</appender>
 		</sift>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-core">
+		<syslogIdentifier>perun-core</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.core" level="debug" additivity="false">
 		<appender-ref ref="perun-core"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-core"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.rpclib" level="info" additivity="false">
 		<appender-ref ref="perun-core"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-core"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.core.impl.JdbcPerunTemplate" level="error"/>
 	<logger name="cz.metacentrum.perun.core.impl.PerunTransactionManager" level="error"/>
@@ -146,9 +156,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-ultimate">
+		<syslogIdentifier>perun-ultimate</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="ultimate_logger" level="debug" additivity="false">
 		<appender-ref ref="perun-ultimate"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-ultimate"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-events">
@@ -163,9 +177,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher-events">
+		<syslogIdentifier>perun-dispatcher-events</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.processing" level="debug" additivity="false">
 		<appender-ref ref="perun-dispatcher-events"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-dispatcher-events"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-jms">
@@ -180,9 +198,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher-jms">
+		<syslogIdentifier>perun-dispatcher-jms</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.jms" level="debug" additivity="false">
 		<appender-ref ref="perun-dispatcher-jms"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-dispatcher-jms"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher">
@@ -197,13 +219,17 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher">
+		<syslogIdentifier>perun-dispatcher</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher" level="info" additivity="false">
 		<appender-ref ref="perun-dispatcher"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-dispatcher"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.taskslib" level="info" additivity="false">
 		<appender-ref ref="perun-dispatcher"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-dispatcher"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-registrar">
@@ -218,9 +244,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-registrar">
+		<syslogIdentifier>perun-registrar</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.registrar" level="debug" additivity="false">
 		<appender-ref ref="perun-registrar"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-registrar"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-rpc">
@@ -237,7 +267,7 @@
 	</appender>
 	<logger name="cz.metacentrum.perun.rpc" level="debug" additivity="false">
 		<appender-ref ref="perun-rpc"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="notification">
@@ -252,9 +282,13 @@
 			<pattern>${ENCODER_PATTERN}</pattern>
 		</encoder>
 	</appender>
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-notif">
+		<syslogIdentifier>perun-notif</syslogIdentifier>
+		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
+	</appender>
 	<logger name="cz.metacentrum.perun.notif" level="debug" additivity="false">
 		<appender-ref ref="notification"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-notif"/>
 	</logger>
 
 	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-notif-sended">
@@ -271,7 +305,7 @@
 	</appender>
 	<logger name="sendMessages" level="debug" additivity="false">
 		<appender-ref ref="perun-notif-sended"/>
-        <appender-ref ref="journal"/>
+		<appender-ref ref="journal-notif"/>
 	</logger>
 
 </configuration>
