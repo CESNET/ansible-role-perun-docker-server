@@ -280,6 +280,7 @@ perun_ngui_profile_hostname_aliases: []
 perun_ngui_profile_tls_cert_same_as_host: yes
 perun_ngui_profile_instance_favicon: false
 perun_ngui_profile_auto_oauth_redirect: true
+perun_ngui_profile_auto_service_access_redirect: false
 perun_ngui_profile_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_profile_oauth_csp_url: '{{ perun_ngui_profile_oauth_authority }}'
 perun_ngui_profile_csp_connect_src: ''

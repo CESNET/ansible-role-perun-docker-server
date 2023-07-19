@@ -8,6 +8,7 @@
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
 {% endif %}
   "auto_auth_redirect": {{ perun_ngui_profile_auto_oauth_redirect|to_json }},
+  "auto_service_access_redirect": {{ perun_ngui_profile_auto_service_access_redirect|to_json }},
   "supported_languages": {{ perun_ngui_profile_supported_languages|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "oidc_client" : {
     "oauth_authority": "{{ perun_ngui_profile_oauth_authority }}",
