@@ -104,7 +104,7 @@
     apply: { tags: [ 'sendmail_for_docker'] }
   tags: [ 'sendmail_for_docker']
   vars:
-    sendmail_for_docker_hostname: "{{ perun_rpc_hostname }}"
+    sendmail_for_docker_hostname: "{{ perun_instance_hostname }}"
     sendmail_for_docker_bridge_network_name: perun_net
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
