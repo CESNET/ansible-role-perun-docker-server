@@ -222,3 +222,10 @@ perun.idpLoginValidityExceptions={{ perun_rpc_idpLoginValidityExceptions|join(',
 
 # force HTML sanitization
 perun.forceHtmlSanitization={{ perun_rpc_force_html_sanitization|bool|to_json }}
+
+# Limit roles in session for the old GUI apps. This is necessary to support step-up MFA globally.
+perun.appAllowedRoles.apps={% for app in perun_rpc_app_allowed_roles %}{{ app.name }}{% if not loop.last %},{% endif %}{% endfor %}
+{% for app in perun_rpc_app_allowed_roles %}
+perun.appAllowedRoles.{{ app.name }}.reg={{ app.reg }}
+perun.appAllowedRoles.{{ app.name }}.roles={{ app.roles|join(',') }}
+{% endfor %}
