@@ -126,6 +126,16 @@ perun_rpc_idpLoginValidityExceptions: []
 perun_rpc_notif_send_messages: 'true'
 perun_rpc_force_html_sanitization: false
 
+# TODO - enable when we ditch old admin gui and enable step-up for MFA
+perun_rpc_app_allowed_roles: []
+#perun_rpc_app_allowed_roles:
+#  - name: 'registrar'
+#    reg: '^.*/registrar/.*$'
+#    roles: [ 'SELF', 'MFA' ]
+#  - name: 'ic'
+#    reg: '^.*/ic/.*$'
+#    roles: [ 'SELF', 'MFA' ]
+
 perun_namespaces_properties: ""
 
 # old GUI
@@ -315,7 +325,7 @@ perun_ngui_profile_page_attributes:
 perun_ngui_profile_mfa: {}
 perun_ngui_profile_display_identity_certificates: true
 perun_ngui_profile_external_services: []
-perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'settings', 'ssh_keys']
+perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'authentication', 'settings', 'ssh_keys']
 perun_ngui_profile_custom_labels: []
 perun_ngui_profile_supported_languages: ['en']
 perun_ngui_profile_header_label_en: "User Profile"
