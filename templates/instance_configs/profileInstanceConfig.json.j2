@@ -2,7 +2,9 @@
 {
   "document_title": {{ perun_ngui_profile_document_title|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "instance_favicon": {{ perun_ngui_profile_instance_favicon|to_json }},
-{% if perun_ngui_profile_api_hostname is defined %}
+{% if perun_ngui_profile_api_url is defined %}
+  "api_url": "{{ perun_ngui_profile_api_url }}",
+{% elif perun_ngui_profile_api_hostname is defined %}
   "api_url": "https://{{ perun_ngui_profile_api_hostname }}/oauth/rpc",
 {% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",

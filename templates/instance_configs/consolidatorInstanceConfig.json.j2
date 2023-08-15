@@ -1,8 +1,8 @@
 {# https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications #}
 {
   "config": "{{ perun_ngui_consolidator_hostname }}",
-{% if perun_ngui_consolidator_api_url is defined %}
-  "api_url": "https://{{ perun_ngui_consolidator_api_url }}/oauth/rpc",
+{% if perun_ngui_consolidator_api_hostname is defined %}
+  "api_url": "https://{{ perun_ngui_consolidator_api_hostname }}/oauth/rpc",
 {% else %}
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
 {% endif %}
