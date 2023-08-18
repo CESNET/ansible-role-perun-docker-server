@@ -325,7 +325,7 @@ perun_ngui_profile_page_attributes:
 perun_ngui_profile_mfa: {}
 perun_ngui_profile_display_identity_certificates: true
 perun_ngui_profile_external_services: []
-perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'authentication', 'settings', 'ssh_keys']
+perun_ngui_profile_displayed_tabs: ['profile', 'identities', 'groups', 'privacy', 'authentication', 'ssh_keys']
 perun_ngui_profile_custom_labels: []
 perun_ngui_profile_supported_languages: ['en']
 perun_ngui_profile_header_label_en: "User Profile"
