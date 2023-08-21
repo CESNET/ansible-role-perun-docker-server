@@ -1,0 +1,124 @@
+- name: "create perun-auditlogger.properties"
+  template:
+    src: perun-auditlogger.properties.j2
+    dest: /etc/perun/auditlogger/perun-auditlogger.properties
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+# files jdbc.properties, perun.properties, perun-roles.yml and login-namespaces-rules-config.yml are needed because perun-auditlogger includes Perun core
+- name: "create jdbc.properties for Auditlogger"
+  template:
+    src: jdbc.properties.j2
+    dest: /etc/perun/auditlogger/jdbc.properties
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create perun.properties for Auditlogger"
+  template:
+    src: perun.properties.j2
+    dest: /etc/perun/auditlogger/perun.properties
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create perun-apps-config.yml for Auditlogger"
+  template:
+    src: perun-apps-config.yml.j2
+    dest: /etc/perun/auditlogger/perun-apps-config.yml
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create perun-roles.yml for Auditlogger"
+  template:
+    src: perun-roles.yml.j2
+    dest: /etc/perun/auditlogger/perun-roles.yml
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create login-namespaces-rules-config.yml"
+  copy:
+    src: "{{ lookup('first_found', findme) }}"
+    dest: /etc/perun/auditlogger/login-namespaces-rules-config.yml
+    owner: root
+    group: perunalg
+    mode: '0440'
+  vars:
+    findme:
+      - "{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
+      - "login-namespaces-rules-config.yml"
+  notify: "restart perun_auditlogger"
+
+- name: "create logback-auditlogger.xml"
+  template:
+    src: logback-auditlogger.xml.j2
+    dest: /etc/perun/auditlogger/logback-auditlogger.xml
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create perun-auditlogger"
+  template:
+    src: perun-auditlogger.j2
+    dest: /etc/perun/auditlogger/perun-auditlogger
+    owner: root
+    group: perunalg
+    mode: '0440'
+  notify: "restart perun_auditlogger"
+
+- name: "create perun-auditlogger-last-state"
+  copy:
+    force: no
+    dest: /home/perunalg/perun-auditlogger-last-state
+    content: "0"
+    owner: perunalg
+    group: perunalg
+
+- name: "get perun_net info"
+  docker_network_info:
+    name: perun_net
+  register: perun_net_info
+
+- name: "{{ 'create' if perun_auditlogger_enabled else 'remove' }} Perun Auditlogger container"
+  docker_container:
+    name: perun_auditlogger
+    hostname: perun-auditlogger
+    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_auditlogger:{{ perun_auditlogger_container_version }}"
+    pull: yes
+    restart_policy: unless-stopped
+    mounts:
+      - { type: volume, source: perunalg_home, target: /home/perun }
+      - { type: volume, source: perunalg_etc,  target: /etc/perun }
+      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
+      - { type: bind, source: /dev/log, target: /dev/log }
+      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+    networks_cli_compatible: yes
+    networks:
+      - name: perun_net
+    network_mode: perun_net
+    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
+    container_default_behavior: no_defaults
+    state: "{{ 'started' if perun_auditlogger_enabled else 'absent' }}"
+  register: perun_auditlogger_container
+
+- name: "remove old hostname"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: 'perun_auditlogger'
+    state: absent
+
+- name: "put container IP into /etc/hosts"
+  when: perun_auditlogger_enabled
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "{{ perun_auditlogger_container.container.Config.Hostname }}"
+    line: "{{ perun_auditlogger_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_auditlogger_container.container.Config.Hostname }}"

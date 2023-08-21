@@ -205,6 +205,17 @@
     - perun_ldapc
     - perun_config
 
+- name: "perun auditlogger setup"
+  include_tasks:
+    file: perun_auditlogger.yml
+    apply:
+      tags:
+        - perun_auditlogger
+        - perun_config
+  tags:
+    - perun_auditlogger
+    - perun_config
+
 - name: "perun apache setup"
   import_tasks: perun_apache.yml
   tags:
