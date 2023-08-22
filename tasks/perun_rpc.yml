@@ -128,6 +128,19 @@
       - "login-namespaces-rules-config.yml"
   notify: "restart perun_rpc"
 
+- name: "create perun-oidc-config.yml"
+  copy:
+    src: "{{ lookup('first_found', findme) }}"
+    dest: /etc/perun/rpc/perun-oidc-config.yml
+    owner: root
+    group: perunrpc
+    mode: 0440
+  vars:
+    findme:
+      - "{{ perun_instance_hostname }}/perun-oidc-config.yml"
+      - "perun-oidc-config.yml"
+  notify: "restart perun_rpc"
+
 - name: "create directory /etc/perun/rpc/modules/"
   file:
     path: /etc/perun/rpc/modules
