@@ -27,7 +27,7 @@ groupNameSecondaryRegex={{ perun_rpc_group_nameSecondaryRegex }}
 groupNameErrorMessage={{ perun_rpc_group_nameErrorMessage }}
 {% endif %}
 {% if perun_rpc_reset_pwd_emails is defined %}
-getResetPasswordEmails={{ perun_rpc_reset_pwd_emails }}
+getResetPasswordEmails={{ perun_rpc_reset_pwd_emails|join(',') }}
 {% endif %}
 
 ### NEW WUI CONFIG ######
