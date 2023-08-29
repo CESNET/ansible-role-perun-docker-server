@@ -97,11 +97,6 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
-- name: "delete unused perun-notifications.properties"
-  file:
-    path: /etc/perun/rpc/perun-notification.properties
-    state: absent
-
 - name: "create perun-extSources.xml"
   copy:
     src: "{{ lookup('first_found', findme) }}"
