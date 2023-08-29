@@ -123,19 +123,29 @@
       - "login-namespaces-rules-config.yml"
   notify: "restart perun_rpc"
 
-# FIXME - must be optional
-#- name: "create perun-oidc-config.yml"
-#  copy:
-#    src: "{{ lookup('first_found', findme) }}"
-#    dest: /etc/perun/rpc/perun-oidc-config.yml
-#    owner: root
-#    group: perunrpc
-#    mode: 0440
-#  vars:
-#    findme:
-#      - "{{ perun_instance_hostname }}/perun-oidc-config.yml"
-#      - "perun-oidc-config.yml"
-#  notify: "restart perun_rpc"
+# conditionally create or remove perun-oidc-config.yml
+- name: "detect local perun-oidc-config.yml"
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/perun-oidc-config.yml"
+  register: perun_oidc_config
+
+- name: "create perun-oidc-config.yml"
+  when: perun_oidc_config.stat.exists
+  copy:
+    src: "files/{{ perun_instance_hostname }}/perun-oidc-config.yml"
+    dest: /etc/perun/rpc/perun-oidc-config.yml
+    owner: root
+    group: perunrpc
+    mode: 0440
+  notify: "restart perun_rpc"
+
+- name: "remove perun-oidc-config.yml"
+  when: perun_oidc_config.stat.exists is false
+  file:
+    path: /etc/perun/rpc/perun-oidc-config.yml
+    state: absent
+  notify: "restart perun_rpc"
 
 - name: "create directory /etc/perun/rpc/modules/"
   file:
