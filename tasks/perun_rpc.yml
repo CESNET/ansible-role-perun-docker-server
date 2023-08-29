@@ -116,7 +116,7 @@
     dest: /etc/perun/rpc/login-namespaces-rules-config.yml
     owner: root
     group: perunrpc
-    mode: 0440
+    mode: '0440'
   vars:
     findme:
       - "{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
@@ -137,7 +137,7 @@
     dest: /etc/perun/rpc/perun-oidc-config.yml
     owner: root
     group: perunrpc
-    mode: 0440
+    mode: '0440'
   notify: "restart perun_rpc"
 
 - name: "remove perun-oidc-config.yml"
