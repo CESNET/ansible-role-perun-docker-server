@@ -9,6 +9,7 @@
     - { name: peruneng, gid: 962 }
     - { name: perunldc, gid: 963 }
     - { name: _shibd, gid: 964 }
+    - { name: perunalg, gid: 965 }
 
 - name: "create perun users"
   user:
@@ -26,11 +27,12 @@
     - { name: peruneng, uid: 962, comment: "Perun Engine", create_home: no, home: /nonexistent, shell: /usr/sbin/nologin }
     - { name: perunldc, uid: 963, comment: "Perun LDAP Connector", create_home: no, home: /nonexistent, shell: /usr/sbin/nologin }
     - { name: _shibd,   uid: 964, comment: "Shibboleth daemon", create_home: no, home: /nonexistent, shell: /usr/sbin/nologin }
+    - { name: perunalg, uid: 965, comment: "Perun Auditlogger", create_home: no, home: /nonexistent, shell: /usr/sbin/nologin }
 
 - name: "disable ssh to perun* users"
   lineinfile:
     path: /etc/ssh/sshd_config
-    line: "DenyUsers perunrpc peruneng perunldc"
+    line: "DenyUsers perunrpc peruneng perunldc perunalg"
     state: present
   notify: "restart sshd"
 
@@ -53,4 +55,6 @@
       alias rpc-bash-root='docker exec -u root -it perun_rpc bash'
       alias ldapc-bash='docker exec -it -w /home/perun perun_ldapc bash'
       alias ldapc-bash-root='docker exec -u root -it perun_ldapc bash'
+      alias auditlogger-bash='docker exec -it -w /home/perun perun_auditlogger bash'
+      alias auditlogger-bash-root='docker exec -u root -it perun_auditlogger bash'
       alias x509='openssl x509 -noout -nameopt compat -subject -issuer -dates -ext subjectAltName -in'

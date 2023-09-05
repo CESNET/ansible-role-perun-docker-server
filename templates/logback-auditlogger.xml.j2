@@ -1,0 +1,33 @@
+<configuration packagingData="false" debug="false" scan="false" scanPeriod="30 seconds">
+
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal">
+		<syslogIdentifier>perun_auditlogger</syslogIdentifier>
+		<logLoggerName>true</logLoggerName>
+		<encoder>
+			<pattern>%-5level %logger{35} - %msg</pattern>
+		</encoder>
+	</appender>
+
+	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-audit">
+		<syslogIdentifier>perun_audit</syslogIdentifier>
+		<logLoggerName>true</logLoggerName>
+		<logStacktrace>false</logStacktrace>
+		<encoder>
+			<pattern>%msg</pattern>
+		</encoder>
+	</appender>
+
+	<root level="info">
+		<appender-ref ref="journal" />
+	</root>
+
+	<logger name="cz.metacentrum.perun.auditlogger" level="debug"/>
+
+	<logger name="syslog-logger" level="debug" additivity="false">
+		<appender-ref ref="journal-audit" />
+	</logger>
+
+	<!-- keep Spring quiet -->
+	<logger name="org.springframework" level="warn"/>
+
+</configuration>

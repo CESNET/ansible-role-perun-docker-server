@@ -58,6 +58,9 @@
           {% if perun_ldapc_enabled %}
           docker stop perun_ldapc
           {% endif %}
+          {% if perun_auditlogger_enabled %}
+          docker stop perun_auditlogger
+          {% endif %}
           systemctl restart postgresql
           systemctl restart slapd
           systemctl restart syslog-ng
@@ -70,6 +73,9 @@
           {% endif %}
           {% if perun_ldapc_enabled %}
           docker start perun_ldapc
+          {% endif %}
+          {% if perun_auditlogger_enabled %}
+          docker start perun_auditlogger
           {% endif %}
           docker start perun_apache
           docker restart portainer
