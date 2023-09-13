@@ -11,7 +11,6 @@
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-audit">
 		<syslogIdentifier>perun_audit</syslogIdentifier>
 		<logLoggerName>true</logLoggerName>
-		<logStacktrace>false</logStacktrace>
 		<encoder>
 			<pattern>%msg</pattern>
 		</encoder>
@@ -23,7 +22,7 @@
 
 	<logger name="cz.metacentrum.perun.auditlogger" level="debug"/>
 
-	<logger name="syslog-logger" level="debug" additivity="false">
+	<logger name="journal-audit" level="info" additivity="false">
 		<appender-ref ref="journal-audit" />
 	</logger>
 
