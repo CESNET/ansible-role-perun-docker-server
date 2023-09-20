@@ -13,6 +13,11 @@
     postgresql_db_user: "perun"
     postgresql_db_name: "perun"
 
+- name: "install postgresql-{{ perun_postgresql_version }}-repack"
+  apt:
+    name: "postgresql-{{ perun_postgresql_version }}-repack"
+    state: present
+
 - name: "install pipe viewer"
   apt:
     name: pv

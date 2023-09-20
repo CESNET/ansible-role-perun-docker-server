@@ -29,6 +29,7 @@
   loop:
     - unaccent
     - pgcrypto
+    - pg_repack
 
 - name: "detect whether table users exists"
   become: yes
