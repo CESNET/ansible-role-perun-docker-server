@@ -173,6 +173,7 @@ perun_oldgui_disableCreateVo: 'false'
 perun_oldgui_rt_defaultQueue: "perun"
 perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
 perun_oldgui_report_email_address: "{{ perun_email }}"
+perun_oldgui_pwdreset_support_mail: "{{ perun_email }}"
 perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 perun_oldgui_wayf_spLogoutUrl: "/Consolidator.sso/Logout"
