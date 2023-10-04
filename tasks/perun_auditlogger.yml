@@ -75,11 +75,27 @@
     mode: '0440'
   notify: "restart perun_auditlogger"
 
+- name: "detect perun-auditlogger-last-state existence"
+  stat:
+    path: /home/perunalg/perun-auditlogger-last-state
+  register: alls
+
+- name: "get last message id in auditer_log table"
+  when: not alls.stat.exists
+  become: yes
+  become_user: postgres
+  postgresql_query:
+    session_role: perun
+    db: perun
+    query: "SELECT MAX(id) FROM auditer_log"
+  register: max_id
+
 - name: "create perun-auditlogger-last-state"
+  when: not alls.stat.exists
   copy:
     force: no
     dest: /home/perunalg/perun-auditlogger-last-state
-    content: "0"
+    content: "{{ max_id.query_result[0].max|string if max_id.query_result[0].max else '0' }}"
     owner: perunalg
     group: perunalg
 
