@@ -468,8 +468,11 @@ perun_engine_ssh_privkey_file: id_ed25519
 perun_engine_ssh_pubkey_file: id_ed25519.pub
 perun_engine_mounts_additional: []
 
-# Auditlogger
-perun_auditlogger_enabled: no
+# remote logging to vinovago.cesnet.cz
+perun_syslog_vinovago_enabled: false
+
+# Auditlogger - by default enabled on instances logging remotely
+perun_auditlogger_enabled: "{{ perun_syslog_vinovago_enabled }}"
 
 ##########
 # Apache #
@@ -745,5 +748,3 @@ perun_ldap_users:
   - user: proxy
     password: "{{ perun_ldap_proxy_password }}"
     description: "user for IdP Proxy"
-
-perun_syslog_vinovago_enabled: false
