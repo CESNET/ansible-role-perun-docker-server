@@ -55,8 +55,11 @@
     name: cesnet.remote_logging
   vars:
     remote_logging_hostname: "{{ etc_hostname_hostname }}"
-    remote_logging_enabled: "{{ perun_syslog_vinovago_enabled }}"
-
+    remote_logging_enabled: "{{ perun_remote_logging_enabled }}"
+    remote_logging_server: "{{ perun_remote_logging_server }}"
+    remote_logging_port: "{{ perun_remote_logging_port }}"
+    remote_logging_conf: "{{ perun_remote_logging_conf }}"
+    remote_logging_filter: "{{ perun_remote_logging_filter }}"
 
 - name: "creation of users perun, peruneng, etc."
   import_tasks: perun_users.yml

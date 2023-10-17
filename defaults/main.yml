@@ -468,11 +468,15 @@ perun_engine_ssh_privkey_file: id_ed25519
 perun_engine_ssh_pubkey_file: id_ed25519.pub
 perun_engine_mounts_additional: []
 
-# remote logging to vinovago.cesnet.cz
-perun_syslog_vinovago_enabled: false
+# remote logging
+perun_remote_logging_enabled: no
+perun_remote_logging_server: vinovago.cesnet.cz
+perun_remote_logging_port: 514
+perun_remote_logging_conf: vinovago
+perun_remote_logging_filter: ""
 
 # Auditlogger - by default enabled on instances logging remotely
-perun_auditlogger_enabled: "{{ perun_syslog_vinovago_enabled }}"
+perun_auditlogger_enabled: "{{ perun_remote_logging_enabled }}"
 
 ##########
 # Apache #
