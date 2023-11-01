@@ -1,0 +1,33 @@
+- name: "create /etc/systemd/journald.conf.d/"
+  file:
+    path: /etc/systemd/journald.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0544'
+
+- name: "get disk for /var/log"
+  command: "findmnt --noheadings --output source -T /var/log"
+  changed_when: false
+  register: fm
+
+- name: "get disk info for {{ fm.stdout }}"
+  set_fact:
+    log_disk: "{{ ( ansible_mounts | community.general.json_query('[?device==`' + fm.stdout + '`]') )[0] }}"
+
+- name: "configure journald in /etc/systemd/journald.conf.d/perun.conf"
+  copy:
+    dest: /etc/systemd/journald.conf.d/perun.conf
+    content: |
+      [Journal]
+      # use max 30% of disk
+      SystemMaxUse={{ (log_disk.size_total * 0.3 / 1000000) | int }}M
+      # keep free at least 20% of disk
+      SystemKeepFree={{ (log_disk.size_total * 0.2 / 1000000) | int }}M
+  register: perunjourconf
+
+- name: "reload journald configuration"
+  when: perunjourconf.changed
+  systemd_service:
+    name: systemd-journald
+    state: restarted

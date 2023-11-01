@@ -50,6 +50,10 @@
     firewall_do_install: true
     firewall_do_config: false
 
+- name: "journald setup"
+  import_tasks: perun_journald.yml
+  tags: perun_journald
+
 - name: "remote logging setup"
   import_role:
     name: cesnet.remote_logging
