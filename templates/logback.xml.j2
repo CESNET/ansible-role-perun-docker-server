@@ -181,7 +181,7 @@
 		<syslogIdentifier>perun-dispatcher-events</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
-	<logger name="cz.metacentrum.perun.dispatcher.processing" level="debug" additivity="false">
+	<logger name="cz.metacentrum.perun.dispatcher.processing" level="info" additivity="false">
 		<appender-ref ref="perun-dispatcher-events"/>
 		<appender-ref ref="journal-dispatcher-events"/>
 	</logger>
