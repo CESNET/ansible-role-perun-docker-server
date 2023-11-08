@@ -83,6 +83,7 @@ perun_rpc_defaultLoa_idp: "2"
 perun_rpc_recaptcha_privatekey: '6Lf0eUYUAAAAAIBxpRrA7UNrT7czQ28IoH9yiDBE'
 perun_rpc_mailchange_secretKey: "test"
 perun_rpc_mailchange_backupFrom: "{{ perun_email }}"
+perun_rpc_mailchange_replyTo: ""
 perun_rpc_mailchange_validationWindow: 24
 perun_rpc_pwdreset_secret_key: '123456789120123456'
 perun_rpc_pwdreset_init_vector: '0123456789ABCDEF'
@@ -441,7 +442,10 @@ perun_api_for_engine_hostname: "{{ perun_api_hostname }}"
 perun_registrar_secretKey: "test"
 perun_registrar_fedAuthz: 'fed'
 perun_registrar_backupFrom: "{{ perun_email }}"
+perun_registrar_backupFromName: ""
 perun_registrar_backupTo: "{{ perun_email }}"
+perun_registrar_replyTo: ""
+perun_registrar_replyToName: ""
 
 # perun-cabinet.properties
 perun_cabinet_mu_login: ""
