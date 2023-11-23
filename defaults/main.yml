@@ -260,7 +260,9 @@ perun_ngui_password_help_cs:
 perun_ngui_admin_hostname: "perun.aai.example.org"
 perun_ngui_admin_hostname_aliases: []
 perun_ngui_admin_tls_cert_same_as_host: yes
-perun_ngui_admin_document_title: "Perun Next Generation Web UI"
+perun_ngui_admin_document_title: "Perun - Identity and Access Management"
+perun_ngui_admin_header_label_en: "Identity and Access Management"
+perun_ngui_admin_header_label_cs: "Správa identit a přístupu"
 perun_ngui_admin_auto_oauth_redirect: true
 perun_ngui_admin_auto_service_access_redirect: false
 perun_ngui_admin_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
