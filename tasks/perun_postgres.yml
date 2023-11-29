@@ -42,7 +42,7 @@
 
 - name: "download SQL script for creating tables"
   get_url:
-    url: "https://raw.githubusercontent.com/CESNET/perun/{{ perun_rpc_git_version }}/perun-db/postgres.sql"
+    url: "https://gitlab.ics.muni.cz/perun/perun-idm/perun/-/raw/{{ perun_rpc_git_version }}/perun-db/postgres.sql"
     dest: /tmp/postgres.sql
   when: not table_users.query_result[0].exists
 
