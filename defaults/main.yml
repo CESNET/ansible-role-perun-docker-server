@@ -127,6 +127,9 @@ perun_rpc_idpLoginValidity: 24
 perun_rpc_idpLoginValidityExceptions: []
 perun_rpc_notif_send_messages: 'true'
 perun_rpc_force_html_sanitization: false
+perun_rpc_external_programs_dependencies:
+  - ssh-keygen
+  - openssl
 
 # TODO - enable when we ditch old admin gui and enable step-up for MFA
 perun_rpc_app_allowed_roles: []

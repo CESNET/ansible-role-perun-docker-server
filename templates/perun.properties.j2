@@ -230,3 +230,6 @@ perun.appAllowedRoles.apps={% for app in perun_rpc_app_allowed_roles %}{{ app.na
 perun.appAllowedRoles.{{ app.name }}.reg={{ app.reg }}
 perun.appAllowedRoles.{{ app.name }}.roles={{ app.roles|join(',') }}
 {% endfor %}
+
+# Check upon initialization, that external dependencies listed here are available in underlying OS/container environment.
+perun.externalProgramsDependencies={{ perun_rpc_external_programs_dependencies|join(',') }}
