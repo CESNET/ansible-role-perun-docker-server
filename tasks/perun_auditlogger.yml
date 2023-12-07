@@ -24,6 +24,9 @@
     owner: root
     group: perunalg
     mode: '0440'
+  # clear startup check on deps for included perun-core
+  vars:
+    perun_rpc_external_programs_dependencies: []
   notify: "restart perun_auditlogger"
 
 - name: "create perun-apps-config.yml for Auditlogger"
