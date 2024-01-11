@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 jdbc.driver=org.postgresql.Driver
-jdbc.url=jdbc:postgresql://perun-host:5432/perun
+jdbc.url=jdbc:postgresql://perun-host:5432/perun?sslmode=disable
 jdbc.username=perun
 jdbc.password={{ perun_postgresql_db_user_password }}
 

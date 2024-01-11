@@ -1,3 +1,25 @@
+- name: "get perun_net info"
+  when: perun_net_info is not defined
+  docker_network_info:
+    name: perun_net
+  register: perun_net_info
+
+- name: "add row to pg_hba.conf allowing unencrypted connections from perun containers"
+  postgresql_pg_hba:
+    dest: "/etc/postgresql/{{ perun_postgresql_version }}/main/pg_hba.conf"
+    contype: host
+    databases: perun
+    users: perun
+    address: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}"
+    method: md5
+  register: pghba_file
+
+- name: "restart postgres"
+  when: pghba_file.changed
+  service:
+    name: postgresql
+    state: restarted
+
 - name: "create /var/lib/postgresql/dump_perun_for_test.sh file"
   copy:
     dest: /var/lib/postgresql/dump_perun_for_test.sh

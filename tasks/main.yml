@@ -69,6 +69,10 @@
   import_tasks: perun_users.yml
   tags: perun_users
 
+- name: "Docker and Portainer setup"
+  import_tasks: perun_docker.yml
+  tags: perun_docker
+
 - name: "Postgres server setup"
   import_tasks: postgres.yml
   tags: postgresql
@@ -76,10 +80,6 @@
 - name: "Postgres perun db setup"
   import_tasks: perun_postgres.yml
   tags: perun_postgres
-
-- name: "Docker and Portainer setup"
-  import_tasks: perun_docker.yml
-  tags: perun_docker
 
 - name: "compute firewall rules"
   tags: firewall
