@@ -1,5 +1,4 @@
 - name: "get perun_net info"
-  when: perun_net_info is not defined
   docker_network_info:
     name: perun_net
   register: perun_net_info
