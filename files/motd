@@ -15,7 +15,7 @@
 ╚══════╝╚═════╝ ╚═╝   ╚═╝       ╚═════╝    ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝
 
 This machine is managed by Ansible, make changes to settings
-in https://gitlab.ics.muni.cz/perun/perun_sites and apply the playbook.
+in https://gitlab.ics.muni.cz/perun/deployment/idm/perun_sites and apply the playbook.
 
 
 
