@@ -46,7 +46,6 @@ perun_rpc_hostname: "{{ inventory_hostname }}"
 perun_rpc_hostname_aliases: []
 perun_rpc_admins:
   - perunDispatcher
-  - perunController
   - perunEngine
   - perunRegistrar
   - perunCabinet
@@ -57,7 +56,6 @@ perun_rpc_engine_principals:
   - perun-engine
 perun_rpc_dont_lookup_users:
   - perunDispatcher
-  - perunController
   - perunEngine
   - perunRegistrar
   - perunCabinet
@@ -66,6 +64,7 @@ perun_rpc_dont_lookup_users:
   - perunNotifications
   - perunRpc
   - perunSynchronizer
+perun_rpc_additional_dont_lookup_users: []
 perun_rpc_rt_url: ""
 perun_rpc_rt_defaultQueue: ""
 perun_rpc_rt_serviceuser_username: ""

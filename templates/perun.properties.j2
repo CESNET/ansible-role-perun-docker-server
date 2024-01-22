@@ -16,7 +16,7 @@ perun.notification.principals = perunNotifications
 perun.rpc.principal = perunRpc
 
 # Do not lookup users for these logins
-perun.dont.lookup.users={{ perun_rpc_dont_lookup_users|join(', ') }}
+perun.dont.lookup.users={{ (perun_rpc_dont_lookup_users+perun_rpc_additional_dont_lookup_users)|join(', ') }}
 
 # Default group synchronization interval in fold of 5 minutes
 perun.group.synchronization.interval = {{ perun_rpc_group_sync_interval }}
