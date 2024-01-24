@@ -111,7 +111,7 @@
   docker_container:
     name: perun_auditlogger
     hostname: perun-auditlogger
-    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_auditlogger:{{ perun_auditlogger_container_version }}"
+    image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_auditlogger:{{ perun_auditlogger_container_version }}"
     pull: yes
     restart_policy: unless-stopped
     mounts:

@@ -108,7 +108,7 @@
   docker_container:
     name: perun_ldapc
     hostname: perun-ldapc
-    image: "registry.gitlab.ics.muni.cz:443/perun/perun_docker/perun_ldapc:{{ perun_ldapc_container_version }}"
+    image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_ldapc:{{ perun_ldapc_container_version }}"
     pull: yes
     restart_policy: unless-stopped
     mounts:
