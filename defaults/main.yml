@@ -445,7 +445,6 @@ perun_api_for_engine_hostname: "{{ perun_api_hostname }}"
 
 # perun-registrar-lib.properties
 perun_registrar_secretKey: "test"
-perun_registrar_fedAuthz: 'fed'
 perun_registrar_backupFrom: "{{ perun_email }}"
 perun_registrar_backupFromName: ""
 perun_registrar_backupTo: "{{ perun_email }}"
