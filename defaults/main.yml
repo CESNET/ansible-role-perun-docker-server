@@ -182,6 +182,9 @@ perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 perun_oldgui_wayf_spLogoutUrl: "/Consolidator.sso/Logout"
 perun_oldgui_wayf_spLoginUrl: "/Consolidator.sso/Login"
+perun_oldgui_namespacesForPreferredGroupNames: []
+perun_oldgui_vosToSkipCaptchaFor: []
+perun_oldgui_perunInstanceName: "{{ perun_rpc_instance_name }}"
 
 #perun-roles.yml
 perun_roles: []
@@ -439,6 +442,16 @@ perun_apache_oauth_alternative_introspection_url: https://other.oidc.provider/oi
 perun_apache_oauth_alternative_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
 perun_apache_oauth_alternative_client_secret: "YYYYYYYYYYYYYYYYY"
 
+# virtual host for CERT API (if enabled, /cert/ endpoint will no longer be available on default host)
+perun_api_cert_enabled: no
+perun_api_cert_hostname: perun-api-cert.example.org
+perun_api_cert_hostname_aliases: []
+perun_api_cert_tls_cert_same_as_host: yes
+perun_api_cert_alternative_enabled: no
+perun_api_cert_alternative_hostname: perun-api-cert-second.example.org
+perun_api_cert_alternative_hostname_aliases: []
+perun_api_cert_alternative_tls_cert_same_as_host: yes
+
 # pointers to API for CLI and Engine
 perun_api_for_cli_hostname: "{{ perun_api_hostname }}"
 perun_api_for_engine_hostname: "{{ perun_api_hostname }}"
@@ -498,6 +511,8 @@ perun_apache_default_gui_enabled: yes
 perun_apache_default_profile_enabled: no
 # whether to activate CSRF protection in Perun RPC on main hostname
 perun_apache_csrf_protection_enabled: no
+# enables /wayf/ path on the server and copy wayf config files
+perun_apache_enable_wayf_config: no
 
 # passwords for basic authentication, expected to be redefined in an encrypted vault
 perun_apache_basicAuth_user_perun_password: "test"
@@ -522,6 +537,10 @@ perun_apache_fed_initiators:
     applicationId: "default"
 # whether to enable authentication with X509 certificates issued by IGTF-accredites CAs
 perun_apache_igtf_certs: no
+# whether to use custom domain for /cert/ endpoints (supports only old identity consolidator!!)
+perun_apache_cert_hostname_enabled: no
+perun_apache_cert_hostname: perun-cert.example.org
+perun_apache_cert_hostname_aliases: []
 perun_apache_non_enabled: yes
 perun_apache_kerberos_enabled: no
 perun_apache_kerberos_realms:
@@ -550,6 +569,7 @@ perun_apache_registrar_default_auth: "fed"
 perun_apache_registrar_html_suffix: ""
 perun_apache_consolidator_forceAuthn: no
 perun_apache_consolidator_html_suffix: ""
+perun_apache_consolidator_cert_html_suffix: ""
 perun_apache_profile_default_auth: "fed"
 perun_apache_profile_html_suffix: ""
 perun_apache_pwdreset_html_suffix: ""

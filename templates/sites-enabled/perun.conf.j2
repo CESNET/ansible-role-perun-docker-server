@@ -45,6 +45,14 @@ ShibCompatValidUser on
     Require all granted
   </Directory>
 
+{% if perun_apache_enable_wayf_config %}
+  Alias /wayf /etc/perun/apache/wayf
+  <Directory /etc/perun/apache/wayf/>
+    Options -Indexes -FollowSymLinks -MultiViews
+    Require all granted
+  </Directory>
+{% endif %}
+
   # GENERIC ERRORS
   ErrorDocument 401 /maintenance/401.html
   ErrorDocument 403 /maintenance/403.html
@@ -60,7 +68,7 @@ ShibCompatValidUser on
   SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
   SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
 
-{% if perun_apache_igtf_certs %}
+{% if perun_apache_igtf_certs and not perun_apache_cert_hostname_enabled %}
   # SSL client certificates authentication
   SSLCACertificatePath /etc/grid-security/certificates/
   SSLCADNRequestFile /etc/grid-security/accepted_cas.pem
@@ -276,7 +284,7 @@ ShibCompatValidUser on
     SetEnvIf _ .* AJP_EXTSOURCELOA=0
   </LocationMatch>
 
-{% if perun_apache_igtf_certs %}
+{% if perun_apache_igtf_certs and not perun_apache_cert_hostname_enabled %}
   # authentication with X509 client certificates
   <LocationMatch "(^/cert/|^/cert-ic/)">
     Options FollowSymLinks
