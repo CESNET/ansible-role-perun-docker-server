@@ -212,6 +212,9 @@ ShibCompatValidUser on
   ##     Identity Consolidator    ####
   ####################################
 
+{% if perun_apache_consolidator_custom_sp is defined %}
+{{ perun_apache_consolidator_custom_sp }}
+{% else %}
   # SP endpoint
   <Location "/Consolidator.sso">
     AuthType shibboleth
@@ -219,11 +222,11 @@ ShibCompatValidUser on
     ShibRequestSetting applicationId consolidator
     Require shib-session
   </Location>
-
 {% if perun_apache_consolidator_forceAuthn %}
   <LocationMatch "^/Consolidator.sso/Login">
     ShibRequestSetting forceAuthn On
   </LocationMatch>
+{% endif %}
 {% endif %}
 
 {% if  perun_apache_consolidator_rewrite_rules is defined %}
@@ -295,24 +298,28 @@ ShibCompatValidUser on
     ShibRequestSetting applicationId {{ item.applicationId }}
     ShibRequestSetting requireSession 1
 {% if item.id is defined %}
-    ShibRequestSetting requireSessionWith {{  item.id }}
+    ShibRequestSetting requireSessionWith {{ item.id }}
 {% endif %}
 {% if item.entityID is defined %}
-    ShibRequestSetting entityID {{  item.entityID }}
+    ShibRequestSetting entityID {{ item.entityID }}
 {% endif %}
     Require shib-session
   </LocationMatch>
 
   <LocationMatch "^/{{ item.url }}-ic/">
     AuthType shibboleth
+{% if item.consolidatorApplicationId is defined %}
+    ShibRequestSetting applicationId {{ item.consolidatorApplicationId }}
+{% else %}
     ShibRequestSetting applicationId consolidator
+{% endif %}
     ShibRequestSetting requireSession 1
 {% if item.id is defined %}
-    ShibRequestSetting requireSessionWith {{  item.id }}
+    ShibRequestSetting requireSessionWith {{ item.id }}
 {% endif %}
     ShibRequestSetting forceAuthn On
 {% if item.entityID is defined %}
-    ShibRequestSetting entityID {{  item.entityID }}
+    ShibRequestSetting entityID {{ item.entityID }}
 {% endif %}
     Require shib-session
   </LocationMatch>
