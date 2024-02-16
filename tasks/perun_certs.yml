@@ -23,6 +23,21 @@
       set_fact:
         perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + perun_rpc_hostname_aliases }}"
 
+    - name: "add cert hostname aliases for multicert"
+      when: perun_apache_cert_hostname_enabled
+      set_fact:
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ perun_apache_cert_hostname ] + perun_apache_cert_hostname_aliases }}"
+
+    - name: "add rpc-api cert aliases for multicert"
+      when: perun_api_cert_enabled
+      set_fact:
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ perun_api_cert_hostname ] + perun_api_cert_hostname_aliases }}"
+
+    - name: "add rpc-alternative-api cert aliases for multicert"
+      when: perun_api_cert_alternative_enabled
+      set_fact:
+        perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ perun_api_cert_alternative_hostname ] + perun_api_cert_alternative_hostname_aliases }}"
+
     - name: "collected DNS names"
       debug:
         var: perun_certbot_alt_hostnames

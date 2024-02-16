@@ -64,6 +64,23 @@
   with_fileglob:
     - "{{ perun_instance_hostname }}/img/*"
 
+- name: "create dir /etc/perun/apache/wayf for wayf configs"
+  when: perun_apache_enable_wayf_config
+  file:
+    state: directory
+    path: /etc/perun/apache/wayf
+    mode: '0755'
+
+- name: "copy wayf config"
+  when: perun_apache_enable_wayf_config
+  copy:
+    src: "{{ item }}"
+    dest: /etc/perun/apache/wayf
+  with_fileglob:
+    - "{{ perun_instance_hostname }}/wayf/*"
+
+# TODO - remove folder when perun_apache_enable_wayf_config == false ?
+
 - name: "create dir /etc/perun/apache/well-known"
   file:
     state: directory
@@ -109,6 +126,16 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "create /etc/perun/apache/sites-enabled/perun-cert.conf"
+  when: perun_apache_cert_hostname_enabled
+  template:
+    src: sites-enabled/perun-cert.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-cert.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
 - name: "clean old file for perun-admin.conf"
   file:
     path: /etc/perun/apache/sites-enabled/perun-ngui.conf
@@ -149,6 +176,30 @@
     perun_apache_oauth_introspection_url: "{{ perun_apache_oauth_alternative_introspection_url }}"
     perun_apache_oauth_client_id: "{{ perun_apache_oauth_alternative_client_id }}"
     perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative_client_secret }}"
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-api-cert.conf"
+  when: perun_api_cert_enabled
+  template:
+    src: sites-enabled/perun-api-cert.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-api-cert.conf
+    owner: root
+    group: root
+    mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "create /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf"
+  when: perun_api_cert_alternative_enabled
+  template:
+    src: sites-enabled/perun-api-cert.conf.j2
+    dest: /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf
+    owner: root
+    group: root
+    mode: '0400'
+  vars:
+    perun_api_cert_hostname: "{{ perun_api_cert_alternative_hostname }}"
+    perun_api_cert_hostname_aliases: "{{ perun_api_cert_alternative_hostname_aliases }}"
+    perun_api_cert_tls_cert_same_as_host: "{{ perun_api_cert_alternative_tls_cert_same_as_host }}"
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"

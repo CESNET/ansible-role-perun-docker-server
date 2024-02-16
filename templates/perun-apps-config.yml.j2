@@ -1,5 +1,5 @@
 {% if perun_apps_config is defined %}
-{{ perun_apps_config }}
+{{ perun_apps_config | to_nice_yaml(indent=2) }}
 {% else %}
 brands:
   - name: default

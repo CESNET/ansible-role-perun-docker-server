@@ -1,0 +1,112 @@
+{{ ansible_managed | comment }}
+
+####
+# Perun RPC API for X.509 (certs) without CSRF protection and CORS
+####
+
+<VirtualHost *:80>
+    ServerAdmin {{ perun_email }}
+    ServerName {{ perun_api_cert_hostname }}
+{% for alias in perun_api_cert_hostname_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
+    Redirect / https://{{ perun_api_cert_hostname }}/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerAdmin {{ perun_email }}
+    ServerName {{ perun_api_cert_hostname }}
+{% for alias in perun_api_cert_hostname_aliases %}
+    ServerAlias {{ alias }}
+{% endfor %}
+
+    DocumentRoot /var/www/html
+    <Directory "/var/www/html">
+        Options -Indexes +FollowSymLinks -MultiViews
+        Require all granted
+    </Directory>
+
+    Alias /.well-known /etc/perun/apache/well-known
+    <Directory "/etc/perun/apache/well-known">
+        Options -Indexes -FollowSymLinks -MultiViews
+        Require all granted
+    </Directory>
+
+    # GENERIC ERRORS
+    ErrorDocument 401 /maintenance/401.html
+    ErrorDocument 403 /maintenance/403.html
+    ErrorDocument 404 /maintenance/404.html
+    ErrorDocument 500 /maintenance/500.html
+    ErrorDocument 503 /maintenance/503.html
+
+    RewriteEngine On
+
+    ProxyIOBufferSize 65536
+
+    SSLEngine on
+{% if perun_use_certbot_certificates %}
+    SSLCertificateFile /etc/letsencrypt/live/multi/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/multi/privkey.pem
+{% elif perun_api_tls_cert_same_as_host %}
+    SSLCertificateFile /etc/perun/ssl/hostcert.pem
+    SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
+    SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
+{% else %}
+    SSLCertificateFile /etc/perun/ssl/apicert.pem
+    SSLCertificateKeyFile /etc/perun/ssl/apikey.pem
+    SSLCertificateChainFile /etc/perun/ssl/apichain.pem
+{% endif %}
+
+    # SSL client certificates authentication
+    SSLCACertificatePath /etc/grid-security/certificates/
+    SSLCADNRequestFile /etc/grid-security/accepted_cas.pem
+    SSLVerifyDepth 5
+    SSLVerifyClient optional
+    SSLOptions +LegacyDNStringFormat
+
+    LogLevel warn ssl:warn rewrite:warn
+
+    #### SECURITY
+
+    # HTTP tracing
+    TraceEnable off
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-frame-options
+    Header always set X-Frame-Options SAMEORIGIN
+    # https://scotthelme.co.uk/hsts-the-missing-link-in-tls/
+    Header always set Strict-Transport-Security "max-age=63072000"
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-content-type-options
+    Header always set X-Content-Type-Options nosniff
+    # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
+    Header always set X-XSS-Protection "1; mode=block"
+    # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+    # Disable browser caching for our RPC resources
+    Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+    Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+    Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
+
+    ####################################
+    ##     RPC                      ####
+    ####################################
+
+    <Proxy "ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/">
+        ProxySet secret={{ perun_rpc_ajp_secret }}
+    </Proxy>
+
+    RewriteRule ^/(.*)/rpc/(.*)$ ajp://{{ perun_rpc_container.container.Config.Hostname }}:8009/perun-rpc/$2 [P,QSA]
+
+    ####################################
+    ##     AuthN Methods            ####
+    ####################################
+
+    # authentication with X509 client certificates
+    <LocationMatch "(^/cert/|^/cert-ic/)">
+        Options FollowSymLinks
+        Require expr "%{SSL_CLIENT_VERIFY} == 'SUCCESS'"
+        SSLOptions +StdEnvVars +ExportCertData +LegacyDNStringFormat
+        SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceX509
+        SetEnvIf _ .* AJP_EXTSOURCELOA=2
+    </LocationMatch>
+
+</VirtualHost>
