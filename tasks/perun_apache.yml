@@ -117,6 +117,12 @@
     src: instance_configs/linkerInstanceConfig.json.j2
     dest: /etc/perun/apache/linkerInstanceConfig.json
 
+- name: "generate /etc/perun/apache/pwdresetInstanceConfig.json"
+  when: perun_ngui_pwdreset_enabled
+  template:
+    src: instance_configs/pwdresetInstanceConfig.json.j2
+    dest: /etc/perun/apache/pwdresetInstanceConfig.json
+
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
     src: sites-enabled/perun.conf.j2
