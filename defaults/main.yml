@@ -279,6 +279,8 @@ perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostnam
 perun_ngui_admin_oauth_load_user_info: false
 perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin offline_access"
 perun_ngui_admin_oauth_response_type: "code"
+perun_ngui_admin_oauth_filters:
+  default: ""
 perun_ngui_admin_proxy_logout: true
 perun_ngui_admin_supported_languages: ['en']
 perun_ngui_admin_member_profile_attributes_friendly_names: []
@@ -312,6 +314,7 @@ perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }
 perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_profile_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
 perun_ngui_profile_proxy_logout: true
 perun_ngui_profile_password_namespace_attributes: []
 perun_ngui_profile_consolidator_url: "https://{{ perun_rpc_hostname }}/fed-ic/ic/"
@@ -442,6 +445,7 @@ perun_ngui_pwdreset_oauth_redirect_uri: "https://{{ perun_ngui_pwdreset_hostname
 perun_ngui_pwdreset_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_pwdreset_oauth_response_type: "code"
 perun_ngui_pwdreset_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_pwdreset_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
 perun_ngui_pwdreset_mfa: {}
 perun_ngui_pwdreset_password_help: '{{ perun_ngui_password_help }}'
 perun_ngui_pwdreset_password_help_cs: '{{ perun_ngui_password_help_cs }}'

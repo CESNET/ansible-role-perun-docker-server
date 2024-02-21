@@ -12,14 +12,15 @@
   "auto_auth_redirect": {{ perun_ngui_pwdreset_auto_oauth_redirect|to_json }},
   "supported_languages": {{ perun_ngui_pwdreset_supported_languages|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "oidc_client" : {
-	"oauth_authority": "{{ perun_ngui_pwdreset_oauth_authority }}",
-	"oauth_callback": "{{ perun_ngui_pwdreset_oauth_callback }}",
-	"oauth_client_id": "{{ perun_ngui_pwdreset_client_id }}",
-	"oauth_post_logout_redirect_uri": "{{ perun_ngui_pwdreset_oauth_post_logout_redirect_uri }}",
-	"oauth_redirect_uri": "{{ perun_ngui_pwdreset_oauth_redirect_uri }}",
-	"oauth_scopes": "{{ perun_ngui_pwdreset_oauth_scopes }}",
-	"oauth_response_type": "{{ perun_ngui_pwdreset_oauth_response_type }}",
-	"oauth_offline_access_consent_prompt": {{ perun_ngui_pwdreset_oauth_offline_access_consent_prompt|to_json }}
+    "oauth_authority": "{{ perun_ngui_pwdreset_oauth_authority }}",
+    "oauth_callback": "{{ perun_ngui_pwdreset_oauth_callback }}",
+    "oauth_client_id": "{{ perun_ngui_pwdreset_client_id }}",
+    "oauth_post_logout_redirect_uri": "{{ perun_ngui_pwdreset_oauth_post_logout_redirect_uri }}",
+    "oauth_redirect_uri": "{{ perun_ngui_pwdreset_oauth_redirect_uri }}",
+    "oauth_scopes": "{{ perun_ngui_pwdreset_oauth_scopes }}",
+    "oauth_response_type": "{{ perun_ngui_pwdreset_oauth_response_type }}",
+    "oauth_offline_access_consent_prompt": {{ perun_ngui_pwdreset_oauth_offline_access_consent_prompt|to_json }},
+    "filters": {{ perun_ngui_pwdreset_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
   },
   "mfa": {{ perun_ngui_pwdreset_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
 {% if perun_ngui_pwdreset_warning_message %}
