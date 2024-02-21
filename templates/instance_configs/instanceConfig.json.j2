@@ -30,7 +30,8 @@
     "oauth_load_user_info": {{ perun_ngui_admin_oauth_load_user_info|bool|to_json }},
     "oauth_scopes": "{{ perun_ngui_admin_oauth_scopes }}",
     "oauth_response_type": "{{ perun_ngui_admin_oauth_response_type }}",
-    "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }}
+    "oauth_offline_access_consent_prompt": {{ perun_ngui_oauth_offline_access_consent_prompt|bool|to_json }},
+    "filters": {{ perun_ngui_admin_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
   },
   "proxy_logout": {{ perun_ngui_admin_proxy_logout|bool|to_json }},
   "login_namespace_attributes": {{ perun_ngui_admin_login_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
