@@ -123,6 +123,12 @@
     src: instance_configs/pwdresetInstanceConfig.json.j2
     dest: /etc/perun/apache/pwdresetInstanceConfig.json
 
+- name: "generate /etc/perun/apache/publicationsInstanceConfig.json"
+  when: perun_ngui_publications_enabled
+  template:
+    src: instance_configs/publicationsInstanceConfig.json.j2
+    dest: /etc/perun/apache/publicationsInstanceConfig.json
+
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
     src: sites-enabled/perun.conf.j2
@@ -231,7 +237,6 @@
 - name: "create /etc/perun/apache/sites-enabled/perun-publications.conf"
   when: perun_ngui_publications_enabled
   template:
-    #TODO does not exist
     src: sites-enabled/perun-publications.conf.j2
     dest: /etc/perun/apache/sites-enabled/perun-publications.conf
     owner: root

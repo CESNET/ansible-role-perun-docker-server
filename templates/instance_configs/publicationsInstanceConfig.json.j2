@@ -1,0 +1,38 @@
+{# https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications #}
+{
+  "document_title": {{ perun_ngui_publications_document_title|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "instance_favicon": {{ perun_ngui_publications_instance_favicon|to_json }},
+{% if perun_ngui_publications_api_url is defined %}
+  "api_url": "{{ perun_ngui_publications_api_url }}",
+{% elif perun_ngui_publications_api_hostname is defined %}
+  "api_url": "https://{{ perun_ngui_publications_api_hostname }}/oauth/rpc",
+{% else %}
+  "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
+{% endif %}
+  "auto_auth_redirect": {{ perun_ngui_publications_auto_oauth_redirect|to_json }},
+  "supported_languages": {{ perun_ngui_publications_supported_languages|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "oidc_client" : {
+    "oauth_authority": "{{ perun_ngui_publications_oauth_authority }}",
+    "oauth_callback": "{{ perun_ngui_publications_oauth_callback }}",
+    "oauth_client_id": "{{ perun_ngui_publications_client_id }}",
+    "oauth_post_logout_redirect_uri": "{{ perun_ngui_publications_oauth_post_logout_redirect_uri }}",
+    "oauth_redirect_uri": "{{ perun_ngui_publications_oauth_redirect_uri }}",
+    "oauth_scopes": "{{ perun_ngui_publications_oauth_scopes }}",
+    "oauth_response_type": "{{ perun_ngui_publications_oauth_response_type }}",
+    "oauth_offline_access_consent_prompt": {{ perun_ngui_publications_oauth_offline_access_consent_prompt|to_json }},
+    "filters": {{ perun_ngui_publications_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
+  },
+{% if perun_ngui_publications_warning_message %}
+  "display_warning": true,
+  "warning_message": "{{ perun_ngui_publications_warning_message }}",
+{% endif %}
+{% if perun_ngui_publications_allowed_owners %}
+  "allowed_owners_for_thanks": {{ perun_ngui_publications_allowed_owners|to_json }},
+{% endif %}
+  "logo": {{ perun_ngui_publications_logo|to_json }},
+  "header_label_en": "{{ perun_ngui_publications_header_label_en }}",
+  "header_label_cs": "{{ perun_ngui_publications_header_label_cs }}",
+  "footer": {{ perun_ngui_publications_footer|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "theme": {{ perun_ngui_publications_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "brandings": {{ perun_ngui_publications_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }}
+}

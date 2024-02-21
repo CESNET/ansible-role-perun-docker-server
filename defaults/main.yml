@@ -456,6 +456,31 @@ perun_ngui_publications_enabled: no
 perun_ngui_publications_hostname: publications.aai.example.org
 perun_ngui_publications_hostname_aliases: []
 perun_ngui_publications_tls_cert_same_as_host: yes
+perun_ngui_publications_auto_oauth_redirect: true
+perun_ngui_publications_oauth_authority: '{{ perun_ngui_oauth_authority }}'
+perun_ngui_publications_oauth_callback: "https://{{ perun_ngui_publications_hostname }}/api-callback"
+perun_ngui_publications_oauth_csp_url: '{{ perun_ngui_publications_oauth_authority }}'
+perun_ngui_publications_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
+perun_ngui_publications_oauth_post_logout_redirect_uri: "https://{{ perun_ngui_publications_hostname }}"
+perun_ngui_publications_oauth_redirect_uri: "https://{{ perun_ngui_publications_hostname }}/api-callback"
+perun_ngui_publications_oauth_scopes: "openid profile perun_api offline_access"
+perun_ngui_publications_oauth_response_type: "code"
+perun_ngui_publications_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_publications_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
+perun_ngui_publications_logo: '{{ perun_ngui_logo }}'
+perun_ngui_publications_footer: '{{ perun_ngui_footer }}'
+perun_ngui_publications_theme: '{{ perun_ngui_theme }}'
+perun_ngui_publications_brandings: "{ '{{ perun_ngui_publications_hostname }}': {} }"
+perun_ngui_publications_warning_message: '{{ perun_ngui_admin_warning_message }}'
+perun_ngui_publications_allowed_owners: []
+perun_ngui_publications_supported_languages: ['en']
+perun_ngui_publications_instance_favicon: false
+perun_ngui_publications_header_label_en: "Publications"
+perun_ngui_publications_header_label_cs: "Publikace"
+perun_ngui_publications_document_title:
+  en: "{{ perun_ngui_publications_header_label_en }}"
+  cs: "{{ perun_ngui_publications_header_label_cs }}"
+
 
 # virtual host for API
 perun_api_enabled: no
