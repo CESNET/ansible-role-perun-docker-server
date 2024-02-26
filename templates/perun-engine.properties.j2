@@ -19,6 +19,9 @@ engine.sendscript.path=/opt/perun-engine/send
 {% if perun_engine_thread_gentasks_max is defined %}
 engine.thread.gentasks.max={{ perun_engine_thread_gentasks_max }}
 {% endif %}
+{% if perun_engine_thread_sendtasks_max is defined %}
+engine.thread.sendtasks.max={{ perun_engine_thread_sendtasks_max }}
+{% endif %}
 
 {% if perun_engine_propagation_timeout is defined %}
 # number of minutes, after which task is aborted
