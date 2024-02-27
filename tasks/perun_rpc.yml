@@ -7,6 +7,21 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
+- name: "detect tomcat_init.sh on controller machine"
+  local_action:
+    module: stat
+    path: "files/{{ perun_instance_hostname }}/tomcat_init.sh"
+  register: tomcat_init
+
+- name: "copy tomcat_init.sh"
+  when: tomcat_init.stat.exists
+  copy:
+    src: "files/{{ perun_instance_hostname }}/tomcat_init.sh"
+    dest: /etc/perun/rpc/tomcat_init.sh
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: "create jdbc.properties for RPC"
   template:
     src: jdbc.properties.j2
