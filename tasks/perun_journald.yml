@@ -19,11 +19,16 @@
   copy:
     dest: /etc/systemd/journald.conf.d/perun.conf
     content: |
+      # see "man 5 journald.conf" for documentation of these directives
       [Journal]
       # use max 30% of disk
       SystemMaxUse={{ (log_disk.size_total * 0.3 / 1000000) | int }}M
       # keep free at least 20% of disk
       SystemKeepFree={{ (log_disk.size_total * 0.2 / 1000000) | int }}M
+      # controls how large individual journal files in /var/log/journal may grow at most
+      SystemMaxFileSize=512M
+      # controls how many individual journal files to keep at most
+      SystemMaxFiles=200
   register: perunjourconf
 
 - name: "reload journald configuration"
