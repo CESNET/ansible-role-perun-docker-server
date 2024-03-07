@@ -707,9 +707,9 @@ perun_msmtp_config: |
   password test
 
 ######################
-# You do not need to modify value below
+# You do not need to modify values below
 ######################
-perun_postgresql_version: 15
+perun_postgresql_version: 16
 
 # directory with SSL/TLS certificates and keys
 perun_certs_dir: "/etc/perun/ssl"
