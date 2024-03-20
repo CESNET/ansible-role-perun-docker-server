@@ -3,16 +3,24 @@
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.14.3', '>=')
-    msg: "Required version is 2.14.3, this is {{ ansible_version.full }}"
+      - ansible_version.full is version_compare('2.16.4', '>=')
+    msg: "Required version is 2.16.4, this is {{ ansible_version.full }}"
     quiet: true
   tags: always
 
 - name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }})"
   assert:
     that:
-      - lookup('community.general.collection_version', 'community.general') is version('6.4.0','>=')
-    msg: "Required version is 6.4.0, this is {{lookup('community.general.collection_version', 'community.general') }}"
+      - lookup('community.general.collection_version', 'community.general') is version('8.4.0','>=')
+    msg: "Required version is 8.4.0, this is {{lookup('community.general.collection_version', 'community.general') }}"
+    quiet: true
+  tags: always
+
+- name: "Collection community.docker version check ({{ lookup('community.general.collection_version', 'community.docker') }})"
+  assert:
+    that:
+      - lookup('community.general.collection_version', 'community.docker') is version('3.8.0','>=')
+    msg: "Required version is 3.8.0, this is {{lookup('community.general.collection_version', 'community.docker') }}"
     quiet: true
   tags: always
 
@@ -186,6 +194,16 @@
   tags:
     - site_specific
     - site_specific_before
+
+- name: "setup of Perun-to-Perun synchronization"
+  when: perun_sync_enabled
+  include_tasks:
+    file: perun_sync.yml
+    apply:
+      tags:
+        - perun_sync
+  tags:
+    - perun_sync
 
 - name: "perun rpc setup"
   import_tasks: perun_rpc.yml

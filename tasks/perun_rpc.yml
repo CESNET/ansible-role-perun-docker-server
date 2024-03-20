@@ -237,6 +237,14 @@
   set_fact:
     rpc_mounts: "{{ rpc_mounts + perun_rpc_mounts_additional }}"
 
+- name: "add sync dirs to perun_rpc mounts"
+  when: perun_sync_enabled
+  loop: "{{ perun_sync_users }}"
+  loop_control:
+    label: "/home/{{ item.user }}"
+  set_fact:
+    rpc_mounts: "{{ rpc_mounts  + [ { 'type': 'bind', 'source': '/home/' + item.user, 'target': '/home/' + item.user } ] }}"
+
 - name: "get perun_net info"
   docker_network_info:
     name: perun_net
@@ -262,7 +270,9 @@
     memory: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     #memory_swap: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     #memory_swappiness: 0
-    container_default_behavior: no_defaults
+    image_name_mismatch: recreate
+    comparisons:
+      '*': strict
   register: perun_rpc_container
 
 - name: "remove old hostname"

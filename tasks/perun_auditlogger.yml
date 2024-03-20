@@ -125,7 +125,9 @@
       - name: perun_net
     network_mode: perun_net
     etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
-    container_default_behavior: no_defaults
+    image_name_mismatch: recreate
+    comparisons:
+      '*': strict
     state: "{{ 'started' if perun_auditlogger_enabled else 'absent' }}"
   register: perun_auditlogger_container
 

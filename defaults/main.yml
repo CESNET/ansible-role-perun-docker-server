@@ -706,6 +706,15 @@ perun_msmtp_config: |
   user test
   password test
 
+# Perun-to-Perun synchronization
+perun_sync_enabled: no
+perun_sync_users:
+  - user: perunsync
+    group: perunsync
+    comment: Perun-to-Perun synchronization
+    src_host: idm.ics.muni.cz
+    ssh_key_file: files/idm.ics.muni.cz/id_rsa.pub
+
 ######################
 # You do not need to modify values below
 ######################

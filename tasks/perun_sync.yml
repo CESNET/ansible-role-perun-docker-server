@@ -1,0 +1,69 @@
+- name: "install perun slave scripts for receiving from Peruns"
+  apt:
+    name:
+      - perun-slave-base
+      - perun-slave-process-generic-json-gen
+    state: present
+
+- name: "allow propagation to {{ perun_instance_hostname }}"
+  copy:
+    dest: /etc/perunv3.conf
+    content: |
+      DNS_ALIAS_WHITELIST=( {{ perun_instance_hostname }} )
+
+- name: "create /etc/perun/generic_json_gen.d/pre_10_set_script"
+  copy:
+    dest: /etc/perun/generic_json_gen.d/pre_10_set_script
+    content: |
+      #!/bin/bash
+      export DST_SCRIPT="/opt/perun/perun_sync.py"
+
+- name: "create /opt/perun/perun_sync.py"
+  copy:
+    dest: /opt/perun/perun_sync.py
+    src: perun_sync.py
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "create groups for each source Perun"
+  loop: "{{ perun_sync_users }}"
+  group:
+    name: "{{ item.group }}"
+
+- name: "create users for each source Perun"
+  loop: "{{ perun_sync_users }}"
+  user:
+    name: "{{ item.user }}"
+    group: "{{ item.group }}"
+    comment: "{{ item.comment }}"
+    shell: /bin/bash
+    create_home: true
+
+- name: "add source Perun's engine ssh keys"
+  loop: "{{ perun_sync_users }}"
+  authorized_key:
+    exclusive: true
+    user: "{{ item.user }}"
+    key_options: 'from="{{ item.src_host }}",command="/opt/perun/bin/perun"'
+    key: "{{ lookup('ansible.builtin.file', item.ssh_key_file ) }}"
+
+- name: "allow UseDNS for sshd"
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: 'UseDNS'
+    line: 'UseDNS yes'
+  register: sshd_config
+
+- name: "restart sshd"
+  when: sshd_config.changed
+  systemd:
+    name: sshd
+    state: reloaded
+
+- name: "add perunrpc to groups for sync"
+  loop: "{{ perun_sync_users }}"
+  user:
+    name: perunrpc
+    groups: "{{ item.group }}"
+    append: true
