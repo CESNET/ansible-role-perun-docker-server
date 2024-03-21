@@ -26,19 +26,31 @@
     group: root
     mode: '0755'
 
-- name: "create groups for each source Perun"
-  loop: "{{ perun_sync_users }}"
+- name: "create group perunsync"
   group:
-    name: "{{ item.group }}"
+    name: perunsync
+    gid: 959
+    system: yes
 
 - name: "create users for each source Perun"
   loop: "{{ perun_sync_users }}"
   user:
     name: "{{ item.user }}"
-    group: "{{ item.group }}"
+    group: perunsync
     comment: "{{ item.comment }}"
     shell: /bin/bash
     create_home: true
+
+- name: "create directory perun_sync_json in each home"
+  loop: "{{ perun_sync_users }}"
+  loop_control:
+    label: "/home/{{ item.user }}/perun_sync_json"
+  file:
+    state: directory
+    path: "/home/{{ item.user }}/perun_sync_json"
+    owner: "{{ item.user }}"
+    group: perunsync
+    mode: '0755'
 
 - name: "add source Perun's engine ssh keys"
   loop: "{{ perun_sync_users }}"
@@ -60,10 +72,3 @@
   systemd:
     name: sshd
     state: reloaded
-
-- name: "add perunrpc to groups for sync"
-  loop: "{{ perun_sync_users }}"
-  user:
-    name: perunrpc
-    groups: "{{ item.group }}"
-    append: true

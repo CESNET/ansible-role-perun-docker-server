@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import grp
 import os
-import pwd
 import sys
 import json
 
-DIR = os.getenv('HOME')
+DIR = os.getenv('HOME') + "/perun_sync_json"
 RESOURCE_ATTR_NAME = "urn:perun:resource:attribute-def:def:authorizationResourceId"
+os.umask(0o022)
+
 
 def update_json(data):
     for user_uuid, user_data in data["users"].items():
@@ -38,9 +38,6 @@ def replace_files(data):
             json.dump(resource_data, tmp_file, indent=4)
             tmp_file.flush()
             os.fsync(tmp_file.fileno())
-        # uid = pwd.getpwnam("perunrpc").pw_uid
-        # gid = grp.getgrnam("perunrpc").gr_gid
-        # os.chown(f"{filepath}.tmp", uid, gid)
         os.replace(f"{filepath}.tmp", f"{filepath}.json")
 
 

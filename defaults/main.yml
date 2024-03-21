@@ -710,7 +710,6 @@ perun_msmtp_config: |
 perun_sync_enabled: no
 perun_sync_users:
   - user: perunsync
-    group: perunsync
     comment: Perun-to-Perun synchronization
     src_host: idm.ics.muni.cz
     ssh_key_file: files/idm.ics.muni.cz/id_rsa.pub
