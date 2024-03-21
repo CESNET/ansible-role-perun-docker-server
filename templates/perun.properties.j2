@@ -166,9 +166,6 @@ perun.user.deletion.forced={{ perun_rpc_user_deletion_forced }}
 # Require consents throughout Perun
 perun.force.consents={{ perun_rpc_force_consents }}
 
-# If the call to user info endpoint should be made (on OIDC) when creating PerunPrincipal
-perun.requestUserInfoEndpoint={{ perun_rpc_requestUserInfoEndpoint }}
-
 perun.defaultLoa.idp={{ perun_rpc_defaultLoa_idp }}
 
 {% if perun_rpc_group_nameSecondaryRegex is defined %}
@@ -195,6 +192,9 @@ perun.sendIdentityAlerts={{ perun_rpc_sendIdentityAlerts }}
 # Therefore, account linking will not be offered to users even when they already have registered some similar accounts.
 perun.findSimilarUsersDisabled={{ perun_rpc_registrar_findSimilarUsers_disabled }}
 
+# If the call to user info endpoint should be made (on OIDC) when creating PerunPrincipal
+perun.requestUserInfoEndpoint={{ perun_rpc_requestUserInfoEndpoint|bool|to_json }}
+
 # names of the property in userInfo that could contain extSourceLogin
 perun.userInfoEndpoint.extSourceLogin={{ perun_rpc_userInfoEndpoint_extSourceLogin }}
 
@@ -203,6 +203,9 @@ perun.userInfoEndpoint.extSourceName={{ perun_rpc_userInfoEndpoint_extSourceName
 
 # properties that are path in the userInfo to the extSourceFriendlyName
 perun.userInfoEndpoint.extSourceFriendlyName={{ perun_rpc_userInfoEndpoint_extSourceFriendlyName }}
+
+# when set to true, MFA is required for critical operations and attribute actions
+perun.enforceMfa={{ perun_rpc_enforceMfa|bool|to_json }}
 
 # timeout limit (minutes) for the MFA to be valid (timestamp cannot be older than the limit)
 perun.introspectionEndpoint.mfaAuthTimeout={{ perun_rpc_introspectionEndpoint_mfaAuthTimeout }}
@@ -215,9 +218,6 @@ perun.introspectionEndpoint.mfaAuthTimeoutPercentageForceLogIn={{ perun_rpc_intr
 # expected acr value to be returned from introspection endpoint if MFA was performed
 perun.introspectionEndpoint.mfaAcrValue={{ perun_rpc_introspectionEndpoint_mfaAcrValue }}
 
-# when set to true, MFA is required for critical operations and attribute actions
-perun.enforceMfa={{ perun_rpc_enforceMfa }}
-
 # how many months is lastAccess of user IdP extSource valid for attributes retrieval
 perun.idpLoginValidity={{ perun_rpc_idpLoginValidity }}
 
@@ -229,6 +229,7 @@ perun.forceHtmlSanitization={{ perun_rpc_force_html_sanitization|bool|to_json }}
 
 # Limit roles in session for the old GUI apps. This is necessary to support step-up MFA globally.
 perun.appAllowedRoles.apps={% for app in perun_rpc_app_allowed_roles %}{{ app.name }}{% if not loop.last %},{% endif %}{% endfor %}
+
 {% for app in perun_rpc_app_allowed_roles %}
 perun.appAllowedRoles.{{ app.name }}.reg={{ app.reg }}
 perun.appAllowedRoles.{{ app.name }}.roles={{ app.roles|join(',') }}

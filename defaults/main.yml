@@ -78,7 +78,6 @@ perun_rpc_extsources_multiple_identifiers: ""
 perun_rpc_lookup_user_by_identifiers_and_extSourceLogin: 'false'
 perun_rpc_user_deletion_forced: 'false'
 perun_rpc_force_consents: 'false'
-perun_rpc_requestUserInfoEndpoint: 'false'
 perun_rpc_defaultLoa_idp: "2"
 perun_rpc_recaptcha_privatekey: '6Lf0eUYUAAAAAIBxpRrA7UNrT7czQ28IoH9yiDBE'
 perun_rpc_mailchange_secretKey: "test"
@@ -116,13 +115,14 @@ perun_rpc_group_maxConcurentGroupsToSynchronize: 10
 perun_rpc_group_structure_maxConcurrentGroupsStructuresToSynchronize: 10
 perun_rpc_powerusers: "perun"
 perun_rpc_db_initializator_enabled: yes
+perun_rpc_requestUserInfoEndpoint: no
 perun_rpc_userInfoEndpoint_extSourceLogin: ""
 perun_rpc_userInfoEndpoint_extSourceName: ""
 perun_rpc_userInfoEndpoint_extSourceFriendlyName: ""
 perun_rpc_introspectionEndpoint_mfaAuthTimeout: 1440
 perun_rpc_introspectionEndpoint_mfaAuthTimeoutPercentageForceLogIn: 75
-perun_rpc_introspectionEndpoint_mfaAcrValue: ""
-perun_rpc_enforceMfa: 'false'
+perun_rpc_introspectionEndpoint_mfaAcrValue: "https://refeds.org/profile/mfa"
+perun_rpc_enforceMfa: no
 perun_rpc_mounts_additional: []
 perun_rpc_idpLoginValidity: 24
 perun_rpc_idpLoginValidityExceptions: []
