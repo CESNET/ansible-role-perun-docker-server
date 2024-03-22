@@ -41,6 +41,22 @@
         --exclude-table-data=perun.service_denials \
         perun | zstdmt -10 --quiet --force -o "$FILENAME"
 
+- name: "create /var/lib/postgresql/dump_perun_without_auditlog.sh file"
+  copy:
+    dest: /var/lib/postgresql/dump_perun_without_auditlog.sh
+    owner: postgres
+    group: postgres
+    mode: 0550
+    content: |2
+      #!/bin/bash
+      FILENAME=perun_wo_auditlog_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
+      echo "dumping PostgreSQL database perun without auditlog into $PWD/$FILENAME ..."
+      export LANG=cs_CZ.UTF-8
+      umask 0027
+      pg_dump \
+        --exclude-table-data=perun.auditer_log \
+        perun | zstdmt -10 --quiet --force -o "$FILENAME"
+
 - name: "add extensions"
   become: yes
   become_user: postgres
@@ -85,7 +101,7 @@
     hour: "23"
     minute: "20"
     user: postgres
-    job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_psql_db.sh perun"
+    job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_perun_without_auditlog.sh"
 
 - name: "detect whether user nagios exists"
   become: yes
