@@ -22,13 +22,13 @@
       # see "man 5 journald.conf" for documentation of these directives
       [Journal]
       # use max 30% of disk
-      SystemMaxUse={{ (log_disk.size_total * 0.3 / 1000000) | int }}M
+      SystemMaxUse={{ (log_disk.size_total * 0.3 / 1073741824) | int }}G
       # keep free at least 20% of disk
-      SystemKeepFree={{ (log_disk.size_total * 0.2 / 1000000) | int }}M
+      SystemKeepFree={{ (log_disk.size_total * 0.2 / 1073741824) | int }}G
       # controls how large individual journal files in /var/log/journal may grow at most
-      SystemMaxFileSize=512M
+      SystemMaxFileSize=1G
       # controls how many individual journal files to keep at most
-      SystemMaxFiles=200
+      SystemMaxFiles={{ (log_disk.size_total * 0.3 / 1073741824) | int }}
   register: perunjourconf
 
 - name: "reload journald configuration"
