@@ -76,14 +76,11 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
-- name: "create perun-cabinet.properties"
-  template:
-    src: perun-cabinet.properties.j2
-    dest: /etc/perun/rpc/perun-cabinet.properties
-    owner: root
-    group: perunrpc
-    mode: '0440'
-  notify: "restart perun_rpc"
+# TODO - remove after some time
+- name: "remove unused perun-cabinet.properties"
+  file:
+    path: '/etc/perun/rpc/perun-cabinet.properties'
+    state: absent
 
 - name: "create perun-registrar-lib.properties"
   template:

@@ -519,10 +519,6 @@ perun_registrar_backupTo: "{{ perun_email }}"
 perun_registrar_replyTo: ""
 perun_registrar_replyToName: ""
 
-# perun-cabinet.properties
-perun_cabinet_mu_login: ""
-perun_cabinet_mu_password: ""
-
 # LDAP
 perun_ldap_local: true
 perun_ldap_url: "ldap://perun-host:389"
