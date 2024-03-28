@@ -17,6 +17,7 @@
       "oauth_offline_access_consent_prompt": {{ perun_ngui_linker_oauth_offline_access_consent_prompt|bool|to_json }},
       "user_info_endpoint_url": "{{ perun_ngui_linker_user_info_endpoint_url }}"
     },
+  "mfa": {{ perun_ngui_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "document_title": "{{ perun_ngui_linker_document_title }}",
   "instance_favicon": {{ perun_ngui_linker_instance_favicon|to_json }},
   "support_mail": "{{ perun_email }}"

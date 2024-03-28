@@ -22,6 +22,7 @@
     "oauth_offline_access_consent_prompt": {{ perun_ngui_publications_oauth_offline_access_consent_prompt|to_json }},
     "filters": {{ perun_ngui_publications_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
   },
+  "mfa": {{ perun_ngui_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
 {% if perun_ngui_publications_warning_message %}
   "display_warning": true,
   "warning_message": "{{ perun_ngui_publications_warning_message }}",
@@ -32,6 +33,7 @@
   "logo": {{ perun_ngui_publications_logo|to_json }},
   "header_label_en": "{{ perun_ngui_publications_header_label_en }}",
   "header_label_cs": "{{ perun_ngui_publications_header_label_cs }}",
+  "other_apps": {{ perun_ngui_publications_other_apps|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "footer": {{ perun_ngui_publications_footer|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "theme": {{ perun_ngui_publications_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "brandings": {{ perun_ngui_publications_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }}
