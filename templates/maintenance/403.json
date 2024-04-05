@@ -1,0 +1,6 @@
+{
+  "type": "https://{{ perun_api_hostname }}/maintenance/403.html",
+  "status": 403,
+  "title": "Forbidden",
+  "detail": "hint: provide authentication prefix e.g. https://{{ perun_api_hostname }}/oauth/rpc/ contact {{ perun_email }} for help"
+}

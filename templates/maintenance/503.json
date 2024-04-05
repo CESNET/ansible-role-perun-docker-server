@@ -1,0 +1,6 @@
+{
+  "type": "https://{{ perun_api_hostname }}/maintenance/503.html",
+  "status": 503,
+  "title": "Service Unavailable",
+  "detail": "Apache cannot contact Tomcat at the moment. Please try again later or contact {{ perun_email }}"
+}

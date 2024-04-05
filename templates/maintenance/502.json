@@ -1,0 +1,5 @@
+{
+  "status": 502,
+  "title": "Bad Gateway",
+  "detail": "Web server cannot contact Perun RPC at the moment. Please try again later or contact {{ perun_email }}"
+}

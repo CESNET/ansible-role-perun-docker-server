@@ -1,0 +1,6 @@
+{
+  "type": "https://{{ perun_api_hostname }}/maintenance/500.html",
+  "status": 500,
+  "title": "Internal Server Error",
+  "detail": "Server has encountered internal error. Please try again later or contact {{ perun_email }}"
+}
