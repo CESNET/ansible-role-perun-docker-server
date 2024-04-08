@@ -123,6 +123,23 @@
     sendmail_for_docker_bridge_network_name: perun_net
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
+- name: "set up /etc/aliases for sendmail"
+  when: not perun_smtp_use_msmtp
+  loop:
+    - postmaster
+    - postgres
+    - perun
+    - perunrpc
+    - peruneng
+    - perunldc
+  lineinfile:
+    path: /etc/aliases
+    regexp: "^{{ item }}:"
+    line: "{{ item }}: root"
+    state: present
+  notify: "run newaliases"
+  tags: [ 'aliases']
+
 - name: "msmtp MTA setup (forwarding emails to a SMTP relay)"
   when: perun_smtp_use_msmtp
   include_role:
