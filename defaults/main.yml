@@ -738,7 +738,12 @@ perun_sync_users:
 ######################
 # You do not need to modify values below
 ######################
+
+# https://www.postgresql.org/support/versioning/
 perun_postgresql_version: 16
+
+# https://github.com/portainer/portainer/releases
+perun_portainer_version: latest
 
 # directory with SSL/TLS certificates and keys
 perun_certs_dir: "/etc/perun/ssl"
