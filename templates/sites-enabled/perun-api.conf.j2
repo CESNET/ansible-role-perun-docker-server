@@ -32,12 +32,13 @@
         Require all granted
     </Directory>
 
-    # GENERIC ERRORS
-    ErrorDocument 401 /maintenance/401.html
-    ErrorDocument 403 /maintenance/403.html
-    ErrorDocument 404 /maintenance/404.html
-    ErrorDocument 500 /maintenance/500.html
-    ErrorDocument 503 /maintenance/503.html
+    # GENERIC ERRORS (RFC 7807 JSON format)
+    ErrorDocument 401 /maintenance/401.json
+    ErrorDocument 403 /maintenance/403.json
+    ErrorDocument 404 /maintenance/404.json
+    ErrorDocument 500 /maintenance/500.json
+    ErrorDocument 502 /maintenance/502.json
+    ErrorDocument 503 /maintenance/503.json
 
     RewriteEngine On
 

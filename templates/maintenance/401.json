@@ -1,0 +1,6 @@
+{
+  "type": "https://{{ perun_api_hostname }}/maintenance/401.html",
+  "status": 401,
+  "title": "Unauthorized",
+  "detail": "hint: provide 'Authorization:' header, contact {{ perun_email }} for help"
+}
