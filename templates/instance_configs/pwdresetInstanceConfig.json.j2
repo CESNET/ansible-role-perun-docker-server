@@ -10,6 +10,7 @@
   "api_url": "https://{{ perun_api_hostname }}/oauth/rpc",
 {% endif %}
   "auto_auth_redirect": {{ perun_ngui_pwdreset_auto_oauth_redirect|to_json }},
+  "auto_service_access_redirect": {{ perun_ngui_pwdreset_auto_service_access_redirect|to_json }},
   "supported_languages": {{ perun_ngui_pwdreset_supported_languages|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "oidc_client" : {
     "oauth_authority": "{{ perun_ngui_pwdreset_oauth_authority }}",
@@ -23,6 +24,8 @@
     "filters": {{ perun_ngui_pwdreset_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
   },
   "mfa": {{ perun_ngui_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "log_out_enabled": {{ perun_ngui_pwdreset_log_out_enabled|bool|to_json }},
+  "proxy_logout": {{ perun_ngui_pwdreset_proxy_logout|bool|to_json }},
 {% if perun_ngui_pwdreset_warning_message %}
   "display_warning": true,
   "warning_message": "{{ perun_ngui_pwdreset_warning_message }}",
