@@ -16,6 +16,12 @@ def update_json(data):
                 data["resources"].setdefault(resource_uuid, {}).setdefault("members", {})
                 data["resources"][resource_uuid]["members"][user_uuid] = user_data["attributes"]
         data["users"][user_uuid].pop("allowed_resources", None)
+
+    # add the empty members block to empty resources
+    for resource_uuid, resource_data in data["resources"].items():
+        if "members" not in resource_data:
+            data["resources"][resource_uuid]["members"] = {}
+
     return data
 
 
