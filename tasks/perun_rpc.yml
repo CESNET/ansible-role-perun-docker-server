@@ -76,12 +76,6 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
-# TODO - remove after some time
-- name: "remove unused perun-cabinet.properties"
-  file:
-    path: '/etc/perun/rpc/perun-cabinet.properties'
-    state: absent
-
 - name: "create perun-registrar-lib.properties"
   template:
     src: perun-registrar-lib.properties.j2
