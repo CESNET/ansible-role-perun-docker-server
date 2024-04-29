@@ -196,7 +196,7 @@ ShibCompatValidUser on
 {% else %}
   RewriteRule ^/gui[/]?$ https://%{HTTP_HOST}/{{ perun_apache_gui_default_auth }}/gui/ [L,R=301]
   RewriteRule ^/(.*)/gui$ https://%{HTTP_HOST}/$1/gui/ [L,R=301]
-  RewriteRule ^/(.*)/gui/$ /var/www/perun-web-gui/PerunWeb.html [L]
+  RewriteRule ^/(.*)/gui/$ /var/www/perun-web-gui/PerunWeb{{ perun_apache_gui_html_suffix }}.html [L]
   RewriteRule ^/(.*)/gui/(.+)$ /var/www/perun-web-gui/$2 [L]
 {% endif %}
 
