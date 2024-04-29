@@ -644,6 +644,7 @@ perun_apache_csp_connect_src: ""
 perun_apache_special_config1: ""
 perun_apache_other_rewrites: ""
 perun_apache_gui_default_auth: "fed"
+perun_apache_gui_html_suffix: ""
 perun_apache_registrar_default_auth: "fed"
 perun_apache_registrar_html_suffix: ""
 perun_apache_consolidator_forceAuthn: no
