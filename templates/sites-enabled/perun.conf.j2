@@ -97,7 +97,7 @@ ShibCompatValidUser on
   # https://scotthelme.co.uk/hardening-your-http-response-headers/#x-xss-protection
   Header always set X-XSS-Protection "1; mode=block"
   # https://scotthelme.co.uk/content-security-policy-an-introduction/
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ {{ perun_apache_csp_script_src }} ; frame-src https://www.google.com/recaptcha/ {{ perun_apache_csp_frame_src }} ; style-src 'self' 'unsafe-inline' {{ perun_apache_csp_style_src }}; font-src 'self' {{ perun_apache_csp_font_src }} ; img-src 'self' data: {{ perun_apache_csp_img_src }} ; ; connect-src 'self' {{ perun_apache_csp_connect_src }}"
+  Header always set Content-Security-Policy "default-src 'self' {{ perun_apache_csp_default_src }} ; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ {{ perun_apache_csp_script_src }} ; frame-src https://www.google.com/recaptcha/ {{ perun_apache_csp_frame_src }} ; style-src 'self' 'unsafe-inline' {{ perun_apache_csp_style_src }}; font-src 'self' {{ perun_apache_csp_font_src }} ; img-src 'self' data: {{ perun_apache_csp_img_src }} ; ; connect-src 'self' {{ perun_apache_csp_connect_src }}"
   # https://scotthelme.co.uk/a-new-security-header-referrer-policy/
   Header always set Referrer-Policy "no-referrer-when-downgrade"
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
