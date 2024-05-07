@@ -160,7 +160,7 @@
 		<syslogIdentifier>perun-ultimate</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
-	<logger name="ultimate_logger" level="debug" additivity="false">
+	<logger name="ultimate_logger" level="{{ perun_rpc_logback_ultimate_logger_level }}" additivity="false">
 		<appender-ref ref="perun-ultimate"/>
 		<appender-ref ref="journal-ultimate"/>
 	</logger>
