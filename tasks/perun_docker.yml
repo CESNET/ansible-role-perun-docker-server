@@ -126,6 +126,7 @@
 - name: "create a local Docker network for Perun"
   docker_network:
     name: perun_net
+    enable_ipv6: true
     driver_options:
       com.docker.network.driver.mtu: "{{ ansible_default_ipv4.mtu }}"
   register: perun_net_info
