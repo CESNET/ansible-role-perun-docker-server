@@ -23,3 +23,19 @@
     name: pv
     state: present
 
+- name: "make list of packages for holding"
+  set_fact:
+    psql_packages:
+      - "postgresql-{{ perun_postgresql_version }}"
+      - "postgresql-client-{{ perun_postgresql_version }}"
+      - "postgresql-{{ perun_postgresql_version }}-repack"
+      - postgresql-client-common
+      - postgresql-common
+- debug:
+    var: psql_packages
+
+- name: "Hold postgresql packages from upgrading"
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: "{{ psql_packages }}"
