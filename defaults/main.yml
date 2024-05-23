@@ -834,8 +834,11 @@ perun_firewall_docker_rules:
   - port: 9000
     only:
       - { ipv4: "147.251.0.0/16", comment: "portainer from MUNI" }
+      - { ipv6: "2001:718:801::/48", comment: "portainer from MUNI" }
       - { ipv4: "78.128.246.160/32", comment: "portainer from CESNET eduVPN" }
       - { ipv4: "78.128.247.175/32", comment: "portainer from CESNET eduVPN" }
+      - { ipv6: "2001:718:ff05:acb::/64", comment: "portainer from CESNET eduVPN" }
+      - { ipv6: "2001:718:ff05:acc::/64", comment: "portainer from CESNET eduVPN" }
 
 # debian repos to use for automatic updates
 perun_unattended_upgrades_origin_patterns: |2
