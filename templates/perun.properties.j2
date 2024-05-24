@@ -237,3 +237,9 @@ perun.appAllowedRoles.{{ app.name }}.roles={{ app.roles|join(',') }}
 
 # Check upon initialization, that external dependencies listed here are available in underlying OS/container environment.
 perun.externalProgramsDependencies={{ perun_rpc_external_programs_dependencies|join(',') }}
+
+# Max number of audit messages/events which are readers able to retrieve from Perun in one call
+perun.auditlogReadLimit={{ perun_rpc_auditlog_read_limit }}
+
+# Set to "true" to archive data generated during each run of service provisioning
+perun.archiveSpool={{ perun_rpc_archive_spool|bool|to_json }}
