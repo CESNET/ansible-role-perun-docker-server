@@ -1,6 +1,6 @@
 - name: "set working environment"
   import_role:
-    name: martin_kuba.work_env
+    name: cesnet.work_env
 
 - import_role:
     name: cesnet.ntp
