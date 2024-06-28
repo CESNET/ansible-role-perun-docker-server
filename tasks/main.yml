@@ -3,24 +3,24 @@
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.16.3', '>=')
-    msg: "Required version is 2.16.4, this is {{ ansible_version.full }}"
+      - ansible_version.full is version_compare('2.16.8', '>=')
+    msg: "Required version is 2.16.8, this is {{ ansible_version.full }}"
     quiet: true
   tags: always
 
 - name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }})"
   assert:
     that:
-      - lookup('community.general.collection_version', 'community.general') is version('8.3.0','>=')
-    msg: "Required version is 8.4.0, this is {{lookup('community.general.collection_version', 'community.general') }}"
+      - lookup('community.general.collection_version', 'community.general') is version('8.6.2','>=')
+    msg: "Required version is 8.6.2, this is {{lookup('community.general.collection_version', 'community.general') }}"
     quiet: true
   tags: always
 
 - name: "Collection community.docker version check ({{ lookup('community.general.collection_version', 'community.docker') }})"
   assert:
     that:
-      - lookup('community.general.collection_version', 'community.docker') is version('3.7.0','>=')
-    msg: "Required version is 3.8.0, this is {{lookup('community.general.collection_version', 'community.docker') }}"
+      - lookup('community.general.collection_version', 'community.docker') is version('3.10.4','>=')
+    msg: "Required version is 3.10.4, this is {{lookup('community.general.collection_version', 'community.docker') }}"
     quiet: true
   tags: always
 
@@ -28,8 +28,8 @@
   assert:
     that:
       - ansible_distribution == "Debian"
-      - ansible_distribution_major_version is version('10','>=')
-    msg: "Required version is 10, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+      - ansible_distribution_major_version is version('11','>=')
+    msg: "Required version is 11, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
     quiet: true
   tags: always
 
@@ -171,7 +171,7 @@
     apply:
       tags:
         - perun_ldap
-  when: perun_ldap_local
+  when: perun_ldap_local and perun_ldap_implementation=="openldap"
   vars:
     ldap_domain: "{{ perun_ldap_domain }}"
     ldap_top_organization: perun
@@ -190,15 +190,31 @@
   tags:
     - perun_ldap
 
-- name: "prepare vars for perun_config"
-  import_tasks: perun_config.yml
+- name: "LDAP 389Directory server installation"
+  include_role:
+    name: cesnet.ds389
+    apply:
+      tags:
+        - perun_ldap
+  when: perun_ldap_local and perun_ldap_implementation=="ds389"
+  vars:
+    ldap_ds389_domain: "{{ perun_ldap_domain }}"
+    ldap_ds389_server_name: "{{ perun_ldap_ds389_server_name }}"
+    ldap_ds389_instance_name: "{{ perun_ldap_ds389_instance_name}}"
+    ldap_ds389_root_pass: "{{ perun_ldap_data_password }}"
+    ldap_ds389_certificate_file: "{{ perun_certificate_file }}"
+    ldap_ds389_certificate_key_file: "{{ perun_certificate_key_file }}"
+    ldap_ds389_certificate_chain_file: "{{ perun_certificate_chain_file }}"
+    ldap_ds389_repl_pass: "{{ perun_ldap_replication_password }}"
+    ldap_ds389_set_up_supplier_replica: "{{ perun_ldap_master_replica }}"
+    ldap_ds389_replication_argument_name: "{{ perun_ldap_ds389_replication_argument_name }}"
+    ldap_ds389_replica_consumer_host: "{{ perun_ldap_ds389_replica_consumer_host }}"
+    ldap_ds389_pass_through_authentication: "{{ ldap_pass_through_authentication if ldap_pass_through_authentication is defined else false }}"
   tags:
-    - perun_config
-    - perun_rpc
-    - perun_ldapc
-    - perun_apache
+    - perun_ldap
 
-- name: "OpenLDAP Perun specific settings"
+- name: "LDAP Perun specific settings"
+  when: perun_ldap_local
   include_role:
     name: cesnet.perun_ldap_config
     apply:
@@ -210,57 +226,18 @@
     - perun_ldap
     - perun_config
     - perun_ldap_config
-  when: perun_ldap_local
-
-- name: "LDAP 389Directory server installation"
-  include_role:
-     name: cesnet.ds389 
-     apply:
-      tags:
-        - perun_ldap_389
-  
-  when: perun_ldap_ds389_local
-  vars:                             
-    ldap_ds389_server_name: "{{ perun_ldap_ds389_server_name }}"
-    ldap_ds389_instance_name: "{{ perun_ldap_ds389_instance_name}}"
-    ldap_ds389_basedn: "{{ perun_ldap_basedn }}"
-    ldap_ds389_root_dn: "{{ perun_ldap_data_admin_dn }}"
-    ldap_ds389_root_pass: "{{ perun_ldap_config_password }}"
-
-    ldap_ds389_certificate_file: "{{ perun_certificate_file }}"
-    ldap_ds389_certificate_key_file: "{{ perun_certificate_key_file }}"
-    ldap_ds389_certificate_chain_file: "{{ perun_certificate_chain_file }}"
-
-    ldap_ds389_repl_bind_dn: "{{ perun_ldap_ds389_repl_bind_dn }}"
-    ldap_ds389_repl_pass: "{{ perun_ldap_ds389_repl_pass }}"
-    ldap_ds389_set_up_consumer_replica: "{{ perun_ldap_master_replica }}"
-    ldap_ds389_set_up_supplier_replica: "{{ perun_ldap_ds389_set_up_supplier_replica }}"
-    ldap_ds389_replication_argument_name: "{{ perun_ldap_ds389_replication_argument_name }}"
-    ldap_ds389_replica_consumer_host: "{{ perun_ldap_ds389_replica_consumer_host }}"
-    ldap_ds389_pass_through_authentication: "{{perun_ldap_ds389_pass_through_authentication}}"  
-  tags:
-        - perun_ldap_389
-
-- name: "LDAP DS389 Perun specific settings"
-  include_role:
-    name: cesnet.perun_ldap_config
-    apply:
-      tags:
-        - perun_ldap_389
-  tags:
-    - perun_ldap_389
-  when: perun_ldap_ds389_local
-  vars:
-    ldap_ds389_instance_name: "{{ perun_ldap_ds389_instance_name}}"
-    ldap_ds389_server_name: "{{ perun_ldap_ds389_server_name }}"
-    ldap_ds389_basedn: "{{ perun_ldap_basedn }}"
-    ldap_ds389_root_dn: "{{ perun_ldap_data_admin_dn }}"
-    ldap_ds389_root_pass: "{{ perun_ldap_config_password }}"
-    ldap_ds389_aci_content: "{{ perun_ldap_ds389_aci_content  }}"
 
 - name: "setup of Docker data volumes for Perun containers"
   import_tasks: perun_volumes.yml
   tags: perun_volumes
+
+- name: "prepare vars for perun_config"
+  import_tasks: perun_config.yml
+  tags:
+    - perun_config
+    - perun_rpc
+    - perun_ldapc
+    - perun_apache
 
 - name: "site-specific tasks before perun config"
   when: perun_site_specific_tasks_before is defined

@@ -554,35 +554,22 @@ perun_registrar_replyToName: ""
 perun_ldap_local: true
 perun_ldap_url: "ldap://perun-host:389"
 perun_ldap_domain: "example.org"
-perun_ldap_data_password: "test"
+perun_ldap_data_password: "testtest"
 perun_ldap_config_password: "testtest"
-perun_ldap_proxy_password: "test"
-perun_ldap_replication_password: "test"
+perun_ldap_proxy_password: "testtest"
+perun_ldap_replication_password: "testtest"
 perun_ldap_sasl_login_namespace: ""
 perun_ldap_master_replica: no
-
+# set to "openldap" or "ds389"
+perun_ldap_implementation: openldap
 
 # LDAP 389DS
-perun_ldap_ds389_local: false
-perun_ldap_ds389_server_name: "{{ inventory_hostname }}"
-# perun_ldap_ds389_full_instance_name: "example.org"
-perun_ldap_ds389_instance_name: '{{  perun_ldap_domain.split(".")[0] }}'
-#perun_ldap_ds389_basedn: '{{ "dc=" + perun_ldap_ds389_full_instance_name.split(".") | join(",dc=") }}'
-#perun_ldap_ds389_root_dn: '{{ "cn=admin," + perun_ldap_ds389_basedn }}'  
-#perun_ldap_ds389_root_pass: "testtest"
-perun_ldap_ds389_repl_bind_dn: "cn=replication manager,cn=config"
-perun_ldap_ds389_repl_pass: "password1233"
-perun_ldap_ds389_replication_password: "testtest"
-perun_ldap_ds389_set_up_consumer_replica: false
-perun_ldap_ds389_set_up_supplier_replica: false
+perun_ldap_ds389_server_name: "{{ perun_instance_hostname }}"
+perun_ldap_ds389_instance_name: localhost
+perun_ldap_ds389_repl_pass: "{{ perun_ldap_replication_password }}"
 perun_ldap_ds389_replication_argument_name: ""
 perun_ldap_ds389_replica_consumer_host: ""
 perun_ldap_ds389_pass_through_authentication: no
-perun_ldap_ds389_aci_content: 
-- (targetattr="userPassword") (version 3.0; acl "Allow users updating their password"; allow (write) userdn="ldap:///self";)
-- (targetattr="shadowLastChange")(version 3.0; acl "Shadow last change access"; allow (write) userdn="ldap:///self"; allow (read) userdn="ldap:///all";)
-- (target="ldap:///{{ perun_ldap_ds389_basedn }}")(version 3.0; acl "Self read access"; allow (read) userdn="ldap:///self";) 
-- (target="ldap:///{{ perun_ldap_ds389_basedn }}")(version 3.0; acl "User search access"; allow (search) userdn="ldap:///users";)
 
 # LDAPc
 perun_ldapc_full_sync_on_restart: yes
