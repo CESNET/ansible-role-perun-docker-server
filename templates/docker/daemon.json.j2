@@ -7,11 +7,6 @@
 {# uses container name as its syslog tag (instead of id) #}
     "tag": "{{ '{{' }}.Name}}"
   },
-{# enables IPv6 networking on the default network #}
-  "ipv6": true,
-{# enables IPv6 NAT #}
-  "experimental": true,
-  "ip6tables": true,
 {# adds IPv6 pool to default IPv4 pools, the range must be ULA (unique local address) starting with fd::/8 #}
   "default-address-pools": [
     { "base": "172.17.0.0/16", "size": 16 },
