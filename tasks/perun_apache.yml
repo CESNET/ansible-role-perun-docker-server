@@ -377,69 +377,67 @@
         - perun_apache
         - perun_config
 
-- name: "list normal apache mounts"
-  set_fact:
-    apache_mounts:
-      - { type: volume, source: apache_logs, target: /var/log/apache2 }
-      - { type: bind, source: /etc/perun/ssl, target: /etc/perun/ssl, read_only: yes }
-      - { type: bind, source: /etc/perun/apache, target: /etc/perun/apache, read_only: yes }
-      # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
-      - { type: tmpfs, target: /tmp }
-      # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
-      - { type: bind, source: /dev/log, target: /dev/log }
-      - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
+- name: "container only"
+  tags:
+    - perun_apache_container
+  block:
+    - name: "list normal apache mounts"
+      set_fact:
+        apache_mounts:
+          - { type: volume, source: apache_logs, target: /var/log/apache2 }
+          - { type: bind, source: /etc/perun/ssl, target: /etc/perun/ssl, read_only: yes }
+          - { type: bind, source: /etc/perun/apache, target: /etc/perun/apache, read_only: yes }
+          # mount tmpfs to /tmp for faster performance https://docs.docker.com/storage/tmpfs/
+          - { type: tmpfs, target: /tmp }
+          # bind syslog and journal from container to host, see https://www.projectatomic.io/blog/2016/10/playing-with-docker-logging/
+          - { type: bind, source: /dev/log, target: /dev/log }
+          - { type: bind, source: /var/run/systemd/journal/socket, target: /var/run/systemd/journal/socket }
 
-- name: "add /etc/grid-security to apache mounts"
-  when: perun_apache_igtf_certs
-  set_fact:
-    apache_mounts: "{{ apache_mounts + [ { 'type': 'bind', 'source': '/etc/grid-security', 'target': '/etc/grid-security', 'read_only': 'yes' } ] }}"
+    - name: "add /etc/grid-security to apache mounts"
+      when: perun_apache_igtf_certs
+      set_fact:
+        apache_mounts: "{{ apache_mounts + [ { 'type': 'bind', 'source': '/etc/grid-security', 'target': '/etc/grid-security', 'read_only': 'yes' } ] }}"
 
-- name: "add perun_apache_mounts_additional to apache mounts"
-  when: perun_apache_mounts_additional|length > 0
-  set_fact:
-    apache_mounts: "{{ apache_mounts + perun_apache_mounts_additional }}"
+    - name: "add perun_apache_mounts_additional to apache mounts"
+      when: perun_apache_mounts_additional|length > 0
+      set_fact:
+        apache_mounts: "{{ apache_mounts + perun_apache_mounts_additional }}"
 
-- name: "add certbot dirs to apache mounts"
-  when: perun_use_certbot_certificates
-  set_fact:
-    apache_mounts: "{{ apache_mounts + perun_certbot_mounts }}"
+    - name: "add certbot dirs to apache mounts"
+      when: perun_use_certbot_certificates
+      set_fact:
+        apache_mounts: "{{ apache_mounts + perun_certbot_mounts }}"
 
-- name: "get perun_net info"
-  docker_network_info:
-    name: perun_net
-  register: perun_net_info
+    - name: "get perun_net info"
+      docker_network_info:
+        name: perun_net
+      register: perun_net_info
 
-- name: "create Perun Apache container"
-  docker_container:
-    name: perun_apache
-    hostname: perun-apache
-    image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_apache:{{ perun_apache_container_version }}"
-    pull: yes
-    state: started
-    restart_policy: unless-stopped
-    mounts: "{{ apache_mounts }}"
-    networks_cli_compatible: yes
-    networks:
-      - name: perun_net
-    network_mode: perun_net
-    etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
-    image_name_mismatch: recreate
-    comparisons:
-      '*': strict
-    ports:
-      - 80:80
-      - 443:443
-    default_host_ip: ''
-  register: perun_apache_container
+    - name: "create Perun Apache container"
+      docker_container:
+        name: perun_apache
+        hostname: perun-apache
+        image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_apache:{{ perun_apache_container_version }}"
+        pull: yes
+        state: started
+        restart_policy: unless-stopped
+        mounts: "{{ apache_mounts }}"
+        networks_cli_compatible: yes
+        networks:
+          - name: perun_net
+        network_mode: perun_net
+        etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
+        image_name_mismatch: recreate
+        comparisons:
+          '*': strict
+        published_ports:
+          - '0.0.0.0:80:80'
+          - '443:443'
+        default_host_ip: ''
+      register: perun_apache_container
 
-- name: "remove old hostname"
-  lineinfile:
-    dest: /etc/hosts
-    regexp: 'perun_apache'
-    state: absent
-
-- name: "put container IP into /etc/hosts"
-  lineinfile:
-    dest: /etc/hosts
-    regexp: "{{ perun_apache_container.container.Config.Hostname }}"
-    line: "{{ perun_apache_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_apache_container.container.Config.Hostname }}"
+    - name: "put container IP into /etc/hosts"
+      lineinfile:
+        dest: /etc/hosts
+        regexp: "{{ perun_apache_container.container.Config.Hostname }}"
+        line: "{{ perun_apache_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_apache_container.container.Config.Hostname }}"
