@@ -858,8 +858,8 @@ perun_unattended_upgrades_origin_patterns: |2
 perun_unattended_upgrades_blacklist: |2
             "postgresql-{{ perun_postgresql_version }}";
             "slapd";
-# do not reboot automatically
-perun_unattended_upgrades_automatic_reboot: 'false'
+# reboot automatically
+perun_unattended_upgrades_automatic_reboot: 'true'
 
 # users for Yubikeys
 perun_root_users:
