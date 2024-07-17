@@ -245,7 +245,7 @@
   docker_container:
     name: perun_rpc
     hostname: perun-rpc
-    image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_rpc:{{ perun_rpc_container_version }}"
+    image: "{{ perun_container_registry }}/perun_rpc:{{ perun_rpc_container_version }}"
     pull: yes
     state: started
     restart_policy: unless-stopped

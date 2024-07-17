@@ -320,7 +320,7 @@
   docker_container:
     name: perun_engine
     hostname: perun-engine
-    image: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_engine:{{ perun_engine_container_version }}"
+    image: "{{ perun_container_registry }}/perun_engine:{{ perun_engine_container_version }}"
     pull: yes
     restart_policy: unless-stopped
     mounts: "{{ engine_mounts}}"
@@ -365,5 +365,5 @@
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
         -w /home/perun \
-        registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_engine:{{ perun_engine_container_version }} /bin/bash --login
+        {{ perun_container_registry }}/perun_engine:{{ perun_engine_container_version }} /bin/bash --login
 

@@ -83,9 +83,9 @@
   vars:
     docker_packages_hold: true
     docker_registries:
-      - url: registry.gitlab.ics.muni.cz:443
-        username: gitlab-read-only-deploy-token-perun-all
-        password: BgdJHJ_gsmyqp3se5WRx
+      - url: gitlab-registry.cesnet.cz
+        username: gitlab-deploy-token-712
+        password: gldt-TcDbEs8Yj-cX4KPmM1Wq
     docker_local_network_name: perun_net
     docker_portainer_install: true
     docker_portainer_admin_password_file: "{{ perun_certs_dir }}/portainer_admin_password.txt"

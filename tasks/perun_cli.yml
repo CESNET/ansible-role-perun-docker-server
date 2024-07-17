@@ -24,7 +24,7 @@
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
         --env-file /etc/perun/perun-cli-env -w $PWD ${PERUN_DOCKER_OPTS} \
-        registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_cli_perl:{{ perun_cli_container_version }} "$ARGS"
+        {{ perun_container_registry }}/perun_cli_perl:{{ perun_cli_container_version }} "$ARGS"
 
 - name: "create /usr/local/bin/perun-script-cli for scripts"
   copy:
@@ -41,7 +41,7 @@
         --add-host {{ host }}:{{ ip }} \
       {% endfor %}
         --env-file /etc/perun/perun-cli-env --entrypoint="" ${PERUN_DOCKER_OPTS} \
-        registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_cli_perl:{{ perun_cli_container_version }} "$@"
+        {{ perun_container_registry }}/perun_cli_perl:{{ perun_cli_container_version }} "$@"
 
 - name: "prune unused docker images other than CLI"
   docker_prune:
@@ -57,7 +57,7 @@
 
 - name: "preload image for perun_cli"
   docker_image:
-    name: "registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_cli_perl:{{ perun_cli_container_version }}"
+    name: "{{ perun_container_registry }}/perun_cli_perl:{{ perun_cli_container_version }}"
     source: pull
     force_source: true
     state: present
@@ -70,7 +70,7 @@
       - "images"
       - "-q"
       - "--filter"
-      - "before=registry.gitlab.ics.muni.cz:443/perun/deployment/idm/perun_idm_docker/perun_cli_perl:{{ perun_cli_container_version }}"
+      - "before={{ perun_container_registry }}/perun_cli_perl:{{ perun_cli_container_version }}"
       - "--filter"
       - "label=org.perun-aai.cli"
   register: oldcliimages

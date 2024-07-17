@@ -763,6 +763,9 @@ perun_postgresql_version: 16
 # https://github.com/portainer/portainer/releases
 perun_portainer_version: latest
 
+# prefix for containers
+perun_container_registry: "gitlab-registry.cesnet.cz/712/deployment/idm/perun_idm_docker"
+
 # directory with SSL/TLS certificates and keys
 perun_certs_dir: "/etc/perun/ssl"
 perun_certificate_file: "{{ perun_certs_dir }}/hostcert.pem"
