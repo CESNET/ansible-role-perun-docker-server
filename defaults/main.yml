@@ -584,6 +584,7 @@ perun_engine_mounts_additional: []
 # remote logging
 perun_remote_logging_enabled: no
 perun_remote_logging_server: vinovago.cesnet.cz
+perun_remote_logging_protocol: network
 perun_remote_logging_port: 514
 perun_remote_logging_conf: vinovago
 perun_remote_logging_filter: ""
