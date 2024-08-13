@@ -588,7 +588,7 @@ perun_remote_logging_protocol: network
 perun_remote_logging_port: 514
 perun_remote_logging_conf: vinovago
 perun_remote_logging_filter: ""
-perun_remote_logging_disk_buffer: no
+perun_remote_logging_enable_disk_buffer: no
 
 # Auditlogger - by default enabled on instances logging remotely
 perun_auditlogger_enabled: "{{ perun_remote_logging_enabled }}"
