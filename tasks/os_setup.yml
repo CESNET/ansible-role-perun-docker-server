@@ -8,6 +8,8 @@
 - name: "set up monitoring by MetaCentrum's Nagios"
   import_role:
     name: cesnet.metacentrum_monitoring
+  vars:
+    monitoring_check_mk_config: "{{ perun_monitoring_check_mk_config }}"
 
 - name: "set up unattended upgrades"
   import_role:
