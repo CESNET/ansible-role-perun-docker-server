@@ -11,9 +11,17 @@
     content: |
       DNS_ALIAS_WHITELIST=( {{ perun_instance_hostname }} )
 
-- name: "create /etc/perun/generic_json_gen.d/pre_10_set_script"
+- name: "create directory /etc/perun/generic_json_distributed_authorization.d/"
+  file:
+    path: /etc/perun/generic_json_distributed_authorization.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "create /etc/perun/generic_json_distributed_authorization.d/pre_10_set_script"
   copy:
-    dest: /etc/perun/generic_json_gen.d/pre_10_set_script
+    dest: /etc/perun/generic_json_distributed_authorization.d/pre_10_set_script
     content: |
       #!/bin/bash
       export DST_SCRIPT="/opt/perun/perun_sync.py"
