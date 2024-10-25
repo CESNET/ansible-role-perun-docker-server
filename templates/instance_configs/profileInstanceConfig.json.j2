@@ -51,5 +51,6 @@
   "logo": {{ perun_ngui_profile_logo|to_json }},
   "brandings": {{ perun_ngui_profile_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "use_new_consolidator": {{ perun_ngui_profile_use_new_consolidator|to_json }},
-  "local_account_namespace": "{{ perun_ngui_profile_local_account_namespace }}"
+  "local_account_namespace": "{{ perun_ngui_profile_local_account_namespace }}",
+  "export_limit": {{ perun_ngui_table_export_limit }}
 }

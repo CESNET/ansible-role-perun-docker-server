@@ -53,5 +53,6 @@
   "theme": {{ perun_ngui_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "brandings": {{ perun_ngui_admin_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "user_deletion_forced": {{ perun_ngui_admin_user_deletion_forced|bool|to_json }},
-  "enforce_consents": {{ perun_ngui_admin_enforce_consents|bool|to_json }}
+  "enforce_consents": {{ perun_ngui_admin_enforce_consents|bool|to_json }},
+  "export_limit": {{ perun_ngui_table_export_limit }}
 }
