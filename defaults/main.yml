@@ -250,6 +250,7 @@ perun_ngui_footer:
 perun_ngui_logo: "😀"
 perun_ngui_theme: {}
 perun_ngui_mfa: {}
+perun_ngui_table_export_limit: 1000
 
 # shared password strength hints for new GUI
 perun_ngui_password_help:
