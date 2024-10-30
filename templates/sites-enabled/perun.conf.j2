@@ -106,9 +106,9 @@ ShibCompatValidUser on
   Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), geolocation=(), microphone=(), payment=()"
 
   # Disable browser caching for our html/rpc resources
-  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
-  Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
-  Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Cache-Control "no-cache, no-store, max-age=0, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|oldgui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Pragma no-cache "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|oldgui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
+  Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/((gui|oldgui|pwd-reset|ic|registrar|profile)(/|(.*).nocache.js)|rpc/(.*))$#"
 
 {% if perun_rpc_cors_domains %}
   # CORS headers
