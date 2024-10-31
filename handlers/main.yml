@@ -63,3 +63,20 @@
     name: sshd
     state: restarted
 
+- name: "Reload limits"
+  shell: "bash -c 'ulimit -n'"
+  when: ansible_facts.services['slapd'] is defined and ansible_facts.services['slapd'].state == 'running'
+
+- name: "Reload sysctl"
+  command: sysctl -p
+  when: ansible_facts.services['sysctl'] is defined and ansible_facts.services['sysctl'].state == 'running'
+
+- name: "Reload systemd"
+  service:
+      name: systemd
+      state: reloaded
+  when: ansible_facts.services['systemd'] is defined and ansible_facts.services['systemd'].state == 'running'
+
+
+
+
