@@ -177,7 +177,6 @@ perun_oldgui_profile_personal_showAttributes:
   - urn:perun:user:attribute-def:def:preferredMail
 perun_oldgui_profile_hidePages:  [ 'settings' ]
 perun_oldgui_profile_settings_hidePages: [ 'sshkeys', 'dataquotas']
-perun_oldgui_disableCreateVo: 'false'
 perun_oldgui_rt_defaultQueue: "perun"
 perun_oldgui_rt_defaultMail: "perun@cesnet.cz"
 perun_oldgui_report_email_address: "{{ perun_email }}"
