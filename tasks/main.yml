@@ -90,6 +90,7 @@
         password: gldt-TcDbEs8Yj-cX4KPmM1Wq
     docker_local_network_name: perun_net
     docker_portainer_install: true
+    docker_portainer_version: "{{ perun_portainer_version }}"
     docker_portainer_admin_password_file: "{{ perun_certs_dir }}/portainer_admin_password.txt"
     docker_portainer_admin_password: "{{ perun_portainer_admin_password }}"
     docker_portainer_admin_password_file_owner: root
