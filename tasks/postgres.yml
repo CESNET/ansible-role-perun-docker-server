@@ -9,6 +9,7 @@
     postgresql_db_user_password: "{{ perun_postgresql_db_user_password }}"
     postgresql_settings: "{{ perun_postgresql_settings }}"
     postgresql_daily_backup: yes
+    postgresql_daily_backup_more_commands: "{{ perun_postgresql_daily_backup_more_commands }}"
     postgresql_hold_upgrades: yes
     postgresql_db_user: "perun"
     postgresql_db_name: "perun"

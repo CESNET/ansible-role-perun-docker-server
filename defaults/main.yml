@@ -709,6 +709,7 @@ perun_postgresql_db_minimumIdle: 1
 perun_postgresql_db_maxLifetime: 1800000
 perun_postgresql_db_idleTimeout: 600000
 perun_postgresql_db_leakDetectionThreshold: 30000
+perun_postgresql_daily_backup_more_commands: ""
 
 # password for accessing portainer at https://machine:9000/
 # since portainer:2.14.0 must be at least 12 characters

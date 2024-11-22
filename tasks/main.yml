@@ -242,6 +242,29 @@
     - perun_ldapc
     - perun_apache
 
+- name: "group-specific tasks before perun config"
+  block:
+    - name: "find files with group specific tasks"
+      loop: "{{ group_names }}"
+      local_action:
+        module: stat
+        path: "files/{{ item }}/{{ item }}_group_specific_tasks_before.yml"
+      register: group_specific_tasks_before
+    - name: "execute group-specific tasks"
+      loop: "{{ group_specific_tasks_before.results }}"
+      loop_control:
+        label: "{{ item.invocation.module_args.path }}"
+      when: item.stat.exists
+      include_tasks:
+        file: "{{ item.stat.path }}"
+        apply:
+          tags:
+            - group_specific
+            - group_specific_before
+  tags:
+    - group_specific
+    - group_specific_before
+
 - name: "site-specific tasks before perun config"
   when: perun_site_specific_tasks_before is defined
   include_tasks:
