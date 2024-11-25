@@ -243,3 +243,16 @@ perun.auditlogReadLimit={{ perun_rpc_auditlog_read_limit }}
 
 # Set to "true" to archive data generated during each run of service provisioning
 perun.archiveSpool={{ perun_rpc_archive_spool|bool|to_json }}
+
+# Personal data change switchers
+perun.enableLinkedName={{ perun_rpc_personal_enable_linked_name|bool|to_json }}
+perun.enableCustomName={{ perun_rpc_personal_enable_custom_name|bool|to_json }}
+perun.customNameRequiresApprove={{ perun_rpc_personal_custom_name_requires_approve|bool|to_json }}
+
+perun.enableLinkedOrganization={{ perun_rpc_personal_enable_linked_organization|bool|to_json }}
+perun.enableCustomOrganization={{ perun_rpc_personal_enable_custom_organization|bool|to_json }}
+perun.customOrganizationRequiresApprove={{ perun_rpc_personal_custom_organization_requires_approve|bool|to_json }}
+
+perun.enableLinkedEmail={{ perun_rpc_personal_enable_linked_email|bool|to_json }}
+perun.enableCustomEmail={{ perun_rpc_personal_enable_custom_email|bool|to_json }}
+perun.customEmailRequiresVerification={{ perun_rpc_personal_custom_email_requires_approve|bool|to_json }}
