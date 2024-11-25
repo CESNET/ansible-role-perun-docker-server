@@ -134,6 +134,16 @@ perun_rpc_external_programs_dependencies:
 perun_rpc_auditlog_read_limit: 10000
 perun_rpc_archive_spool: no
 perun_rpc_logback_ultimate_logger_level: error
+# Default personal data change on profile (allow changing preferred email / requires verification)
+perun_rpc_personal_enable_linked_name: no
+perun_rpc_personal_enable_custom_name: no
+perun_rpc_personal_custom_name_requires_approve: no
+perun_rpc_personal_enable_linked_organization: no
+perun_rpc_personal_enable_custom_organization: no
+perun_rpc_personal_custom_organization_requires_approve: no
+perun_rpc_personal_enable_linked_email: no
+perun_rpc_personal_enable_custom_email: yes
+perun_rpc_personal_custom_email_requires_approve: yes
 
 # TODO - enable when we ditch old admin gui and enable step-up for MFA
 perun_rpc_app_allowed_roles: []
