@@ -103,11 +103,11 @@
     Header always set Expires 0 "expr=%{REQUEST_URI} =~ m#^/(.*)/rpc/(.*)$#"
 
 {% if perun_apache_enable_wayf_config %}
-    # Anything, that is not /cert/ or /wayf/ redirect to base hostname
-    RewriteRule !(^/cert|^/wayf) {{ perun_rpc_hostname }}%{REQUEST_URI} [L,R=301]
+    # Anything, that is not /cert/ or /wayf/ redirect to base hostname, include maintenance
+    RewriteRule !(^/cert|^/wayf|^/maintenance|^/static) {{ perun_rpc_hostname }}%{REQUEST_URI} [L,R=301]
 {% else %}
-    # Anything, that is not /cert/ redirect to base hostname
-    RewriteRule !(^/cert) {{ perun_rpc_hostname }}%{REQUEST_URI} [L,R=301]
+    # Anything, that is not /cert/ redirect to base hostname, include maintenance
+    RewriteRule !(^/cert|^/maintenance|^/static) {{ perun_rpc_hostname }}%{REQUEST_URI} [L,R=301]
 {% endif %}
 
     ####################################
