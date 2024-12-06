@@ -39,8 +39,12 @@
 
 - name: "message-of-the-day setup"
   copy:
-    src: motd
+    src: "{{ lookup('first_found', findme) }}"
     dest: /etc/motd
+  vars:
+    findme:
+      - "files/message-of-the-day"
+      - "motd"
   tags: motd
 
 - name: "TLS certificates setup"
