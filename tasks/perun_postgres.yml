@@ -3,146 +3,210 @@
     name: perun_net
   register: perun_net_info
 
-- name: "add row to pg_hba.conf allowing unencrypted connections from perun containers"
-  postgresql_pg_hba:
-    dest: "/etc/postgresql/{{ perun_postgresql_version }}/main/pg_hba.conf"
-    contype: host
-    databases: perun
-    users: perun
-    address: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}"
-    method: md5
-  register: pghba_file
 
-- name: "restart postgres"
-  when: pghba_file.changed
-  service:
-    name: postgresql
-    state: restarted
+- name: "Perun postgres localy"
+  when: postgres_implementation=="local"
+  block:
+    - name: "add row to pg_hba.conf allowing unencrypted connections from perun containers"
+      postgresql_pg_hba:
+        dest: "/etc/postgresql/{{ perun_postgresql_version }}/main/pg_hba.conf"
+        contype: host
+        databases: perun
+        users: perun
+        address: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}"
+        method: md5
+      register: pghba_file
 
-- name: "create /var/lib/postgresql/dump_perun_for_test.sh file"
-  copy:
-    dest: /var/lib/postgresql/dump_perun_for_test.sh
-    owner: postgres
-    group: postgres
-    mode: 0550
-    content: |2
-      #!/bin/bash
-      FILENAME=perun_for_test_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
-      echo "dumping PostgreSQL database perun into $PWD/$FILENAME ..."
-      export LANG=cs_CZ.UTF-8
-      umask 0027
-      pg_dump \
-        --exclude-table-data=perun.auditer_log \
-        --exclude-table-data=perun.pn_receiver \
-        --exclude-table-data=perun.pn_template_regex \
-        --exclude-table-data=perun.facility_service_destinations \
-        --exclude-table-data=perun.tasks_results \
-        --exclude-table-data=perun.destinations \
-        --exclude-table-data=perun.service_denials \
-        perun | zstdmt -10 --quiet --force -o "$FILENAME"
+    - name: "restart postgres"
+      when: pghba_file.changed
+      service:
+        name: postgresql
+        state: restarted
 
-- name: "create /var/lib/postgresql/dump_perun_without_auditlog.sh file"
-  copy:
-    dest: /var/lib/postgresql/dump_perun_without_auditlog.sh
-    owner: postgres
-    group: postgres
-    mode: 0550
-    content: |2
-      #!/bin/bash
-      FILENAME=perun_wo_auditlog_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
-      echo "dumping PostgreSQL database perun without auditlog into $PWD/$FILENAME ..."
-      export LANG=cs_CZ.UTF-8
-      umask 0027
-      pg_dump \
-        --exclude-table-data=perun.auditer_log \
-        perun | zstdmt -10 --quiet --force -o "$FILENAME"
+    - name: "create /var/lib/postgresql/dump_perun_for_test.sh file"
+      copy:
+        dest: /var/lib/postgresql/dump_perun_for_test.sh
+        owner: postgres
+        group: postgres
+        mode: 0550
+        content: |2
+          #!/bin/bash
+          FILENAME=perun_for_test_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
+          echo "dumping PostgreSQL database perun into $PWD/$FILENAME ..."
+          export LANG=cs_CZ.UTF-8
+          umask 0027
+          pg_dump \
+            --exclude-table-data=perun.auditer_log \
+            --exclude-table-data=perun.pn_receiver \
+            --exclude-table-data=perun.pn_template_regex \
+            --exclude-table-data=perun.facility_service_destinations \
+            --exclude-table-data=perun.tasks_results \
+            --exclude-table-data=perun.destinations \
+            --exclude-table-data=perun.service_denials \
+            perun | zstdmt -10 --quiet --force -o "$FILENAME"
 
-- name: "add extensions"
-  become: yes
-  become_user: postgres
-  postgresql_ext:
-    db: "perun"
-    name: "{{ item }}"
-  loop:
-    - unaccent
-    - pgcrypto
-    - pg_repack
+    - name: "create /var/lib/postgresql/dump_perun_without_auditlog.sh file"
+      copy:
+        dest: /var/lib/postgresql/dump_perun_without_auditlog.sh
+        owner: postgres
+        group: postgres
+        mode: 0550
+        content: |2
+          #!/bin/bash
+          FILENAME=perun_wo_auditlog_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
+          echo "dumping PostgreSQL database perun without auditlog into $PWD/$FILENAME ..."
+          export LANG=cs_CZ.UTF-8
+          umask 0027
+          pg_dump \
+            --exclude-table-data=perun.auditer_log \
+            perun | zstdmt -10 --quiet --force -o "$FILENAME"
 
-- name: "detect whether table users exists"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
-    db: perun
-    query: "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'perun' AND table_name = 'users' )"
-  register: table_users
+    - name: "add extensions"
+      become: yes
+      become_user: postgres
+      postgresql_ext:
+        db: "perun"
+        name: "{{ item }}"
+      loop:
+        - unaccent
+        - pgcrypto
+        - pg_repack
 
-- name: "download SQL script for creating tables"
-  get_url:
-    url: "https://gitlab.ics.muni.cz/perun/perun-idm/perun/-/raw/{{ perun_rpc_git_version }}/perun-db/postgres.sql"
-    dest: /tmp/postgres.sql
-  when: not table_users.query_result[0].exists
+    - name: "detect whether table users exists"
+      become: yes
+      become_user: postgres
+      postgresql_query:
+        session_role: perun
+        db: perun
+        query: "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'perun' AND table_name = 'users' )"
+      register: table_users
 
-- name: "create perun tables"
-  become: yes
-  become_user: postgres
-  community.postgresql.postgresql_script:
-    session_role: perun
-    db: perun
-    path: /tmp/postgres.sql
-    encoding: UTF-8
-  when: not table_users.query_result[0].exists
+    - name: "download SQL script for creating tables"
+      get_url:
+        url: "https://gitlab.ics.muni.cz/perun/perun-idm/perun/-/raw/{{ perun_rpc_git_version }}/perun-db/postgres.sql"
+        dest: /tmp/postgres.sql
+      when: not table_users.query_result[0].exists
 
-- name: "create /etc/cron.d/perundb-backup"
-  cron:
-    name: "Every Sunday night do backup of the Perun db"
-    cron_file: perundb-backup
-    weekday: "sun"
-    hour: "23"
-    minute: "20"
-    user: postgres
-    job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_perun_without_auditlog.sh"
+    - name: "create perun tables"
+      become: yes
+      become_user: postgres
+      community.postgresql.postgresql_script:
 
-- name: "detect whether user nagios exists"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
-    db: perun
-    query: "SELECT EXISTS ( SELECT 1 FROM users WHERE first_name='(Service)' and last_name='nagios' and service_acc)"
-  register: user_nagios
+        session_role: perun
+        db: perun
+        path: /tmp/postgres.sql
+        encoding: UTF-8
+      when: not table_users.query_result[0].exists
 
-- name: "create user nagios"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
-    db: perun
-    query: "insert into users (id, first_name, last_name, service_acc) values (nextval('users_id_seq'),'(Service)','nagios',true)"
-  when: not user_nagios.query_result[0].exists
+    - name: "create /etc/cron.d/perundb-backup"
+      cron:
+        name: "Every Sunday night do backup of the Perun db"
+        cron_file: perundb-backup
+        weekday: "sun"
+        hour: "23"
+        minute: "20"
+        user: postgres
+        job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_perun_without_auditlog.sh"
 
-- name: "detect whether ues for nagios exists"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
-    db: perun
-    query: "SELECT EXISTS ( select ues.id from user_ext_sources ues join ext_sources e on (ues.ext_sources_id=e.id) where ues.login_ext='nagios' and e.name='INTERNAL' )"
-  register: ues_nagios
+    - name: "detect whether user nagios exists"
+      become: yes
+      become_user: postgres
+      postgresql_query:
+        session_role: perun
+        db: perun
+        query: "SELECT EXISTS ( SELECT 1 FROM users WHERE first_name='(Service)' and last_name='nagios' and service_acc)"
+      register: user_nagios
 
-- name: "create user_ext_source nagios"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
-    db: perun
-    query: >-
-      insert into user_ext_sources (id, user_id, login_ext, ext_sources_id, loa)
-      values (
-       nextval('user_ext_sources_id_seq'),
-       ( select id from users where first_name='(Service)' and last_name='nagios' and service_acc ),
-       'nagios',
-       ( select id from ext_sources where name='INTERNAL' ),
-       2
-      )
-  when: not ues_nagios.query_result[0].exists
+    - name: "create user nagios"
+      become: yes
+      become_user: postgres
+      postgresql_query:
+        session_role: perun
+        db: perun
+        query: "insert into users (id, first_name, last_name, service_acc) values (nextval('users_id_seq'),'(Service)','nagios',true)"
+      when: not user_nagios.query_result[0].exists
+
+    - name: "detect whether ues for nagios exists"
+      become: yes
+      become_user: postgres
+      postgresql_query:
+        session_role: perun
+        db: perun
+        query: "SELECT EXISTS ( select ues.id from user_ext_sources ues join ext_sources e on (ues.ext_sources_id=e.id) where ues.login_ext='nagios' and e.name='INTERNAL' )"
+      register: ues_nagios
+
+    - name: "create user_ext_source nagios"
+      become: yes
+      become_user: postgres
+      postgresql_query:
+        session_role: perun
+        db: perun
+        query: >-
+          insert into user_ext_sources (id, user_id, login_ext, ext_sources_id, loa)
+          values (
+          nextval('user_ext_sources_id_seq'),
+          ( select id from users where first_name='(Service)' and last_name='nagios' and service_acc ),
+          'nagios',
+          ( select id from ext_sources where name='INTERNAL' ),
+          2
+          )
+      when: not ues_nagios.query_result[0].exists
+
+
+- name: "Perun postgres remote"
+  when: postgres_implementation=="remote"
+  block:
+    - name: "Add extensions to database"
+      community.postgresql.postgresql_ext:
+        login_host: "{{ perun_postgressl_remote_login_host }}"
+        login_user: "{{ perun_postgresql_remote_login_user }}"
+        login_password: "{{ perun_postgresql_remote_login_password }}"
+        port: "{{ perun_postgresql_remote_port }}"
+        db: "{{ postgresql_db_name }}"
+        name: "{{ item }}"
+      loop:
+        - unaccent
+        - pgcrypto
+        - pg_repack
+
+    - name: "Detect whether table 'users' exists"
+      community.postgresql.postgresql_query:
+        login_host: "{{ perun_postgressl_remote_login_host }}"
+        login_user: "{{ perun_postgresql_remote_login_user }}"
+        login_password: "{{ perun_postgresql_remote_login_password }}"
+        port: "{{ perun_postgresql_remote_port }}"
+        db: "{{ postgresql_db_name }}"
+        query: >
+          SELECT EXISTS (
+            SELECT 1
+            FROM information_schema.tables
+            WHERE table_schema = 'perun'
+            AND table_name = 'users'
+          );
+      register: table_users
+
+    - name: "download SQL script for creating tables"
+      ansible.builtin.uri:
+        url: "https://gitlab.ics.muni.cz/perun/perun-idm/perun/-/raw/{{ perun_rpc_git_version }}/perun-db/postgres.sql"
+        dest: /tmp/postgres.sql
+      when: not table_users.query_result[0].exists
+      register: sql_script
+    - debug:
+       var: sql_script
+
+
+    - name: "Execute SQL script on RDS"
+      become: yes
+      become_user: postgres
+      community.postgresql.postgresql_script:
+        login_host: "{{ perun_postgressl_remote_login_host }}"
+        login_user: "{{ perun_postgresql_remote_login_user }}"
+        login_password: "{{ perun_postgresql_remote_login_password }}"
+        port: "{{ perun_postgresql_remote_port }}"
+        db: perun
+        session_role: perun
+        path: /tmp/postgres.sql
+        encoding: "UTF-8"
+      when: sql_script is defined      
+      ignore_errors: true
+

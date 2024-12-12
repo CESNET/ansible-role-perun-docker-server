@@ -525,8 +525,8 @@ perun_ngui_publications_link_to_admin_gui_by_roles: [
 ]
 
 # virtual host for API
-perun_api_enabled: no
-perun_api_hostname: "{{ perun_rpc_hostname }}"
+perun_api_enabled: yes
+perun_api_hostname: api-aws1.test.eduteams.org
 perun_api_hostname_aliases: []
 perun_api_tls_cert_same_as_host: yes
 # second API with other OIDC
@@ -905,3 +905,14 @@ perun_ldap_users:
   - user: proxy
     password: "{{ perun_ldap_proxy_password }}"
     description: "user for IdP Proxy"
+
+perun_postgresql_jdbc_url: jdbc:postgresql://perun-host:5432/perun?sslmode=disable
+
+#postgres remote credentials
+postgresql_remote_login_host: "{{ perun_postgressl_remote_login_host }}"
+postgresql_remote_login_user: "{{ perun_postgresql_remote_login_user }}"
+postgresql_remote_login_password: "{{ perun_postgresql_remote_login_password }}"
+postgresql_remote_port: "{{ perun_postgresql_remote_port }}"
+postgres_implementation: local
+postgresql_db_user: "perun"
+postgresql_db_name: "perun"
