@@ -85,10 +85,11 @@
 
 - name: "get last message id in auditer_log table"
   when: not alls.stat.exists
-  become: yes
-  become_user: postgres
   postgresql_query:
-    session_role: perun
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: "SELECT MAX(id) FROM auditer_log"
   register: max_id

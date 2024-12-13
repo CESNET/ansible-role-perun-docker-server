@@ -1,24 +1,3 @@
-- name: "get perun_net info"
-  docker_network_info:
-    name: perun_net
-  register: perun_net_info
-
-- name: "add row to pg_hba.conf allowing unencrypted connections from perun containers"
-  postgresql_pg_hba:
-    dest: "/etc/postgresql/{{ perun_postgresql_version }}/main/pg_hba.conf"
-    contype: host
-    databases: perun
-    users: perun
-    address: "{{ perun_net_info.network.IPAM.Config[0].Subnet }}"
-    method: md5
-  register: pghba_file
-
-- name: "restart postgres"
-  when: pghba_file.changed
-  service:
-    name: postgresql
-    state: restarted
-
 - name: "create /var/lib/postgresql/dump_perun_for_test.sh file"
   copy:
     dest: /var/lib/postgresql/dump_perun_for_test.sh
@@ -53,26 +32,15 @@
       echo "dumping PostgreSQL database perun without auditlog into $PWD/$FILENAME ..."
       export LANG=cs_CZ.UTF-8
       umask 0027
-      pg_dump \
-        --exclude-table-data=perun.auditer_log \
-        perun | zstdmt -10 --quiet --force -o "$FILENAME"
+      pg_dump --exclude-table-data=perun.auditer_log perun | zstdmt -10 --quiet --force -o "$FILENAME"
 
-- name: "add extensions"
-  become: yes
-  become_user: postgres
-  postgresql_ext:
-    db: "perun"
-    name: "{{ item }}"
-  loop:
-    - unaccent
-    - pgcrypto
-    - pg_repack
 
 - name: "detect whether table users exists"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
+  community.postgresql.postgresql_query:
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'perun' AND table_name = 'users' )"
   register: table_users
@@ -84,10 +52,11 @@
   when: not table_users.query_result[0].exists
 
 - name: "create perun tables"
-  become: yes
-  become_user: postgres
   community.postgresql.postgresql_script:
-    session_role: perun
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     path: /tmp/postgres.sql
     encoding: UTF-8
@@ -104,37 +73,41 @@
     job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_perun_without_auditlog.sh"
 
 - name: "detect whether user nagios exists"
-  become: yes
-  become_user: postgres
-  postgresql_query:
-    session_role: perun
+  community.postgresql.postgresql_query:
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: "SELECT EXISTS ( SELECT 1 FROM users WHERE first_name='(Service)' and last_name='nagios' and service_acc)"
   register: user_nagios
 
 - name: "create user nagios"
-  become: yes
-  become_user: postgres
   postgresql_query:
-    session_role: perun
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: "insert into users (id, first_name, last_name, service_acc) values (nextval('users_id_seq'),'(Service)','nagios',true)"
   when: not user_nagios.query_result[0].exists
 
 - name: "detect whether ues for nagios exists"
-  become: yes
-  become_user: postgres
   postgresql_query:
-    session_role: perun
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: "SELECT EXISTS ( select ues.id from user_ext_sources ues join ext_sources e on (ues.ext_sources_id=e.id) where ues.login_ext='nagios' and e.name='INTERNAL' )"
   register: ues_nagios
 
 - name: "create user_ext_source nagios"
-  become: yes
-  become_user: postgres
   postgresql_query:
-    session_role: perun
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
     db: perun
     query: >-
       insert into user_ext_sources (id, user_id, login_ext, ext_sources_id, loa)

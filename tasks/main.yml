@@ -103,13 +103,31 @@
     docker_portainer_fullchain_file: "{{ perun_certificate_fullchain_file }}"
     docker_portainer_privkey_file: "{{ perun_certificate_key_file }}"
 
-- name: "Postgres server setup"
-  import_tasks: postgres.yml
+- name: "Postgres local server setup"
+  when: perun_postgres_local
+  include_tasks:
+    file: postgres_local.yml
+    apply:
+      tags:
+        - postgresql
   tags: postgresql
 
-- name: "Postgres perun db setup"
-  import_tasks: perun_postgres.yml
-  tags: perun_postgres
+- name: "PostgreSQL remote server setup (AWS)"
+  when: not perun_postgres_local
+  include_tasks:
+    file: postgres_remote.yml
+    apply:
+      tags:
+        - postgresql
+  tags: postgresql
+
+- name: "Postgres perun-specific setup"
+  include_tasks:
+    file: postgres_perun.yml
+    apply:
+      tags:
+        - postgres_perun
+  tags: postgres_perun
 
 - name: "compute firewall rules"
   tags: firewall
