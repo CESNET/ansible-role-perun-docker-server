@@ -1,0 +1,198 @@
+- name: "create /etc/apt/keyrings"
+  file:
+    state: directory
+    path: /etc/apt/keyrings
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "add PostgreSQL Global Development Group (PGDG) repository key"
+  get_url:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    dest: /etc/apt/keyrings/pgdg.asc
+    force: false
+
+- name: "add PGDG repository"
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/pgdg.asc] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    filename: "pgdg"
+    state: present
+
+- name: "install packages for Postgres client {{ perun_postgresql_version }}"
+  package:
+    name:
+      - "postgresql-client-{{ perun_postgresql_version }}"
+      - python3-psycopg2
+      - libpq-dev
+      - zstd
+      - pv
+      - cron
+      - sudo
+    state: present
+
+- name: "create group postgres to keep things compatible"
+  group:
+    name: postgres
+
+- name: "create user postgres to keep things compatible"
+  user:
+    name: postgres
+    group: postgres
+    comment: "user for postgres client"
+    home: /var/lib/postgresql
+    shell: /bin/bash
+    create_home: yes
+    state: present
+
+- name: "create /etc/postgresql-common/pg_service.conf"
+  copy:
+    dest: /etc/postgresql-common/pg_service.conf
+    content: |
+      # see https://www.postgresql.org/docs/current/libpq-pgservice.html
+      # connect using the command "psql service={{ perun_postgresql_remote_login_user }}"
+      [{{ perun_postgresql_remote_login_user }}]
+      host={{ perun_postgresql_remote_login_host }}
+      port=5432
+      user={{ perun_postgresql_remote_login_user }}
+      sslmode=require
+      dbname={{ perun_postgresql_remote_login_user }}
+      [perun]
+      host={{ perun_postgresql_remote_login_host }}
+      port=5432
+      user=perun
+      sslmode=require
+      dbname=perun
+
+- name: "create /var/lib/postgresql/.pgpass"
+  copy:
+    dest: /var/lib/postgresql/.pgpass
+    owner: postgres
+    group: postgres
+    mode: '0600'
+    content: |
+      # see https://www.postgresql.org/docs/current/libpq-pgpass.html
+      # hostname:port:database:username:password
+      {{ perun_postgresql_remote_login_host }}:5432:{{ perun_postgresql_remote_login_user }}:{{ perun_postgresql_remote_login_user }}:{{ perun_postgresql_remote_login_password|replace(':','\:') }}
+      {{ perun_postgresql_remote_login_host }}:5432:perun:{{ perun_postgresql_remote_login_user }}:{{ perun_postgresql_remote_login_password|replace(':','\:') }}
+      {{ perun_postgresql_remote_login_host }}:5432:perun:perun:{{ perun_postgresql_db_user_password|replace(':','\:') }}
+      {{ perun_postgresql_remote_login_host }}:5432:{{ perun_postgresql_remote_login_user }}:perun:{{ perun_postgresql_db_user_password|replace(':','\:') }}
+
+- name: "create /var/lib/postgresql/.bashrc if it does not exist"
+  copy:
+    content: ""
+    owner: postgres
+    group: postgres
+    dest: /var/lib/postgresql/.bashrc
+    force: no
+
+- name: "set shell variables for PostgreSQL connection for unix user postgres"
+  blockinfile:
+    dest: /var/lib/postgresql/.bashrc
+    block: |
+      # service is defined in /etc/postgresql-common/pg_service.conf
+      export PGSERVICE=postgres
+
+- name: "create /var/lib/postgresql/dump_psql_db.sh file"
+  copy:
+    dest: /var/lib/postgresql/dump_psql_db.sh
+    owner: postgres
+    group: postgres
+    mode: "0550"
+    content: |
+      #!/bin/bash
+      if [ -z "$1" ] ; then
+        echo "Usage: $0 db_name"
+        exit 1
+      fi
+      DBNAME="$1"
+      FILENAME="$DBNAME"_`date +"%Y-%m-%d-%H-%M-%S"`.sql.zst
+      echo "dumping PostgreSQL database $DBNAME into $PWD/$FILENAME ..."
+      export LANG=cs_CZ.UTF-8
+      umask 0027
+      pg_dump $DBNAME | zstdmt -10 --quiet --force -o "$FILENAME"
+
+- name: "set up easy connection to remote database for psql commands for unix user perun"
+  block:
+    - name: "create /home/perun/.bashrc if it does not exist"
+      copy:
+        content: ""
+        dest: /home/perun/.bashrc
+        owner: perun
+        group: perun
+        force: no
+    - name: "set shell variables for PostgreSQL connection for unix user perun"
+      blockinfile:
+        dest: /home/perun/.bashrc
+        block: |
+          # service is defined in /etc/postgresql-common/pg_service.conf
+          export PGSERVICE=perun
+    - name: "create /home/perun/.pgpass"
+      copy:
+        dest: /home/perun/.pgpass
+        owner: perun
+        group: perun
+        mode: '0600'
+        content: |
+          # see https://www.postgresql.org/docs/current/libpq-pgpass.html
+          # hostname:port:database:username:password
+          {{ perun_postgresql_remote_login_host }}:5432:perun:perun:{{ perun_postgresql_db_user_password|replace(':','\:') }}
+          {{ perun_postgresql_remote_login_host }}:5432:postgres:perun:{{ perun_postgresql_db_user_password|replace(':','\:') }}
+
+
+- name: "create database user perun"
+  community.postgresql.postgresql_user:
+    login_user: "{{ perun_postgresql_remote_login_user }}"
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_remote_login_password }}"
+    ssl_mode: require
+    name: perun
+    password: "{{ perun_postgresql_db_user_password }}"
+    encrypted: yes
+    no_password_changes: true
+    state: present
+
+- name: "create database perun"
+  community.postgresql.postgresql_db:
+    login_user: "{{ perun_postgresql_remote_login_user }}"
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_remote_login_password }}"
+    ssl_mode: require
+    name: perun
+    encoding: 'UTF-8'
+    state: present
+
+- name: "change database owner to perun user"
+  community.postgresql.postgresql_owner:
+    login_user: "{{ perun_postgresql_remote_login_user }}"
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_remote_login_password }}"
+    ssl_mode: require
+    db: postgres
+    new_owner: perun
+    obj_name: perun
+    obj_type: database
+
+- name: "create schema perun in database perun"
+  community.postgresql.postgresql_schema:
+    login_user: perun
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_db_user_password }}"
+    ssl_mode: require
+    database: perun
+    name: perun
+    owner: perun
+    state: present
+
+- name: "add extensions"
+  community.postgresql.postgresql_ext:
+    login_user: "{{ perun_postgresql_remote_login_user }}"
+    login_host: "{{ perun_postgresql_remote_login_host }}"
+    login_password: "{{ perun_postgresql_remote_login_password }}"
+    ssl_mode: require
+    db: "perun"
+    name: "{{ item }}"
+  loop:
+    - unaccent
+    - pgcrypto
+    - pg_repack
+
