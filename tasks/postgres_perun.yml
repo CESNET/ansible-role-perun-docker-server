@@ -72,6 +72,15 @@
     user: postgres
     job: ": {{ inventory_hostname }} ; cd /var/lib/postgresql; ./dump_perun_without_auditlog.sh"
 
+- name: "set environment variable for crob job to find remote database"
+  when: not perun_postgres_local
+  cron:
+    cron_file: perundb-backup
+    user: postgres
+    env: true
+    name: PGSERVICE
+    value: perun
+
 - name: "detect whether user nagios exists"
   community.postgresql.postgresql_query:
     login_user: perun
