@@ -49,6 +49,7 @@
   "footer": {{ perun_ngui_footer|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "log_out_enabled": {{ perun_ngui_admin_log_out_enabled|bool|to_json }},
   "other_apps": {{ perun_ngui_admin_other_apps|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "other_apps_custom": {{ perun_ngui_admin_other_apps_custom|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "logo": {{ perun_ngui_logo|to_json }},
   "theme": {{ perun_ngui_theme|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "brandings": {{ perun_ngui_admin_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},

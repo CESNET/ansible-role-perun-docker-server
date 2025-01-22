@@ -20,6 +20,7 @@
   "proxy_logout": {{ perun_ngui_consolidator_proxy_logout|bool|to_json }},
   "document_title": "{{ perun_ngui_consolidator_document_title }}",
   "other_apps": {{ perun_ngui_consolidator_other_apps|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "other_apps_custom": {{ perun_ngui_consolidator_other_apps_custom|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "link_to_admin_gui_by_roles": {{ perun_ngui_publications_link_to_admin_gui_by_roles|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "instance_favicon": {{ perun_ngui_consolidator_instance_favicon|to_json }},
   "path_to_idp_provider_userinfo": {{ perun_ngui_consolidator_path_to_idp_provider_userinfo|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},

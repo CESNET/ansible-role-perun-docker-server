@@ -48,6 +48,7 @@
   "warning_message": "{{ perun_ngui_profile_warning_message }}",
 {% endif %}
   "other_apps": {{ perun_ngui_profile_other_apps|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
+  "other_apps_custom": {{ perun_ngui_profile_other_apps_custom|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "logo": {{ perun_ngui_profile_logo|to_json }},
   "brandings": {{ perun_ngui_profile_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "use_new_consolidator": {{ perun_ngui_profile_use_new_consolidator|to_json }},
