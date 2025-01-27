@@ -312,6 +312,7 @@ perun_ngui_admin_password_help: '{{ perun_ngui_password_help }}'
 perun_ngui_admin_other_apps:
   en:
     profile: "Profile"
+perun_ngui_admin_other_apps_custom:
 
 #new GUI Profile
 perun_ngui_profile_enabled: no
@@ -368,6 +369,7 @@ perun_ngui_profile_other_apps:
     admin: "IAM Administration"
   cs:
     admin: "Správa IAM"
+perun_ngui_profile_other_apps_custom:
 perun_ngui_profile_link_to_admin_gui_by_roles: [
     "PERUNADMIN",
     "PERUNOBSERVER",
@@ -405,6 +407,7 @@ perun_ngui_consolidator_document_title: "Consolidator"
 perun_ngui_consolidator_other_apps:
   en:
     profile: "Profile"
+perun_ngui_consolidator_other_apps_custom:
 perun_ngui_consolidator_client_id: "xxx-xxxx-xxxx-xxx-xx-xxx"
 perun_ngui_consolidator_oauth_authority: '{{ perun_ngui_oauth_authority }}'
 perun_ngui_consolidator_oauth_csp_url: '{{ perun_ngui_consolidator_oauth_authority }}'
@@ -508,6 +511,7 @@ perun_ngui_publications_other_apps:
   en:
     admin: "IAM Administration"
     profile: "Profile"
+perun_ngui_publications_other_apps_custom:
 perun_ngui_publications_link_to_admin_gui_by_roles: [
   "PERUNADMIN",
   "PERUNOBSERVER",
