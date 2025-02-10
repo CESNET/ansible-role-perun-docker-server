@@ -4,11 +4,19 @@
     content: |
       Use journalctl with filters for tags (syslog identifiers):
       
-      journalctl -t perun_ldapc
-      journalctl -t perun_engine
-      journalctl -t perun_rpc
       journalctl -t perun_apache
-
+      journalctl -t perun_rpc
+      journalctl -t perun_engine
+      journalctl -t perun_ldapc
+      journalctl -t perun_auditlogger
+      journalctl -t perun_audit                   ... messages logged by perun_auditlogger
+      
+      Internal loggers use "-" dash, eg.:
+      
+      journalctl -t perun-core                    ... internal core logs
+      journalctl -t perun-dispatcher              ... events processing and provisioning planning
+      journalctl -t perun-registrar               ... logs of registration component
+      
       Other options:
       
       journalctl -p [debug|info|warning|error]    ... filter for higher levels of priority
@@ -17,7 +25,12 @@
       journalctl --no-pager                       ... full non-truncated lines
       journalctl --grep "<PERL regex>"            ... grep for substring
       journalctl -f                               ... wait for more lines like "tail -f"
-
+      
+      Logs disk management:
+      
+      journalctl --disk-usage                     ... logs size on filesystem
+      journalctl --vacuum-size=5G                 ... clear logs and keep only 5 GB
+      
       Use the command "man journalctl" to get all options.
 
 - name: "create txt files"
