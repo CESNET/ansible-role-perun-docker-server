@@ -244,6 +244,9 @@ perun.auditlogReadLimit={{ perun_rpc_auditlog_read_limit }}
 # Set to "true" to archive data generated during each run of service provisioning
 perun.archiveSpool={{ perun_rpc_archive_spool|bool|to_json }}
 
+# Max number of results for all entities in global search from NGUI
+perun.globalSearchLimit={{ perun_rpc_global_search_limit }}
+
 # Personal data change switchers
 perun.enableLinkedName={{ perun_rpc_personal_enable_linked_name|bool|to_json }}
 perun.enableCustomName={{ perun_rpc_personal_enable_custom_name|bool|to_json }}
