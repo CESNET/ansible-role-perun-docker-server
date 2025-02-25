@@ -261,8 +261,6 @@ perun_ngui_logo: "😀"
 perun_ngui_theme: {}
 perun_ngui_mfa: {}
 perun_ngui_table_export_limit: 1000
-# set to "yes" and configure "globalSearch_String_policy" policy on backend to display global search to proper roles
-perun_ngui_display_search: no
 
 # shared password strength hints for new GUI
 perun_ngui_password_help:
@@ -316,6 +314,8 @@ perun_ngui_admin_other_apps:
   en:
     profile: "Profile"
 perun_ngui_admin_other_apps_custom:
+# set to "yes" and configure "globalSearch_String_policy" policy on backend to display global search to proper roles
+perun_ngui_admin_display_search: no
 
 #new GUI Profile
 perun_ngui_profile_enabled: no
