@@ -858,7 +858,9 @@ other_certs:
 perun_firewall_open_tcp_ports:
   - { port: 80, comment: "accept http from everywhere" }
   - { port: 443, comment: "accept https from everywhere" }
+perun_firewall_open_ldap_ports:
   - { port: 636, comment: "accept encrypted ldaps from everywhere" }
+perun_firewall_open_postgres_ports:
   - { port: 5432, ipv4: "100.67.76.0/22", comment: "accept postgres from MUNI eduVPN ICS IPv4" }
   - { port: 5432, ipv6: "2001:718:801:900:24c::/78", comment: "accept postgres from MUNI eduVPN ICS IPv6" }
   - { port: 5432, ipv4: "78.128.246.160/32", comment: "accept postgres from CESNET eduVPN IPv4" }

@@ -149,7 +149,7 @@
   vars:
     firewall_do_install: false
     firewall_do_config: true
-    firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
+    firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_open_ldap_ports + perun_firewall_open_postgres_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
     firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
 
 - name: "sendmail setup for Dockerized environment (legacy)"
