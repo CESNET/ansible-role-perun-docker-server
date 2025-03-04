@@ -165,6 +165,51 @@
   loop_control:
     label: "{{ item.path }}"
 
+- name: "use local perun-services repo"
+  when: perun_engine_services_repo | length > 0
+  block:
+    - name: "checkout '{{ perun_engine_services_repo_version }}' version from custom perun-services repo"
+      git:
+        repo: "{{ perun_engine_services_repo }}"
+        dest: /etc/perun/engine/perun-services-git
+        version: "{{ perun_engine_services_repo_version }}"
+        force: true
+      notify: "restart perun_engine"
+    - name: "chown files for perun_engine"
+      file:
+        path: /etc/perun/engine/perun-services-git
+        state: directory
+        recurse: yes
+        owner: root
+        group: peruneng
+    - name: "chown files for perun_engine"
+      file:
+        path: /etc/perun/engine/perun-services-git
+        state: directory
+        mode: '0550'
+    - name: "find (gen|send) files from custom perun-services repo"
+      find:
+        paths:
+          - /etc/perun/engine/perun-services-git/gen
+          - /etc/perun/engine/perun-services-git/send
+        file_type: file
+      register: srvlcfiles
+    - name: "set executable on (gen|send) files from custom perun-services repo"
+      file:
+        path: "{{ item.path }}"
+        mode: '0750'
+      loop: "{{ srvlcfiles.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+      notify: "restart perun_engine"
+
+- name: "don't use local perun-services repo"
+  when: perun_engine_services_repo | length == 0
+  file:
+    path: /etc/perun/engine/perun-services-git
+    state: absent
+  notify: "restart perun_engine"
+
 - name: "make key, cert and chain for generic_send script with curl"
   block:
     - name: "create engine ssl dir"
@@ -263,6 +308,7 @@
     mode: '0750'
 
 - name: "create /home/peruneng/.bash_profile"
+  notify: "restart perun_engine"
   copy:
     dest: /home/peruneng/.bash_profile
     owner: peruneng
@@ -271,7 +317,18 @@
     content: |2
       # set environment
       source /etc/perun/perun-engine
-      
+
+      {% if perun_engine_services_repo is defined %}
+      # replace scripts from perun-services-git/gen
+      if [[ -n $(ls -A /etc/perun/perun-services-git/gen) ]] ; then
+        cd /etc/perun/perun-services-git/gen
+        for i in * ; do
+          echo "replacing from perun-services-git/gen/$i"
+           cp $i "/opt/perun-engine/gen/$i"
+        done
+      fi
+      {% endif %}
+
       # replace scripts from gen-local
       if [[ -n $(ls -A /etc/perun/gen-local) ]] ; then
         cd /etc/perun/gen-local
@@ -289,7 +346,18 @@
           cp $i "/opt/perun-engine/gen/$i"
         done
       fi
-      
+
+      {% if perun_engine_services_repo is defined %}
+      # replace scripts from perun-services-git/send
+      if [[ -n $(ls -A /etc/perun/perun-services-git/send) ]] ; then
+        cd /etc/perun/perun-services-git/send
+        for i in * ; do
+          echo "replacing from perun-services-git/send/$i"
+           cp $i "/opt/perun-engine/send/$i"
+        done
+      fi
+      {% endif %}
+
       # replace scripts from send-local
       if [[ -n $(ls -A /etc/perun/send-local) ]] ; then
         cd /etc/perun/send-local
@@ -307,7 +375,7 @@
           cp $i "/opt/perun-engine/send/$i"
         done
       fi
-      
+
       # go home
       cd /home/perun
 
