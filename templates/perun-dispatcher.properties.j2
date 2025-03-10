@@ -22,3 +22,9 @@ dispatcher.task.delay.count={{ perun_dispatcher_task_delay_count }}
 {% if perun_dispatcher_propagation_timeout is defined %}
 dispatcher.task.delay.timeout={{ perun_dispatcher_propagation_timeout }}
 {% endif %}
+{% if perun_dispatcher_task_poll_wait is defined %}
+dispatcher.task.poll.wait={{ perun_dispatcher_task_poll_wait }}
+{% endif %}
+{% if perun_dispatcher_task_reschedule is defined %}
+dispatcher.task.reschedule={{ perun_dispatcher_task_reschedule }}
+{% endif %}
