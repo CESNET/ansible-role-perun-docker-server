@@ -15,6 +15,7 @@
       "oauth_scopes": "{{ perun_ngui_consolidator_oauth_scopes }}",
       "oauth_response_type": "{{ perun_ngui_consolidator_oauth_response_type }}",
       "oauth_offline_access_consent_prompt": {{ perun_ngui_consolidator_oauth_offline_access_consent_prompt|bool|to_json }},
+	  "oauth_acr_value": "{{ perun_ngui_consolidator_oauth_acr_value }}",
       "user_info_endpoint_url": "{{ perun_ngui_consolidator_user_info_endpoint_url }}"
     },
   "proxy_logout": {{ perun_ngui_consolidator_proxy_logout|bool|to_json }},

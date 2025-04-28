@@ -20,6 +20,7 @@
     "oauth_scopes": "{{ perun_ngui_publications_oauth_scopes }}",
     "oauth_response_type": "{{ perun_ngui_publications_oauth_response_type }}",
     "oauth_offline_access_consent_prompt": {{ perun_ngui_publications_oauth_offline_access_consent_prompt|to_json }},
+	"oauth_acr_value": "{{ perun_ngui_publications_oauth_acr_value }}",
     "filters": {{ perun_ngui_publications_oauth_filters|to_nice_json(indent=2,ensure_ascii=False)|indent(4) }}
   },
   "mfa": {{ perun_ngui_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
