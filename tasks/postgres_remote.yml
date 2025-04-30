@@ -167,7 +167,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_remote_login_password }}"
     ssl_mode: require
-    db: postgres
+    login_db: postgres
     new_owner: perun
     obj_name: perun
     obj_type: database
@@ -178,7 +178,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    database: perun
+    login_db: perun
     name: perun
     owner: perun
     state: present
@@ -189,7 +189,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_remote_login_password }}"
     ssl_mode: require
-    db: "perun"
+    login_db: "perun"
     name: "{{ item }}"
   loop:
     - unaccent
