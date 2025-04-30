@@ -295,6 +295,7 @@ perun_ngui_admin_oauth_silent_redirect_uri: "https://{{ perun_ngui_admin_hostnam
 perun_ngui_admin_oauth_load_user_info: false
 perun_ngui_admin_oauth_scopes: "openid profile perun_api perun_admin offline_access"
 perun_ngui_admin_oauth_response_type: "code"
+perun_ngui_admin_oauth_acr_value: "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport https://refeds.org/profile/sfa https://refeds.org/profile/mfa"
 perun_ngui_admin_oauth_filters:
   default: ""
 perun_ngui_admin_proxy_logout: true
@@ -335,6 +336,7 @@ perun_ngui_profile_oauth_redirect_uri: "https://{{ perun_ngui_profile_hostname }
 perun_ngui_profile_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_profile_oauth_response_type: "code"
 perun_ngui_profile_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_profile_oauth_acr_value: "{{ perun_ngui_admin_oauth_acr_value }}"
 perun_ngui_profile_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
 perun_ngui_profile_proxy_logout: true
 perun_ngui_profile_password_namespace_attributes: []
@@ -422,6 +424,7 @@ perun_ngui_consolidator_oauth_response_type: "code"
 perun_ngui_consolidator_proxy_logout: true
 perun_ngui_consolidator_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
 perun_ngui_consolidator_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_consolidator_oauth_acr_value: "{{ perun_ngui_admin_oauth_acr_value }}"
 perun_ngui_consolidator_instance_favicon: false
 perun_ngui_consolidator_path_to_idp_provider_userinfo: ["target_backend", "display_name", "text"]
 perun_ngui_consolidator_path_to_idp_logo_userinfo: ["target_backend", "logo", "text"]
@@ -445,6 +448,7 @@ perun_ngui_linker_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_linker_oauth_response_type: "code"
 perun_ngui_linker_user_info_endpoint_url: "{{ perun_ngui_oauth_authority }}/OIDC/userinfo"
 perun_ngui_linker_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_linker_oauth_acr_value: "{{ perun_ngui_admin_oauth_acr_value }}"
 perun_ngui_linker_instance_favicon: false
 
 #new GUI Password reset
@@ -473,6 +477,7 @@ perun_ngui_pwdreset_oauth_redirect_uri: "https://{{ perun_ngui_pwdreset_hostname
 perun_ngui_pwdreset_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_pwdreset_oauth_response_type: "code"
 perun_ngui_pwdreset_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_pwdreset_oauth_acr_value: "{{ perun_ngui_admin_oauth_acr_value }}"
 perun_ngui_pwdreset_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
 perun_ngui_pwdreset_log_out_enabled: true
 perun_ngui_pwdreset_proxy_logout: true
@@ -496,6 +501,7 @@ perun_ngui_publications_oauth_redirect_uri: "https://{{ perun_ngui_publications_
 perun_ngui_publications_oauth_scopes: "openid profile perun_api offline_access"
 perun_ngui_publications_oauth_response_type: "code"
 perun_ngui_publications_oauth_offline_access_consent_prompt: '{{ perun_ngui_oauth_offline_access_consent_prompt }}'
+perun_ngui_publications_oauth_acr_value: "{{ perun_ngui_admin_oauth_acr_value }}"
 perun_ngui_publications_oauth_filters: '{{ perun_ngui_admin_oauth_filters }}'
 perun_ngui_publications_logo: '{{ perun_ngui_logo }}'
 perun_ngui_publications_footer: '{{ perun_ngui_footer }}'
