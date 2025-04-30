@@ -66,7 +66,7 @@
   become: yes
   become_user: postgres
   postgresql_ext:
-    db: "perun"
+    login_db: "perun"
     name: "{{ item }}"
   loop:
     - unaccent

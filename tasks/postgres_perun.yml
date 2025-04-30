@@ -41,7 +41,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'perun' AND table_name = 'users' )"
   register: table_users
 
@@ -57,7 +57,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     path: /tmp/postgres.sql
     encoding: UTF-8
   when: not table_users.query_result[0].exists
@@ -87,7 +87,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: "SELECT EXISTS ( SELECT 1 FROM users WHERE first_name='(Service)' and last_name='nagios' and service_acc)"
   register: user_nagios
 
@@ -97,7 +97,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: "insert into users (id, first_name, last_name, service_acc) values (nextval('users_id_seq'),'(Service)','nagios',true)"
   when: not user_nagios.query_result[0].exists
 
@@ -107,7 +107,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: "SELECT EXISTS ( select ues.id from user_ext_sources ues join ext_sources e on (ues.ext_sources_id=e.id) where ues.login_ext='nagios' and e.name='INTERNAL' )"
   register: ues_nagios
 
@@ -117,7 +117,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: >-
       insert into user_ext_sources (id, user_id, login_ext, ext_sources_id, loa)
       values (
