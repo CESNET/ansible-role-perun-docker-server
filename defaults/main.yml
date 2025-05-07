@@ -196,7 +196,7 @@ perun_oldgui_fedAuthz: [ 'fed' ]
 perun_oldgui_supportedPasswordNamespaces: ''
 perun_oldgui_wayf_spLogoutUrl: "/Consolidator.sso/Logout"
 perun_oldgui_wayf_spLoginUrl: "/Consolidator.sso/Login"
-perun_oldgui_wayf_authnContextClassRef: "urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified%20urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
+perun_oldgui_wayf_authnContextClassRef: "urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified%20urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport%20urn:cesnet:proxyidp:template:cesnet"
 perun_oldgui_namespacesForPreferredGroupNames: []
 perun_oldgui_vosToSkipCaptchaFor: []
 perun_oldgui_perunInstanceName: "{{ perun_rpc_instance_name }}"
