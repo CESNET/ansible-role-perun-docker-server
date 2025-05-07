@@ -309,6 +309,7 @@ perun_ngui_admin_brandings: "{ '{{ perun_ngui_admin_hostname}}': {} }" #Ansible 
 perun_ngui_admin_apache_special_config1: ""
 perun_ngui_admin_instance_favicon: false
 perun_ngui_admin_user_deletion_forced: false
+perun_ngui_admin_enable_sponsorships: false
 perun_ngui_admin_enforce_consents: false
 perun_ngui_admin_warning_message: ""
 perun_ngui_admin_password_help: '{{ perun_ngui_password_help }}'
