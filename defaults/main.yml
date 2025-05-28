@@ -889,7 +889,8 @@ perun_firewall_docker_rules:
       - { ipv6: "2001:718:ff05:acb::/64", comment: "portainer from CESNET eduVPN IPv6" }
       - { ipv6: "2001:718:ff05:acc::/64", comment: "portainer from CESNET eduVPN IPv6" }
 
-# config files for probes from Metacentrum monitoring
+# Enabled Metacentrum monitoring and include config files for probes
+perun_metacentrum_monitoring: yes
 perun_monitoring_check_mk_config: "{{ perun_instance_hostname }}/check_mk/"
 
 # debian repos to use for automatic updates
