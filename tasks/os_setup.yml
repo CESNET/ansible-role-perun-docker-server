@@ -6,10 +6,16 @@
     name: cesnet.ntp
 
 - name: "set up monitoring by MetaCentrum's Nagios"
-  import_role:
+  include_role:
     name: cesnet.metacentrum_monitoring
+    apply:
+      tags:
+        - metacentrum_monitoring
+  when: perun_metacentrum_monitoring
   vars:
     monitoring_check_mk_config: "{{ perun_monitoring_check_mk_config }}"
+  tags:
+    - metacentrum_monitoring
 
 - name: "set up unattended upgrades"
   import_role:
