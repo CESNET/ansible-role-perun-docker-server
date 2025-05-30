@@ -625,6 +625,9 @@ perun_auditlogger_enabled: "{{ perun_remote_logging_enabled }}"
 # Apache #
 ##########
 
+# Whether to include OCSP stapling support
+perun_apache_ocsp_stapling: no
+
 # whether to set maintenance mode
 perun_apache_in_maintenance: no
 # whether to enable redirect from / to /{{ perun_apache_gui_default_auth }}/gui/

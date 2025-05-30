@@ -342,6 +342,26 @@
   when: perun_apache_custom_vars is defined and perun_apache_custom_vars
   notify: "restart perun_apache"
 
+- name: "create apache_stapling.conf"
+  when: perun_apache_ocsp_stapling
+  copy:
+    dest: /etc/perun/apache/apache_stapling.conf
+    mode: '0644'
+    content: |2
+      # OCSP Stapling
+      SSLUseStapling          on
+      SSLStaplingResponderTimeout 5
+      SSLStaplingReturnResponderErrors off
+      SSLStaplingCache        shmcb:${APACHE_RUN_DIR}/ocsp(32768)
+  notify: "restart perun_apache"
+
+- name: "remove apache_stapling.conf"
+  when: not perun_apache_ocsp_stapling
+  file:
+    path: /etc/perun/apache/apache_stapling.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create additional files for Shibboleth"
   copy:
     src: "{{ item }}"
