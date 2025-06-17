@@ -90,7 +90,7 @@
     login_host: "{{ perun_postgresql_remote_login_host }}"
     login_password: "{{ perun_postgresql_db_user_password }}"
     ssl_mode: require
-    db: perun
+    login_db: perun
     query: "SELECT MAX(id) FROM auditer_log"
   register: max_id
 
