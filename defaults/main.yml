@@ -617,6 +617,7 @@ perun_remote_logging_port: 514
 perun_remote_logging_conf: remotelog
 perun_remote_logging_filter: ""
 perun_remote_logging_enable_disk_buffer: yes
+perun_remote_logging_template: remote_logging.j2
 
 # Auditlogger - by default enabled on instances logging remotely
 perun_auditlogger_enabled: "{{ perun_remote_logging_enabled }}"

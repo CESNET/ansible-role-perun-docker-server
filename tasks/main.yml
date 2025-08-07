@@ -78,6 +78,7 @@
     remote_logging_conf: "{{ perun_remote_logging_conf }}"
     remote_logging_filter: "{{ perun_remote_logging_filter }}"
     remote_logging_enable_disk_buffer: "{{ perun_remote_logging_enable_disk_buffer }}"
+    remote_logging_template: "{{ perun_remote_logging_template }}"
 
 - name: "creation of users perun, peruneng, etc."
   import_tasks: perun_users.yml
