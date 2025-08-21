@@ -62,6 +62,38 @@
     name: postgresql
     state: restarted
 
+- name: "add monitoring by Grafana"
+  when: postgresql_pgwatch_password is defined
+  block:
+    - name: "create user pgwatch"
+      become: yes
+      become_user: postgres
+      postgresql_user:
+        name: pgwatch
+        comment: "monitoring from Grafana"
+        password: "{{ postgresql_pgwatch_password }}"
+        role_attr_flags: NOSUPERUSER,NOCREATEDB,NOCREATEROLE
+        encrypted: yes
+        state: present
+
+    - name: "grant connect on database to user pgwatch"
+      become: yes
+      become_user: postgres
+      postgresql_privs:
+        state: present
+        login_db: "perun"
+        type: database
+        priv: CONNECT
+        role: pgwatch
+
+    - name: "add shared_preload_libraries=pg_stat_statements"
+      become: yes
+      become_user: postgres
+      postgresql_set:
+        name: shared_preload_libraries
+        value: pg_stat_statements
+      notify: "restart postgresql"
+
 - name: "add extensions"
   become: yes
   become_user: postgres
@@ -72,3 +104,4 @@
     - unaccent
     - pgcrypto
     - pg_repack
+    - pg_stat_statements
