@@ -72,4 +72,3 @@
     - unaccent
     - pgcrypto
     - pg_repack
-    - pg_stat_statements
