@@ -884,6 +884,8 @@ perun_firewall_open_postgres_ports:
   - { port: 5432, ipv6: "2001:718:ff05:acc::/64", comment: "accept postgres from CESNET eduVPN IPv6" }
   - { port: 5432, ipv4: "147.251.255.45/32", comment: "accept postgres from psql-monitoring.perun-aai.org" }
   - { port: 5432, ipv6: "2001:718:801:43b:f816:3eff:fec4:1a33/128", comment: "accept postgres from psql-monitoring.perun-aai.org" }
+  - { port: 5432, ipv4: "78.128.247.148/32", comment: "accept postgres from psql-monitoring.perun-aai.org (VMWare)" }
+  - { port: 5432, ipv6: "2001:718:ff05:206::148/128", comment: "accept postgres from psql-monitoring.perun-aai.org (VMWare)" }
 site_specific_open_tcp_ports: []
 perun_firewall_docker_rules:
   - port: 9000
