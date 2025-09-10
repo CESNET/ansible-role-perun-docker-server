@@ -3,8 +3,8 @@
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.16.8', '>=')
-    msg: "Required version is 2.16.8, this is {{ ansible_version.full }}"
+      - ansible_version.full is version_compare('2.18.9', '>=')
+    fail_msg: "Required version is 2.18.9, this is {{ ansible_version.full }}"
     quiet: true
   tags: always
 
@@ -12,7 +12,7 @@
   assert:
     that:
       - lookup('community.general.collection_version', 'community.general') is version('8.6.2','>=')
-    msg: "Required version is 8.6.2, this is {{lookup('community.general.collection_version', 'community.general') }}"
+    fail_msg: "Required version is 8.6.2, this is {{lookup('community.general.collection_version', 'community.general') }}"
     quiet: true
   tags: always
 
@@ -20,7 +20,7 @@
   assert:
     that:
       - lookup('community.general.collection_version', 'community.docker') is version('3.10.4','>=')
-    msg: "Required version is 3.10.4, this is {{lookup('community.general.collection_version', 'community.docker') }}"
+    fail_msg: "Required version is 3.10.4, this is {{lookup('community.general.collection_version', 'community.docker') }}"
     quiet: true
   tags: always
 
@@ -29,7 +29,7 @@
     that:
       - ansible_distribution == "Debian"
       - ansible_distribution_major_version is version('11','>=')
-    msg: "Required version is 11, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+    fail_msg: "Required version is 11, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
     quiet: true
   tags: always
 
@@ -39,12 +39,16 @@
 
 - name: "message-of-the-day setup"
   copy:
-    src: "{{ lookup('first_found', findme) }}"
+    src: "{{ lookup('ansible.builtin.first_found', params) }}"
     dest: /etc/motd
   vars:
-    findme:
-      - "files/message-of-the-day"
-      - "motd"
+    params:
+      files:
+        - message-of-the-day
+        - motd
+      paths:
+        - files
+
   tags: motd
 
 - name: "TLS certificates setup"
@@ -269,9 +273,9 @@
   block:
     - name: "find files with group specific tasks"
       loop: "{{ group_names }}"
-      local_action:
-        module: stat
+      ansible.builtin.stat:
         path: "files/{{ item }}/{{ item }}_group_specific_tasks_before.yml"
+      delegate_to: localhost
       register: group_specific_tasks_before
     - name: "execute group-specific tasks"
       loop: "{{ group_specific_tasks_before.results }}"

@@ -320,8 +320,8 @@
     mode: '0400'
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/sp-key.pem"
-      - "sp-key.pem"
+      - "files/{{ perun_instance_hostname }}/sp-key.pem"
+      - "files/sp-key.pem"
 
 - name: "create sp-cert.pem"
   copy:
@@ -332,8 +332,8 @@
     mode: '0444'
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/sp-cert.pem"
-      - "sp-cert.pem"
+      - "files/{{ perun_instance_hostname }}/sp-cert.pem"
+      - "files/sp-cert.pem"
 
 - name: "create apache_custom_vars containing changes to apache2.conf"
   copy:
@@ -374,8 +374,8 @@
   notify: "restart perun_apache"
 
 - name: "detect apache_init.sh on controller machine"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/apache_init.sh"
   register: apache_init
 

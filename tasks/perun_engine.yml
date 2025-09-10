@@ -47,8 +47,8 @@
     mode: 0600
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/{{ perun_engine_ssh_privkey_file }}"
-      - "{{ perun_engine_ssh_privkey_file }}"
+      - "files/{{ perun_instance_hostname }}/{{ perun_engine_ssh_privkey_file }}"
+      - "files/{{ perun_engine_ssh_privkey_file }}"
 
 - name: "create ssh public key {{ perun_engine_ssh_pubkey_file }} for accessing slaves"
   copy:
@@ -59,12 +59,12 @@
     mode: 0644
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/{{ perun_engine_ssh_pubkey_file }}"
-      - "{{ perun_engine_ssh_pubkey_file }}"
+      - "files/{{ perun_instance_hostname }}/{{ perun_engine_ssh_pubkey_file }}"
+      - "files/{{ perun_engine_ssh_pubkey_file }}"
 
 - name: "detect local directory"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/services"
   register: hs
 
@@ -94,8 +94,8 @@
 
 - name: "detect local directories gen-local and send-local"
   loop: [ 'gen-local', 'send-local' ]
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/{{ item }}/"
   register: gsl
 
@@ -234,8 +234,8 @@
         - { src: "hostchain.pem", dest: "perun-send.chain" }
 
 - name: "detect local directory perun_engine_etc/"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/perun_engine_etc/"
   register: engineetc
 
@@ -250,8 +250,8 @@
     mode: '0440'
 
 - name: "detect local directory perun_engine_home/"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/perun_engine_home/"
   register: enginehome
 

@@ -8,8 +8,8 @@
   notify: "restart perun_rpc"
 
 - name: "detect tomcat_init.sh on controller machine"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/tomcat_init.sh"
   register: tomcat_init
 
@@ -105,34 +105,40 @@
 
 - name: "create perun-extSources.xml"
   copy:
-    src: "{{ lookup('first_found', findme) }}"
+    src: "{{ lookup('first_found', params) }}"
     dest: "/etc/perun/rpc/perun-extSources.xml"
     owner: root
     group: perunrpc
     mode: '0440'
   vars:
-    findme:
-      - "{{ perun_instance_hostname }}/perun-extSources.xml"
-      - "perun-extSources.xml"
+    params:
+      files:
+        - "perun-extSources.xml"
+      paths:
+        - "files/{{ perun_instance_hostname }}"
+        - "files"
   notify: "restart perun_rpc"
 
 - name: "create login-namespaces-rules-config.yml"
   copy:
-    src: "{{ lookup('first_found', findme) }}"
+    src: "{{ lookup('first_found', params) }}"
     dest: /etc/perun/rpc/login-namespaces-rules-config.yml
     owner: root
     group: perunrpc
     mode: '0440'
   vars:
-    findme:
-      - "{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
-      - "login-namespaces-rules-config.yml"
+    params:
+      files:
+        - "login-namespaces-rules-config.yml"
+      paths:
+        - "files/{{ perun_instance_hostname }}"
+        - "files"
   notify: "restart perun_rpc"
 
 # conditionally create or remove perun-oidc-config.yml
 - name: "detect local perun-oidc-config.yml"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/perun-oidc-config.yml"
   register: perun_oidc_config
 
@@ -173,8 +179,8 @@
   notify: "restart perun_rpc"
 
 - name: "detect local directory perun_rpc_etc/"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/perun_rpc_etc/"
   register: rpcetc
 
@@ -189,8 +195,8 @@
     mode: '0440'
 
 - name: "detect local directory perun_rpc_home/"
-  local_action:
-    module: stat
+  delegate_to: localhost
+  ansible.builtin.stat:
     path: "files/{{ perun_instance_hostname }}/perun_rpc_home/"
   register: rpchome
 

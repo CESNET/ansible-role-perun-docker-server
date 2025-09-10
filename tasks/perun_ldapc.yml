@@ -56,8 +56,8 @@
     mode: 0440
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
-      - "login-namespaces-rules-config.yml"
+      - "files/{{ perun_instance_hostname }}/login-namespaces-rules-config.yml"
+      - "files/login-namespaces-rules-config.yml"
   notify: "restart perun_ldapc"
 
 - name: "create logback-ldapc.xml"
@@ -87,8 +87,8 @@
     mode: 0440
   vars:
     findme:
-      - "{{ perun_instance_hostname }}/perun-ldapc-attributes.xml"
-      - "perun-ldapc-attributes.xml"
+      - "files/{{ perun_instance_hostname }}/perun-ldapc-attributes.xml"
+      - "files/perun-ldapc-attributes.xml"
   notify: "restart perun_ldapc"
 
 - name: "create perun-ldapc-last-state"

@@ -74,9 +74,9 @@
       - "--filter"
       - "label=org.perun-aai.cli"
   register: oldcliimages
-  changed_when: oldcliimages.stdout_lines
+  changed_when: oldcliimages.stdout_lines | length > 0
 
 - name: "prune old CLI images"
-  when: oldcliimages.stdout_lines
+  when: oldcliimages.stdout_lines | length > 0
   command:
     argv: "{{ [ 'docker', 'rmi' ] + oldcliimages.stdout_lines }}"
