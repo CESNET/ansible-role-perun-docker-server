@@ -876,24 +876,20 @@ perun_firewall_open_tcp_ports:
 perun_firewall_open_ldap_ports:
   - { port: 636, comment: "accept encrypted ldaps from everywhere" }
 perun_firewall_open_postgres_ports:
-  - { port: 5432, ipv4: "100.67.76.0/22", comment: "accept postgres from MUNI eduVPN ICS IPv4" }
-  - { port: 5432, ipv6: "2001:718:801:900:24c::/78", comment: "accept postgres from MUNI eduVPN ICS IPv6" }
-  - { port: 5432, ipv4: "78.128.246.160/32", comment: "accept postgres from CESNET eduVPN IPv4" }
-  - { port: 5432, ipv4: "78.128.247.175/32", comment: "accept postgres from CESNET eduVPN IPv4" }
-  - { port: 5432, ipv6: "2001:718:ff05:acb::/64", comment: "accept postgres from CESNET eduVPN IPv6" }
-  - { port: 5432, ipv6: "2001:718:ff05:acc::/64", comment: "accept postgres from CESNET eduVPN IPv6" }
+  - { port: 5432, ipv4: "195.113.196.6/32", comment: "accept postgres from CESNET 712 IPv4" }
+  - { port: 5432, ipv4: "195.113.196.134/32", comment: "accept postgres from CESNET 712 IPv4" }
+  - { port: 5432, ipv6: "2001:718:ff05:acb:a00:c4:6:0/112", comment: "accept postgres from CESNET 712 IPv6" }
+  - { port: 5432, ipv6: "2001:718:ff05:acc:b00:c4:86:0/112", comment: "accept postgres from CESNET 712 IPv6" }
   - { port: 5432, ipv4: "78.128.247.148/32", comment: "accept postgres from psql-monitoring.perun-aai.org" }
   - { port: 5432, ipv6: "2001:718:ff05:206::148/128", comment: "accept postgres from psql-monitoring.perun-aai.org" }
 site_specific_open_tcp_ports: []
 perun_firewall_docker_rules:
   - port: 9000
     only:
-      - { ipv4: "100.67.76.0/22", comment: "portainer from MUNI eduVPN ICS IPv4" }
-      - { ipv6: "2001:718:801:900:24c::/78", comment: "portainer from MUNI eduVPN ICS IPv6" }
-      - { ipv4: "78.128.246.160/32", comment: "portainer from CESNET eduVPN IPv4" }
-      - { ipv4: "78.128.247.175/32", comment: "portainer from CESNET eduVPN IPv4" }
-      - { ipv6: "2001:718:ff05:acb::/64", comment: "portainer from CESNET eduVPN IPv6" }
-      - { ipv6: "2001:718:ff05:acc::/64", comment: "portainer from CESNET eduVPN IPv6" }
+      - { ipv4: "195.113.196.6/32", comment: "portainer from CESNET 712 IPv4" }
+      - { ipv4: "195.113.196.134/32", comment: "portainer from CESNET 712 IPv4" }
+      - { ipv6: "2001:718:ff05:acb:a00:c4:6:0/112", comment: "portainer from CESNET 712 IPv6" }
+      - { ipv6: "2001:718:ff05:acc:b00:c4:86:0/112", comment: "portainer from CESNET 712 IPv6" }
 
 # Enabled Metacentrum monitoring and include config files for probes
 perun_metacentrum_monitoring: yes
