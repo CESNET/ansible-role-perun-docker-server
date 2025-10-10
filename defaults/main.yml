@@ -585,6 +585,9 @@ perun_ldap_proxy_password: "testtest"
 perun_ldap_replication_password: "testtest"
 perun_ldap_sasl_login_namespace: ""
 perun_ldap_master_replica: no
+# Name of accesslog DB when replication is enabled on master
+# Change the index if you have more DBs in LDAP (e.g. hostel)
+perun_ldap_accesslog_db: "{2}mdb"
 # set to "openldap" or "ds389"
 perun_ldap_implementation: openldap
 
