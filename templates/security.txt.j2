@@ -5,7 +5,7 @@ Contact: {{ contact }}
 {% if perun_security_encryption %}
 Encryption: {{ perun_security_encryption }}
 {% endif %}
-Expires: {{ lookup('pipe','date --iso-8601=seconds --date=+year') }}
+Expires: {{ (now().year + 1) | string + ( '-01-01' if now().month < 6 else '-06-01' ) + 'T00:00:00Z' }}
 Policy: {{ perun_security_policy }}
 Preferred-Languages: {{ perun_security_preferred_languages }}
 Canonical: https://{{ perun_rpc_hostname }}/.well-known/security.txt
