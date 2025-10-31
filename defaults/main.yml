@@ -34,6 +34,8 @@ perun_security_preferred_languages: "en, cs, sk"
 perun_use_certbot_certificates: no
 # alternative DNS names to include into certificate
 perun_certbot_alt_hostnames: []
+perun_certbot_account_options: "--register-unsafely-without-email"
+
 
 # perun dispatcher
 perun_dispatcher_enabled: yes

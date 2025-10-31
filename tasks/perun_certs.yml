@@ -52,6 +52,7 @@
         certbot_hostname: "{{ perun_rpc_hostname }}"
         certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames }}"
         certbot_install_hooks: no
+        certbot_account_options: "{{ perun_certbot_account_options }}"
 
     - name: "create perun_prehook.sh"
       copy:
