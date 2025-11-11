@@ -346,6 +346,7 @@ perun_ngui_profile_proxy_logout: true
 perun_ngui_profile_password_namespace_attributes: []
 perun_ngui_profile_consolidator_url: "https://{{ perun_rpc_hostname }}/fed-ic/ic/"
 perun_ngui_profile_consolidator_url_cert: "https://{{ perun_rpc_hostname }}/cert-ic/ic/"
+perun_ngui_profile_consolidator_url_orcid: "https://{{ perun_rpc_hostname }}/orcid-ic/ic/"
 perun_ngui_profile_registrar_base_url: "https://{{ perun_rpc_hostname }}/fed/registrar/"
 perun_ngui_profile_page_attributes:
   - friendly_name: organization
@@ -405,6 +406,7 @@ perun_ngui_profile_local_account_namespace: ""
 perun_ngui_profile_password_help: '{{ perun_ngui_password_help }}'
 perun_ngui_profile_password_help_cs: '{{ perun_ngui_password_help_cs }}'
 perun_ngui_profile_warning_message: '{{ perun_ngui_admin_warning_message }}'
+perun_ngui_profile_orcid_ext_source_name: ''
 
 #new GUI Consolidator
 

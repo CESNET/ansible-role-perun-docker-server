@@ -28,6 +28,7 @@
   "password_namespace_attributes": {{ perun_ngui_profile_password_namespace_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "consolidator_url": "{{ perun_ngui_profile_consolidator_url }}",
   "consolidator_url_cert": "{{ perun_ngui_profile_consolidator_url_cert }}",
+  "consolidator_url_orcid": "{{ perun_ngui_profile_consolidator_url_orcid }}",
   "registrar_base_url": "{{ perun_ngui_profile_registrar_base_url }}",
   "profile_page_attributes": {{ perun_ngui_profile_page_attributes|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "mfa": {{ perun_ngui_mfa|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
@@ -54,5 +55,6 @@
   "brandings": {{ perun_ngui_profile_brandings|to_nice_json(indent=2,ensure_ascii=False)|indent(2) }},
   "use_new_consolidator": {{ perun_ngui_profile_use_new_consolidator|to_json }},
   "local_account_namespace": "{{ perun_ngui_profile_local_account_namespace }}",
-  "export_limit": {{ perun_ngui_table_export_limit }}
+  "export_limit": {{ perun_ngui_table_export_limit }},
+  "orcid_ext_source_name": "{{ perun_ngui_profile_orcid_ext_source_name }}"
 }
