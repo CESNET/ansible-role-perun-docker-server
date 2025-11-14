@@ -3,8 +3,8 @@
   assert:
     that:
       - ansible_version is defined
-      - ansible_version.full is version_compare('2.18.9', '>=')
-    fail_msg: "Required version is 2.18.9, this is {{ ansible_version.full }}"
+      - ansible_version.full is version_compare('2.19', '>=')
+    fail_msg: "Required version is 2.19, this is {{ ansible_version.full }}"
     quiet: true
   tags: always
 
