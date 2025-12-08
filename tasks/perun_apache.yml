@@ -339,7 +339,7 @@
   copy:
     dest: /etc/perun/apache/apache_custom_vars.conf
     content: "{{ perun_apache_custom_vars }}"
-  when: perun_apache_custom_vars is defined and perun_apache_custom_vars
+  when: perun_apache_custom_vars is defined and perun_apache_custom_vars | length > 0
   notify: "restart perun_apache"
 
 - name: "create apache_stapling.conf"
