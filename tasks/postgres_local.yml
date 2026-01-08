@@ -32,6 +32,15 @@
       - "postgresql-{{ perun_postgresql_version }}-repack"
       - postgresql-client-common
       - postgresql-common
+
+- name: "include additional postgres packages"
+  set_fact:
+    psql_packages: "{{ psql_packages + special_packages }}"
+  vars:
+    special_packages:
+      - "postgresql-{{ perun_postgresql_version }}-jit"
+  when: perun_postgresql_version | int >= 18
+
 - debug:
     var: psql_packages
 
