@@ -37,6 +37,10 @@
   service_facts:
   tags: always
 
+- name: "update apt cache"
+  apt:
+    update_cache: yes
+
 - name: "message-of-the-day setup"
   copy:
     src: "{{ lookup('ansible.builtin.first_found', params) }}"
