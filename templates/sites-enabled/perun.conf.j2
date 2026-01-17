@@ -76,6 +76,8 @@ ShibCompatValidUser on
   SSLVerifyDepth 5
   SSLVerifyClient optional
   SSLOptions +LegacyDNStringFormat
+  SSLCARevocationCheck chain
+  SSLCARevocationPath /etc/grid-security/certificates/
 {% endif %}
 
   # Increasing limits on HTTP headers. Connector packetSize in Tomcat must be set to bigger value than ProxyIOBufferSize here.
