@@ -594,6 +594,8 @@ perun_ldap_master_replica: no
 perun_ldap_accesslog_db: "{2}mdb"
 # set to "openldap" or "ds389"
 perun_ldap_implementation: openldap
+# default LDAP logging
+perun_ldap_log_level: "none"
 
 # LDAP 389DS
 perun_ldap_ds389_server_name: "{{ perun_instance_hostname }}"

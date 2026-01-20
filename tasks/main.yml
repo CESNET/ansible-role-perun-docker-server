@@ -222,6 +222,7 @@
     ldap_accesslog_db: "{{ perun_ldap_accesslog_db }}"
     ldap_users: "{{ perun_ldap_users }}"
     ldap_tls_cipher_suite: "{{ 'SECURE192:-VERS-ALL:+VERS-TLS1.2:+VERS-TLS1.3' if perun_use_certbot_certificates else 'SECURE128:+SECURE192:-VERS-ALL:+VERS-TLS1.2:+VERS-TLS1.3:-AES-256-CBC:-AES-192-CBC:-AES-128-CBC:-3DES-CBC:-DES-CBC' }}"
+    ldap_log_level: "{{ perun_ldap_log_level }}"
   tags:
     - perun_ldap
 
