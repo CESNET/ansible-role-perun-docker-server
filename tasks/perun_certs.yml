@@ -126,7 +126,7 @@
             path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
 
 - name: "check that cert and key belong together"
-  when: not perun_use_certbot_certificates
+  when: not perun_use_certbot_certificates and not perun_use_remote_certs
   block:
     - name: "install python prerequisites"
       apt:
@@ -172,40 +172,66 @@
 
 - name: "use issued certificates"
   when: not perun_use_certbot_certificates
+  vars:
+    # define paths to source certs (default locally in files/{{ perun_instance_hostname }})
+    perun_certs_hostcert_path: "{{ perun_instance_hostname }}/hostcert.pem"
+    perun_certs_hostkey_path: "{{ perun_instance_hostname }}/hostkey.pem"
+    perun_certs_hostchain_path: "{{ perun_instance_hostname }}/hostchain.pem"
   block:
-    - name: "set host key"
-      copy:
-        src: "{{ perun_instance_hostname }}/hostkey.pem"
-        dest: "{{ perun_certificate_key_file }}"
-        owner: root
-        group: ssl-cert
-        mode: 0640
-      notify:
-        - "restart perun_apache"
-        - "restart portainer"
-        - "restart ldap"
-        - "restart postgres"
+    - name: "assert that host cert paths are defined when remote certs are used"
+      when: perun_use_remote_certs
+      assert:
+        that:
+          - perun_remote_certs.host is defined
+          - perun_remote_certs.host.cert | length > 0
+          - perun_remote_certs.host.key | length > 0
+          - perun_remote_certs.host.chain | length > 0
+        fail_msg: "Remote certs paths are NOT defined for 'host' cert in 'perun_remote_certs'."
+        success_msg: "Remote certs paths are defined for 'host' cert in 'perun_remote_certs'."
+
+    - name: "re-set cert path if remote host cert is used"
+      when: perun_use_remote_certs
+      set_fact:
+        perun_certs_hostcert_path: "{{ perun_remote_certs.host.cert }}"
+        perun_certs_hostkey_path: "{{ perun_remote_certs.host.key }}"
+        perun_certs_hostchain_path: "{{ perun_remote_certs.host.chain }}"
 
     - name: "set host certificate"
       copy:
-        src: "{{ perun_instance_hostname }}/hostcert.pem"
+        src: "{{ perun_certs_hostcert_path }}"
         dest: "{{ perun_certificate_file}}"
         owner: root
         group: root
         mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
       register: certfile
       notify:
         - "restart perun_apache"
         - "restart ldap"
         - "restart postgres"
 
+    - name: "set host key"
+      copy:
+        src: "{{ perun_certs_hostkey_path }}"
+        dest: "{{ perun_certificate_key_file }}"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+        remote_src: "{{ perun_use_remote_certs }}"
+      notify:
+        - "restart perun_apache"
+        - "restart portainer"
+        - "restart ldap"
+        - "restart postgres"
+
     - name: "set host chain"
       copy:
-        src: "{{ perun_instance_hostname }}/hostchain.pem"
+        src: "{{ perun_certs_hostchain_path }}"
         dest: "{{ perun_certificate_chain_file }}"
         owner: root
         group: root
         mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
       notify:
         - "restart perun_apache"
         - "restart ldap"
@@ -251,19 +277,19 @@
       when: certfile.changed
       notify: "restart portainer"
 
-    - name: "set other keys"
+    - name: "assert that cert paths are defined when remote certs are used for 'other_certs'"
+      when: perun_use_remote_certs and lookup('vars', item.cond) and not lookup('vars', item.same)
       loop: "{{ other_certs }}"
       loop_control:
         label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond) and not lookup('vars', item.same)
-      copy:
-        src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}key.pem"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
-        owner: root
-        group: ssl-cert
-        mode: 0640
-      notify:
-        - "restart perun_apache"
+      assert:
+        that:
+          - item.prefix in perun_remote_certs
+          - perun_remote_certs[item.prefix].cert | length > 0
+          - perun_remote_certs[item.prefix].key | length > 0
+          - perun_remote_certs[item.prefix].chain | length > 0
+        fail_msg: "Remote certs paths are NOT defined for '{{ item.prefix }}' cert in 'perun_remote_certs'."
+        success_msg: "Remote certs paths are defined for '{{ item.prefix }}' cert in 'perun_remote_certs'."
 
     - name: "set other certificates"
       loop: "{{ other_certs }}"
@@ -271,11 +297,27 @@
         label: "{{ item.prefix }}"
       when: lookup('vars', item.cond) and not lookup('vars', item.same)
       copy:
-        src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}cert.pem"
+        src: "{{ (perun_remote_certs[item.prefix].cert if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'cert.pem'))) }}"
         dest: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
         owner: root
         group: root
         mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
+      notify:
+        - "restart perun_apache"
+
+    - name: "set other keys"
+      loop: "{{ other_certs }}"
+      loop_control:
+        label: "{{ item.prefix }}"
+      when: lookup('vars', item.cond) and not lookup('vars', item.same)
+      copy:
+        src: "{{ (perun_remote_certs[item.prefix].key if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'key.pem'))) }}"
+        dest: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+        remote_src: "{{ perun_use_remote_certs }}"
       notify:
         - "restart perun_apache"
 
@@ -285,11 +327,12 @@
         label: "{{ item.prefix }}"
       when: lookup('vars', item.cond) and not lookup('vars', item.same)
       copy:
-        src: "{{ perun_instance_hostname }}/{{ 'host' if lookup('vars', item.same) else item.prefix }}chain.pem"
+        src: "{{ (perun_remote_certs[item.prefix].chain if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'chain.pem'))) }}"
         dest: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
         owner: root
         group: root
         mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
       notify:
         - "restart perun_apache"
 
