@@ -67,9 +67,9 @@
     SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
     SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
 {% else %}
-    SSLCertificateFile /etc/perun/ssl/apicert.pem
-    SSLCertificateKeyFile /etc/perun/ssl/apikey.pem
-    SSLCertificateChainFile /etc/perun/ssl/apichain.pem
+    SSLCertificateFile /etc/perun/ssl/{{ perun_cert_prefix }}cert.pem
+    SSLCertificateKeyFile /etc/perun/ssl/{{ perun_cert_prefix }}key.pem
+    SSLCertificateChainFile /etc/perun/ssl/{{ perun_cert_prefix }}chain.pem
 {% endif %}
 
 

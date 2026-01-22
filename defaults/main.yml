@@ -674,6 +674,7 @@ perun_apache_igtf_certs: no
 perun_apache_cert_hostname_enabled: no
 perun_apache_cert_hostname: perun-cert.example.org
 perun_apache_cert_hostname_aliases: []
+perun_apache_cert_hostname_tls_cert_same_as_host: yes
 perun_apache_non_enabled: yes
 perun_apache_kerberos_enabled: no
 perun_apache_kerberos_realms:
@@ -839,6 +840,24 @@ other_certs:
     prefix: altapi
     same: perun_api_alternative_tls_cert_same_as_host
 
+  - cond: perun_api_cert_enabled
+    hostname: perun_api_cert_hostname
+    aliases: perun_api_cert_hostname_aliases
+    prefix: apicert
+    same: perun_api_cert_tls_cert_same_as_host
+
+  - cond: perun_api_cert_alternative_enabled
+    hostname: perun_api_cert_alternative_host
+    aliases: perun_api_cert_alternative_hostname_aliases
+    prefix: altapicert
+    same: perun_api_cert_alternative_tls_cert_same_as_host
+
+  - cond: perun_apache_cert_hostname_enabled
+    hostname: perun_apache_cert_hostname
+    aliases: perun_apache_cert_hostname_aliases
+    prefix: cert
+    same: perun_apache_cert_hostname_tls_cert_same_as_host
+
   - cond: perun_ngui_admin_enabled
     hostname: perun_ngui_admin_hostname
     aliases: perun_ngui_admin_hostname_aliases
@@ -860,7 +879,7 @@ other_certs:
   - cond: perun_ngui_publications_enabled
     hostname: perun_ngui_publications_hostname
     aliases: perun_ngui_publications_hostname_aliases
-    prefix: pubs
+    prefix: publications
     same: perun_ngui_publications_tls_cert_same_as_host
 
   - cond: perun_ngui_consolidator_enabled
