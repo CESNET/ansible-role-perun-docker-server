@@ -264,7 +264,7 @@
     # limit to max 60% of host memory, no swap
     # check with "docker exec -it perun_rpc jcmd 1 VM.flags" the value of -XX:MaxRAM
     # JVM then uses -XX:MaxRAMPercentage to compute -XX:MaxHeapSize
-    memory: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
+    memory: "{{ (ansible_facts['memtotal_mb'] * 0.6)|int }}M"
     #memory_swap: "{{ (ansible_memtotal_mb * 0.6)|int }}M"
     #memory_swappiness: 0
     image_name_mismatch: recreate
@@ -274,12 +274,12 @@
 
 - name: "remove old hostname"
   lineinfile:
-    dest: /etc/hosts
+    path: /etc/hosts
     regexp: 'perun_rpc'
     state: absent
 
 - name: "put container IP into /etc/hosts"
   lineinfile:
-    dest: /etc/hosts
+    path: /etc/hosts
     regexp: "{{ perun_rpc_container.container.Config.Hostname }}"
     line: "{{ perun_rpc_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_rpc_container.container.Config.Hostname }}"

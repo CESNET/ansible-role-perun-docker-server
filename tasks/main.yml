@@ -24,12 +24,12 @@
     quiet: true
   tags: always
 
-- name: "Debian version check ({{ ansible_distribution_major_version }})"
+- name: "Debian version check ({{ ansible_facts['distribution_major_version'] }})"
   assert:
     that:
-      - ansible_distribution == "Debian"
-      - ansible_distribution_major_version is version('11','>=')
-    fail_msg: "Required version is 11, this is {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+      - ansible_facts['distribution'] == "Debian"
+      - ansible_facts['distribution_major_version'] is version('11','>=')
+    fail_msg: "Required version is 11, this is {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }}"
     quiet: true
   tags: always
 
