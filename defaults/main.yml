@@ -30,8 +30,25 @@ perun_security_encryption: "https://csirt.cesnet.cz/publickey.asc"
 perun_security_policy: "https://csirt.cesnet.cz/en/vulnerability_report"
 perun_security_preferred_languages: "en, cs, sk"
 
-# whether to use Let's Encrypt (certbot) certificates
+# Whether to use Let's Encrypt (certbot) certificates (can be any ACME compatible service)
+# If "no" (default) then certificates in "files/{{ perun_instance_hostname }}/" are used
 perun_use_certbot_certificates: no
+# Enable when you want to use certificates already present on remote machine instead of certs from "files/{{ perun_instance_hostname }}/"
+perun_use_remote_certs: no
+# When "perun_use_remote_certs" is set to "yes", you must define paths to remote certs
+# You need to define at least "host" certs (if one cert is used for all hostnames).
+# See "prefix" values in "other_certs" variable for possible keys (like "api", "admin", "profile", "pwdreset", ....)
+perun_remote_certs: {}
+#perun_remote_certs:
+#  host:
+#    cert: /path_to_cert/hostcert.pem
+#    key: /path_to_cert/hostkey.pem
+#    chain: /path_to_cert/hostchain.pem
+#  api:
+#    cert: /path_to_cert/hostcert.pem
+#    key: /path_to_cert/hostkey.pem
+#    chain: /path_to_cert/hostchain.pem
+
 # alternative DNS names to include into certificate
 perun_certbot_alt_hostnames: []
 perun_certbot_account_options: "--register-unsafely-without-email"
