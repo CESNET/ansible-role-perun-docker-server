@@ -99,7 +99,6 @@ perun_rpc_user_deletion_forced: 'false'
 perun_rpc_force_consents: 'false'
 perun_rpc_defaultLoa_idp: "2"
 perun_rpc_recaptcha_privatekey: '6Lf0eUYUAAAAAIBxpRrA7UNrT7czQ28IoH9yiDBE'
-perun_rpc_mailchange_secretKey: "test"
 perun_rpc_mailchange_backupFrom: "{{ perun_email }}"
 perun_rpc_mailchange_replyTo: ""
 perun_rpc_mailchange_validationWindow: 24
