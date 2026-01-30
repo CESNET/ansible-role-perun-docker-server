@@ -39,6 +39,14 @@
         certbot_install_hooks: no
         certbot_account_options: "{{ perun_certbot_account_options }}"
 
+    - name: "temporary set preferred profile to 'tlsclient' to support client authentication until 13.5.2026"
+      ini_file:
+        path: /etc/letsencrypt/renewal/multi.conf
+        section: "renewalparams"
+        option: "preferred_profile"
+        value: "tlsclient"
+        state: "{{ 'present' if ansible_facts['date_time'].date < '2026-05-13' else 'absent' }}"
+
     - name: "create perun_prehook.sh"
       copy:
         dest: /etc/letsencrypt/renewal-hooks/pre/perun_prehook.sh

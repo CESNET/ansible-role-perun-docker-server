@@ -51,8 +51,9 @@ perun_remote_certs: {}
 
 # alternative DNS names to include into certificate
 perun_certbot_alt_hostnames: []
-perun_certbot_account_options: "--register-unsafely-without-email"
-
+# Support client authentication in server certs from LE by selecting "tlsclient" profile
+# FIXME / TODO - remove "--preferred-profile tlsclient" after 13.5.2026
+perun_certbot_account_options: "--register-unsafely-without-email --preferred-profile tlsclient"
 
 # perun dispatcher
 perun_dispatcher_enabled: yes
