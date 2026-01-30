@@ -62,8 +62,12 @@
           {% if perun_auditlogger_enabled %}
           docker stop perun_auditlogger
           {% endif %}
+          {% if perun_postgres_local %}
           systemctl restart postgresql
+          {% endif %}
+          {% if perun_ldap_local %}
           systemctl restart slapd
+          {% endif %}
           systemctl restart syslog-ng
           cp /etc/perun/ssl/hostcert.pem /etc/perun/engine/ssl/perun-send.pem
           cp /etc/perun/ssl/hostkey.pem /etc/perun/engine/ssl/perun-send.key
