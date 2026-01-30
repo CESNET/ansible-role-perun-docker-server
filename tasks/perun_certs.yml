@@ -7,6 +7,10 @@
     path: "{{ perun_certs_dir }}"
     state: directory
 
+#
+# Handle SERVER certificate using certbot
+#
+
 - name: "use certbot certificates"
   when: perun_use_certbot_certificates
   block:
@@ -76,10 +80,14 @@
           {% if perun_ldap_local %}
           systemctl restart slapd
           {% endif %}
+          {% if perun_client_tls_cert_same_as_host %}
           systemctl restart syslog-ng
-          cp /etc/perun/ssl/hostcert.pem /etc/perun/engine/ssl/perun-send.pem
-          cp /etc/perun/ssl/hostkey.pem /etc/perun/engine/ssl/perun-send.key
-          cp /etc/perun/ssl/hostchain.pem /etc/perun/engine/ssl/perun-send.chain
+          {% endif %}
+          {% if perun_client_tls_cert_same_as_host %}
+          cp /etc/perun/ssl/clientcert.pem /etc/perun/engine/ssl/perun-send.pem
+          cp /etc/perun/ssl/clientkey.pem /etc/perun/engine/ssl/perun-send.key
+          cp /etc/perun/ssl/clientchain.pem /etc/perun/engine/ssl/perun-send.chain
+          {% endif %}
           docker start perun_rpc
           {% if perun_engine_enabled %}
           docker start perun_engine
@@ -128,14 +136,16 @@
         force: yes
 
     - name: "clean old links"
-      block:
-        - name: "clean old keys links"
-          loop: "{{ ['api', 'altapi', 'apicert', 'altapicert', 'cert', 'admin', 'profile', 'pwdreset', 'publications', 'consolidator', 'linker'] | product(['key', 'cert', 'chain']) | list }}"
-          loop_control:
-            label: "{{ item[0] }}{{ item[1] }}.pem"
-          file:
-            state: absent
-            path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
+      loop: "{{ ['api', 'altapi', 'apicert', 'altapicert', 'cert', 'admin', 'profile', 'pwdreset', 'publications', 'consolidator', 'linker'] | product(['key', 'cert', 'chain']) | list }}"
+      loop_control:
+        label: "{{ item[0] }}{{ item[1] }}.pem"
+      file:
+        state: absent
+        path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
+
+#
+# Handle SERVER certificate using issued cert (in sites repo or remote host)
+#
 
 - name: "check that cert and key belong together"
   when: not perun_use_certbot_certificates and not perun_use_remote_certs
@@ -348,34 +358,138 @@
       notify:
         - "restart perun_apache"
 
-    - name: "clean unnecessary old links"
+    - name: "clean unnecessary old links for disabled apps or apps which use same cert as host"
       block:
-        - name: "clean old links to keys"
-          loop: "{{ other_certs }}"
-          loop_control:
-            label: "{{ item.prefix }}"
-          when: lookup('vars', item.cond) and lookup('vars', item.same)
-          file:
-            path: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
-            state: absent
-
         - name: "clean old links to certs"
           loop: "{{ other_certs }}"
           loop_control:
             label: "{{ item.prefix }}"
-          when: lookup('vars', item.cond) and lookup('vars', item.same)
+          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
           file:
             path: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
+            state: absent
+
+        - name: "clean old links to keys"
+          loop: "{{ other_certs }}"
+          loop_control:
+            label: "{{ item.prefix }}"
+          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
+          file:
+            path: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
             state: absent
 
         - name: "clean old links to chains"
           loop: "{{ other_certs }}"
           loop_control:
             label: "{{ item.prefix }}"
-          when: lookup('vars', item.cond) and lookup('vars', item.same)
+          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
           file:
             path: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
             state: absent
+
+#
+# Handle CLIENT certificate using issued cert (in sites repo or remote host)
+#
+
+- name: "detect whether client cert is link"
+  stat:
+    path: "{{ perun_client_cert_file }}"
+  register: cclnk
+- name: "detect whether client key is link"
+  stat:
+    path: "{{ perun_client_key_file }}"
+  register: cklnk
+- name: "detect whether client chain is link"
+  stat:
+    path: "{{ perun_client_chain_file }}"
+  register: cchlnk
+
+# we always remove client cert if it exists and there is difference between beeing symlink and using same cert as host
+- name: "unlink old {{ perun_client_cert_file }}"
+  file:
+    state: absent
+    path: "{{ perun_client_cert_file }}"
+  when: cclnk.stat.exists and (cclnk.stat.islnk != perun_client_tls_cert_same_as_host)
+- name: "unlink old {{ perun_client_cert_file }}"
+  file:
+    state: absent
+    path: "{{ perun_client_key_file }}"
+  when: cklnk.stat.exists and (cklnk.stat.islnk != perun_client_tls_cert_same_as_host)
+- name: "unlink old {{ perun_client_chain_file }}"
+  file:
+    state: absent
+    path: "{{ perun_client_chain_file }}"
+  when: cchlnk.stat.exists and (cchlnk.stat.islnk != perun_client_tls_cert_same_as_host)
+
+- name: "link host cert as client cert"
+  when: perun_client_tls_cert_same_as_host
+  file:
+    src: "/etc/perun/ssl/host{{ item }}.pem"
+    dest: "/etc/perun/ssl/client{{ item }}.pem"
+    state: link
+  loop:
+    - cert
+    - key
+    - chain
+
+- name: "use custom client certificate"
+  when: not perun_client_tls_cert_same_as_host
+  vars:
+    # define paths to source certs (default locally in files/{{ perun_instance_hostname }})
+    perun_certs_clientcert_path: "{{ perun_instance_hostname }}/clientcert.pem"
+    perun_certs_clientkey_path: "{{ perun_instance_hostname }}/clientkey.pem"
+    perun_certs_clientchain_path: "{{ perun_instance_hostname }}/clientchain.pem"
+  block:
+    - name: "assert that client cert paths are defined when remote certs are used"
+      when: perun_use_remote_certs
+      assert:
+        that:
+          - perun_remote_certs.client is defined
+          - perun_remote_certs.client.cert | length > 0
+          - perun_remote_certs.client.key | length > 0
+          - perun_remote_certs.client.chain | length > 0
+        fail_msg: "Remote certs paths are NOT defined for 'client' cert in 'perun_remote_certs'."
+        success_msg: "Remote certs paths are defined for 'client' cert in 'perun_remote_certs'."
+
+    - name: "re-set cert path if remote client cert is used"
+      when: perun_use_remote_certs
+      set_fact:
+        perun_certs_clientcert_path: "{{ perun_remote_certs.client.cert }}"
+        perun_certs_clientkey_path: "{{ perun_remote_certs.client.key }}"
+        perun_certs_clientchain_path: "{{ perun_remote_certs.client.chain }}"
+
+    - name: "set client certificate"
+      copy:
+        src: "{{ perun_certs_clientcert_path }}"
+        dest: "{{ perun_client_cert_file}}"
+        owner: root
+        group: root
+        mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
+      notify:
+        - "restart syslog-ng"
+
+    - name: "set client key"
+      copy:
+        src: "{{ perun_certs_clientkey_path }}"
+        dest: "{{ perun_client_key_file}}"
+        owner: root
+        group: ssl-cert
+        mode: 0640
+        remote_src: "{{ perun_use_remote_certs }}"
+      notify:
+        - "restart syslog-ng"
+
+    - name: "set client chain"
+      copy:
+        src: "{{ perun_certs_clientchain_path }}"
+        dest: "{{ perun_client_chain_file}}"
+        owner: root
+        group: root
+        mode: 0644
+        remote_src: "{{ perun_use_remote_certs }}"
+      notify:
+        - "restart syslog-ng"
 
 - name: "prereq for docker_container_info task"
   apt:

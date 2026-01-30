@@ -58,6 +58,12 @@
     state: restarted
   when: ansible_facts.services['postgresql'] is defined and ansible_facts.services['postgresql'].state=='running'
 
+- name: "restart syslog-ng"
+  service:
+    name: syslog-ng
+    state: restarted
+  when: ansible_facts.services['syslog-ng'] is defined and ansible_facts.services['syslog-ng'].state=='running'
+
 - name: "restart sshd"
   service:
     name: sshd

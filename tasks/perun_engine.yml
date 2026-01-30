@@ -220,18 +220,18 @@
         group: peruneng
         mode: '0550'
 
-    - name: "copy host certificates for generic_send"
+    - name: "copy certificates for generic_send"
       copy:
         remote_src: yes
-        src: "/etc/perun/ssl/{{ item.src }}"
+        src: "{{ item.src }}"
         dest: "/etc/perun/engine/ssl/{{ item.dest }}"
         owner: root
         group: peruneng
         mode: '0550'
       loop:
-        - { src: "hostkey.pem", dest: "perun-send.key" }
-        - { src: "hostcert.pem", dest: "perun-send.pem" }
-        - { src: "hostchain.pem", dest: "perun-send.chain" }
+        - { src: "{{ perun_client_cert_file }}", dest: "perun-send.pem" }
+        - { src: "{{ perun_client_key_file }}", dest: "perun-send.key" }
+        - { src: "{{ perun_client_chain_file }}", dest: "perun-send.chain" }
 
 - name: "detect local directory perun_engine_etc/"
   delegate_to: localhost

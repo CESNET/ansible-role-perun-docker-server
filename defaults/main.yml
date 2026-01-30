@@ -840,6 +840,11 @@ perun_certificate_file: "{{ perun_certs_dir }}/hostcert.pem"
 perun_certificate_key_file: "{{ perun_certs_dir }}/hostkey.pem"
 perun_certificate_chain_file: "{{ perun_certs_dir }}/hostchain.pem"
 perun_certificate_fullchain_file: "{{ perun_certs_dir }}/hostfullchain.pem"
+# certs and keys used for client authentication (by default we use same as host)
+perun_client_tls_cert_same_as_host: yes
+perun_client_cert_file: "{{ perun_certs_dir }}/clientcert.pem"
+perun_client_key_file: "{{ perun_certs_dir }}/clientkey.pem"
+perun_client_chain_file: "{{ perun_certs_dir }}/clientchain.pem"
 # directories to map to docker containers when certbot certs are used
 perun_certbot_mounts:
   - { type: bind, source: /etc/letsencrypt/live, target: /etc/letsencrypt/live, read_only: yes }
