@@ -37,11 +37,24 @@
     Require all granted
   </Directory>
 
+{% if perun_apache_enable_robots_config %}
+  Alias /ai.txt /etc/perun/apache/robots/ai.txt
+  Alias /robots.txt /etc/perun/apache/robots/robots.txt
+  <Directory /etc/perun/apache/robots/>
+    Options -Indexes -FollowSymLinks -MultiViews
+    Require all granted
+  </Directory>
+{% endif %}
+
   RewriteEngine On
 
   # If an existing asset or directory is requested go to it as it is
   RewriteCond "%{REQUEST_URI}" "^/img" [OR]
   RewriteCond "%{REQUEST_URI}" "^/.well-known" [OR]
+{% if perun_apache_enable_robots_config %}
+  RewriteCond "%{REQUEST_URI}" "^/robots.txt" [OR]
+  RewriteCond "%{REQUEST_URI}" "^/ai.txt" [OR]
+{% endif %}
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
   RewriteRule ^ - [L]

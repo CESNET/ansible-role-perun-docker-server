@@ -665,6 +665,8 @@ perun_apache_default_profile_enabled: no
 perun_apache_csrf_protection_enabled: no
 # enables /wayf/ path on the server and copy wayf config files
 perun_apache_enable_wayf_config: no
+# enables deployment robots.txt and ai.txt (defaults in a role, you can put custom in /files/{{ invetory_hostname }}/
+perun_apache_enable_robots_config: yes
 
 # passwords for basic authentication, expected to be redefined in an encrypted vault
 perun_apache_basicAuth_user_perun_password: "test"

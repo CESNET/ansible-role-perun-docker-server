@@ -32,6 +32,15 @@
         Require all granted
     </Directory>
 
+{% if perun_apache_enable_robots_config %}
+    Alias /ai.txt /etc/perun/apache/robots/ai.txt
+    Alias /robots.txt /etc/perun/apache/robots/robots.txt
+    <Directory /etc/perun/apache/robots/>
+      Options -Indexes -FollowSymLinks -MultiViews
+      Require all granted
+    </Directory>
+{% endif %}
+
     # GENERIC ERRORS (RFC 7807 JSON format)
     ErrorDocument 401 /maintenance/401.json
     ErrorDocument 403 /maintenance/403.json
