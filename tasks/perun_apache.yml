@@ -92,6 +92,37 @@
     src: security.txt.j2
     dest: /etc/perun/apache/well-known/security.txt
 
+- name: "create dir /etc/perun/apache/robots"
+  file:
+    state: directory
+    path: /etc/perun/apache/robots
+    mode: '0755'
+
+- name: "create robots.txt and ai.txt"
+  when: perun_apache_enable_robots_config
+  ansible.builtin.copy:
+    src: "{{ lookup('ansible.builtin.first_found', priority_files) }}"
+    dest: "/etc/perun/apache/robots/{{ item }}"
+    mode: '0644'
+  vars:
+    priority_files:
+      - "files/{{ perun_instance_hostname }}/{{ item }}"
+      - "files/{{ item }}"
+  loop:
+    - robots.txt
+    - ai.txt
+  notify: "restart perun_apache"
+
+- name: "remove robots.txt and ai.txt"
+  when: not perun_apache_enable_robots_config
+  file:
+    path: "/etc/perun/apache/robots/{{ item }}"
+    state: absent
+  loop:
+    - robots.txt
+    - ai.txt
+  notify: "restart perun_apache"
+
 # docs at https://perunaai.atlassian.net/wiki/spaces/STRIBOG/pages/3440714/Configuration+of+new+GUI+applications
 - name: "generate /etc/perun/apache/instanceConfig.json"
   when: perun_ngui_admin_enabled
