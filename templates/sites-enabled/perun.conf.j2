@@ -226,6 +226,7 @@ ShibCompatValidUser on
   RewriteRule ^/pwd-reset[/]?$ https://{{ perun_ngui_pwdreset_hostname }} [QSA,L,R=301]
   RewriteRule ^/(.*)/pwd-reset(.*)$ https://{{ perun_ngui_pwdreset_hostname }} [QSA,L,R=301]
 {% else %}
+  RewriteRule ^/pwd-reset[/]?$ https://%{HTTP_HOST}/{{ perun_apache_pwdreset_default_auth }}/pwd-reset/ [L,R=301]
   RewriteRule ^/(.*)/pwd-reset$ https://%{HTTP_HOST}/$1/pwd-reset/ [L,R=301]
   RewriteRule ^/(.*)/pwd-reset/$ /var/www/perun-wui/PerunPwdReset{{ perun_apache_pwdreset_html_suffix }}.html [L]
   RewriteRule ^/(.*)/pwd-reset/(.+)$ /var/www/perun-wui/$2 [L]
