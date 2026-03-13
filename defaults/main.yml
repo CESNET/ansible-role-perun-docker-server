@@ -58,6 +58,7 @@ perun_certbot_account_options: "--register-unsafely-without-email --preferred-pr
 # perun dispatcher
 perun_dispatcher_enabled: yes
 perun_dispatcher_reschedule_interval: 48
+perun_dispatcher_host: perun-rpc
 
 # host-to-IP mappings to be added to /etc/hosts in each container
 perun_containers_etc_hosts: {}

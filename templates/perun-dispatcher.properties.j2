@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 # Set where Dispatcher JMS is present
-dispatcher.ip.address=perun-rpc
+dispatcher.ip.address={{ perun_dispatcher_host }}
 dispatcher.port=6071
 dispatcher.enabled={{ perun_dispatcher_enabled|bool|to_json }}
 
