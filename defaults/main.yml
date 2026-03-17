@@ -789,6 +789,7 @@ perun_root_email_address: makub@ics.muni.cz
 perun_postgresql_settings:
   max_connections: 200
   max_pred_locks_per_transaction: 128
+  ssl_min_protocol_version: 'TLSv1.3'
 
 # sendmail directives to be added to sendmail.mc
 perun_sendmail_config: ""
