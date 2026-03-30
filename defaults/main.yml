@@ -987,6 +987,9 @@ perun_ldap_users:
     password: "{{ perun_ldap_proxy_password }}"
     description: "user for IdP Proxy"
 
+# Require TLS 1.3 (works only on Debian 13 hosts)
+perun_ldap_tls_1_3_require: yes
+
 # variable "log_disk" is determined from /var/log volume by perun_journald.yml tasks before setting this template
 perun_journald_config: |
   # see "man 5 journald.conf" for documentation of these directives
