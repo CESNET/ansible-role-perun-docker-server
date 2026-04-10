@@ -373,7 +373,6 @@
   import_tasks: perun_syslog_containers.yml
   tags: perun_syslog
 
-
 - name: "site-specific tasks after perun config"
   when: perun_site_specific_tasks_after is defined
   include_tasks:
