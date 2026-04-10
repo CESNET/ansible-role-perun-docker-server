@@ -7,6 +7,22 @@
     group: perun
     mode: '0440'
 
+- name: "create /etc/perun/perun-cli-python-env"
+  template:
+    src: perun-cli-python-env.j2
+    dest: /etc/perun/perun-cli-python-env
+    owner: perun
+    group: perun
+    mode: '0440'
+
+- name: "create /etc/perun/perun-cli-python-instances.json"
+  template:
+    src: perun-cli-python-instances.j2
+    dest: /etc/perun/perun-cli-python-instances.json
+    owner: perun
+    group: perun
+    mode: '0440'
+
 - name: "create /usr/local/bin/perun-cli"
   copy:
     dest: /usr/local/bin/perun-cli
@@ -43,12 +59,52 @@
         --env-file /etc/perun/perun-cli-env --entrypoint="" ${PERUN_DOCKER_OPTS} \
         {{ perun_container_registry }}/perun_cli_perl:{{ perun_cli_container_version }} "$@"
 
+- name: "create /usr/local/bin/perun-cli-python"
+  copy:
+    dest: /usr/local/bin/perun-cli-python
+    owner: perun
+    group: perun
+    mode: '0550'
+    content: |
+      #!/bin/bash
+      # runs an interactive container with current working dir and all arguments are passed to "bash -c " as a single long string
+      if [[ -z $* ]] ; then ARGS="bash" ; else ARGS="$*" ; fi
+      docker run -it --rm --name cli_python_$$ --hostname cli_python_$$ \
+        --network host \
+        --volume /home/perun:/home/perun \
+        --mount type=bind,source=/etc/perun/perun-cli-python-instances.json,target=/opt/perun-cli/instances.json \
+      {% for host, ip in perun_containers_etc_hosts.items() %}
+        --add-host {{ host }}:{{ ip }} \
+      {% endfor %}
+        --env-file /etc/perun/perun-cli-python-env -w $PWD ${PERUN_DOCKER_OPTS} \
+        {{ perun_container_registry }}/perun_cli_python:{{ perun_cli_python_container_version }} "$ARGS"
+
+- name: "create /usr/local/bin/perun-script-cli-python for scripts"
+  copy:
+    dest: /usr/local/bin/perun-script-cli-python
+    owner: perun
+    group: perun
+    mode: '0550'
+    content: |
+      #!/bin/bash
+      # runs non-interactive container with working dir /home/perun and arguments are passed as an array to exec
+      docker run --rm --name script_cli_python_$$ --volume /home/perun:/home/perun \
+        --network host \
+        --mount type=bind,source=/etc/perun/perun-cli-python-instances.json,target=/opt/perun-cli/instances.json \
+      {% for host, ip in perun_containers_etc_hosts.items() %}
+        --add-host {{ host }}:{{ ip }} \
+      {% endfor %}
+        --env-file /etc/perun/perun-cli-python-env --entrypoint="" ${PERUN_DOCKER_OPTS} \
+        {{ perun_container_registry }}/perun_cli_python:{{ perun_cli_python_container_version }} "$@"
+
 - name: "prune unused docker images other than CLI"
   docker_prune:
     images: yes
     images_filters:
       dangling: false
-      label!: org.perun-aai.cli
+      label!:
+        - org.perun-aai.cli
+        - org.perun-aai.cli-python
   register: pruned
 
 - name: "pruned"
@@ -61,7 +117,13 @@
     source: pull
     force_source: true
     state: present
-  register: perun_cli_image
+
+- name: "preload image for perun_cli_python"
+  docker_image:
+    name: "{{ perun_container_registry }}/perun_cli_python:{{ perun_cli_python_container_version }}"
+    source: pull
+    force_source: true
+    state: present
 
 - name: "find old CLI images"
   command:
@@ -76,7 +138,25 @@
   register: oldcliimages
   changed_when: oldcliimages.stdout_lines | length > 0
 
+- name: "find old CLI python images"
+  command:
+    argv:
+      - "docker"
+      - "images"
+      - "-q"
+      - "--filter"
+      - "before={{ perun_container_registry }}/perun_cli_python:{{ perun_cli_python_container_version }}"
+      - "--filter"
+      - "label=org.perun-aai.cli-python"
+  register: oldclipythonimages
+  changed_when: oldclipythonimages.stdout_lines | length > 0
+
 - name: "prune old CLI images"
   when: oldcliimages.stdout_lines | length > 0
   command:
     argv: "{{ [ 'docker', 'rmi' ] + oldcliimages.stdout_lines }}"
+
+- name: "prune old CLI python images"
+  when: oldclipythonimages.stdout_lines | length > 0
+  command:
+    argv: "{{ [ 'docker', 'rmi' ] + oldclipythonimages.stdout_lines }}"

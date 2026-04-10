@@ -15,6 +15,7 @@ perun_apache_container_version: latest
 perun_ldapc_container_version: "{{ perun_rpc_container_version }}"
 perun_auditlogger_container_version: "{{ perun_rpc_container_version }}"
 perun_cli_container_version: "{{ perun_rpc_container_version }}"
+perun_cli_python_container_version: latest
 
 # used only for first database initialization
 perun_rpc_git_version: "{{ perun_rpc_container_version }}"
