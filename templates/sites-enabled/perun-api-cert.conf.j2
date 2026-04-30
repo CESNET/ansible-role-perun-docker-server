@@ -73,6 +73,8 @@
     SSLVerifyDepth 5
     SSLVerifyClient optional
     SSLOptions +LegacyDNStringFormat
+	SSLCARevocationCheck chain
+	SSLCARevocationPath /etc/grid-security/certificates/
 
     LogLevel warn ssl:warn rewrite:warn
 
