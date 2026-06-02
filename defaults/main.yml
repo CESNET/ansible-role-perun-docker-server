@@ -88,6 +88,8 @@ perun_rpc_dont_lookup_users:
   - perunRpc
   - perunSynchronizer
 perun_rpc_additional_dont_lookup_users: []
+perun_rpc_new_registrar_api_url: ""
+perun_rpc_new_registrar_api_secret: ""
 perun_rpc_rt_url: ""
 perun_rpc_rt_defaultQueue: ""
 perun_rpc_rt_serviceuser_username: ""

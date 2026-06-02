@@ -8,6 +8,9 @@ perun.engine.principals = {{ perun_rpc_engine_principals|join(', ') }}
 
 # Principals for the Registrar
 perun.registrar.principals =
+# Settings for new registrar (when perun calls new registrar API)
+perun.registrar.apiUrl={{ perun_rpc_new_registrar_api_url }}
+perun.registrar.apiSecret={{ perun_rpc_new_registrar_api_secret }}
 
 # Principals for the Notificator
 perun.notification.principals = perunNotifications
