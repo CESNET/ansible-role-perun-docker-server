@@ -181,6 +181,10 @@ perun_rpc_app_allowed_roles: []
 
 perun_namespaces_properties: ""
 
+# Support using template for "perun-extSources.xml" in RPC config (default is no, default path to files of each instance)
+perun_use_template_for_extsources_xml: no
+perun_extsources_xml_template_path: "files/{{ perun_instance_hostname }}/perun-extSources.xml.j2"
+
 # old GUI
 perun_oldgui_defaultRtQueue: "perun"
 perun_oldgui_getAttributesListForMemberTables:
