@@ -103,7 +103,8 @@
     mode: '0440'
   notify: "restart perun_rpc"
 
-- name: "create perun-extSources.xml"
+- name: "create perun-extSources.xml from file"
+  when: not perun_use_template_for_extsources_xml
   copy:
     src: "{{ lookup('first_found', params) }}"
     dest: "/etc/perun/rpc/perun-extSources.xml"
@@ -117,6 +118,16 @@
       paths:
         - "files/{{ perun_instance_hostname }}"
         - "files"
+  notify: "restart perun_rpc"
+
+- name: "create perun-extSources.xml from template"
+  when: perun_use_template_for_extsources_xml
+  template:
+    src: "{{ perun_extsources_xml_template_path }}"
+    dest: "/etc/perun/rpc/perun-extSources.xml"
+    owner: root
+    group: perunrpc
+    mode: '0440'
   notify: "restart perun_rpc"
 
 - name: "create login-namespaces-rules-config.yml"
