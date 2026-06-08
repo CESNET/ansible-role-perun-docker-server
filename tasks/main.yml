@@ -1,5 +1,5 @@
 ---
-- name: "Ansible core version check ({{ ansible_version.full }})"
+- name: "Ansible core version check ({{ ansible_version.full }} >= 2.19)"
   assert:
     that:
       - ansible_version is defined
@@ -8,7 +8,7 @@
     quiet: true
   tags: always
 
-- name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }})"
+- name: "Collection community.general version check ({{ lookup('community.general.collection_version', 'community.general') }} >= 8.6.2)"
   assert:
     that:
       - lookup('community.general.collection_version', 'community.general') is version('8.6.2','>=')
@@ -16,7 +16,7 @@
     quiet: true
   tags: always
 
-- name: "Collection community.docker version check ({{ lookup('community.general.collection_version', 'community.docker') }})"
+- name: "Collection community.docker version check ({{ lookup('community.general.collection_version', 'community.docker') }} >= 3.10.4)"
   assert:
     that:
       - lookup('community.general.collection_version', 'community.docker') is version('3.10.4','>=')
@@ -24,7 +24,7 @@
     quiet: true
   tags: always
 
-- name: "Debian version check ({{ ansible_facts['distribution_major_version'] }})"
+- name: "Debian version check ({{ ansible_facts['distribution_major_version'] }} >= 11)"
   assert:
     that:
       - ansible_facts['distribution'] == "Debian"
@@ -289,7 +289,7 @@
     - name: "execute group-specific tasks"
       loop: "{{ group_specific_tasks_before.results }}"
       loop_control:
-        label: "{{ item.invocation.module_args.path }}"
+        label: "{{ item.item }}"
       when: item.stat.exists
       include_tasks:
         file: "{{ item.stat.path }}"

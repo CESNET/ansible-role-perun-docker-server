@@ -12,11 +12,22 @@
     dest: /etc/apt/keyrings/pgdg.asc
     force: false
 
-- name: "add PGDG repository"
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/pgdg.asc] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_facts['distribution_release'] }}-pgdg main"
-    filename: "pgdg"
+- name: "add PGDG repository as deb822-format pgdg.sources"
+  ansible.builtin.deb822_repository:
+    name: pgdg
+    types: deb
+    architectures: amd64
+    uris: http://apt.postgresql.org/pub/repos/apt/
+    suites: "{{ ansible_facts['distribution_release'] }}-pgdg"
+    components: [ "main" ]
+    signed_by: /etc/apt/keyrings/pgdg.asc
     state: present
+  register: postgres_repo
+
+- name: "update apt cache"
+  ansible.builtin.apt:
+    update_cache: yes
+  when: postgres_repo.changed
 
 - name: "install packages for Postgres client {{ perun_postgresql_version }}"
   package:
@@ -31,11 +42,11 @@
     state: present
 
 - name: "create group postgres to keep things compatible"
-  group:
+  ansible.builtin.group:
     name: postgres
 
 - name: "create user postgres to keep things compatible"
-  user:
+  ansible.builtin.user:
     name: postgres
     group: postgres
     comment: "user for postgres client"
@@ -87,7 +98,7 @@
 
 - name: "set shell variables for PostgreSQL connection for unix user postgres"
   blockinfile:
-    dest: /var/lib/postgresql/.bashrc
+    path: /var/lib/postgresql/.bashrc
     block: |
       # service is defined in /etc/postgresql-common/pg_service.conf
       export PGSERVICE=postgres
@@ -122,7 +133,7 @@
         force: no
     - name: "set shell variables for PostgreSQL connection for unix user perun"
       blockinfile:
-        dest: /home/perun/.bashrc
+        path: /home/perun/.bashrc
         block: |
           # service is defined in /etc/postgresql-common/pg_service.conf
           export PGSERVICE=perun
