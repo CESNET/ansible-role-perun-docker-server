@@ -3,6 +3,10 @@
     name: perun_rpc
   register: perun_rpc_container
 
+- name: "set perun_rpc_container_hostname variable for templates"
+  set_fact:
+    perun_rpc_container_hostname: "{{ perun_rpc_container.container.Config.Hostname }}"
+
 - name: "create /etc/perun/apache/sites-enabled directory"
   file:
     path: /etc/perun/apache/sites-enabled
