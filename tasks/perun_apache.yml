@@ -181,8 +181,6 @@
     owner: root
     group: root
     mode: '0400'
-  vars:
-    perun_cert_prefix: cert
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-admin.conf"
@@ -203,8 +201,6 @@
     owner: root
     group: root
     mode: '0400'
-  vars:
-    perun_cert_prefix: api
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-api-alt.conf"
@@ -218,11 +214,9 @@
   vars:
     perun_api_hostname: "{{ perun_api_alternative_hostname }}"
     perun_api_hostname_aliases: "{{ perun_api_alternative_hostname_aliases }}"
-    perun_api_tls_cert_same_as_host: "{{ perun_api_alternative_tls_cert_same_as_host }}"
     perun_apache_oauth_introspection_url: "{{ perun_apache_oauth_alternative_introspection_url }}"
     perun_apache_oauth_client_id: "{{ perun_apache_oauth_alternative_client_id }}"
     perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative_client_secret }}"
-    perun_cert_prefix: altapi
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-api-cert.conf"
@@ -233,8 +227,6 @@
     owner: root
     group: root
     mode: '0400'
-  vars:
-    perun_cert_prefix: apicert
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf"
@@ -248,8 +240,6 @@
   vars:
     perun_api_cert_hostname: "{{ perun_api_cert_alternative_hostname }}"
     perun_api_cert_hostname_aliases: "{{ perun_api_cert_alternative_hostname_aliases }}"
-    perun_api_cert_tls_cert_same_as_host: "{{ perun_api_cert_alternative_tls_cert_same_as_host }}"
-    perun_cert_prefix: altapicert
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"

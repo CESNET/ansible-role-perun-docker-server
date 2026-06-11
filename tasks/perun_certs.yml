@@ -18,7 +18,7 @@
       loop: "{{ other_certs }}"
       loop_control:
         loop_var: cert_item
-        label: "{{ cert_item.prefix }}"
+        label: "{{ cert_item.hostname }}"
       when: lookup('vars', cert_item.cond)
       set_fact:
         perun_certbot_alt_hostnames: "{{ perun_certbot_alt_hostnames + [ lookup('vars', cert_item.hostname) ] + lookup('vars', cert_item.aliases) }}"
@@ -134,14 +134,6 @@
         src: "/etc/letsencrypt/live/multi/fullchain.pem"
         dest: "{{ perun_certificate_fullchain_file }}"
         force: yes
-
-    - name: "clean old links"
-      loop: "{{ ['api', 'altapi', 'apicert', 'altapicert', 'cert', 'admin', 'profile', 'pwdreset', 'publications', 'consolidator', 'linker'] | product(['key', 'cert', 'chain']) | list }}"
-      loop_control:
-        label: "{{ item[0] }}{{ item[1] }}.pem"
-      file:
-        state: absent
-        path: "{{ perun_certs_dir }}/{{ item[0] }}{{ item[1] }}.pem"
 
 #
 # Handle SERVER certificate using issued cert (in sites repo or remote host)
@@ -298,94 +290,6 @@
           >{{ perun_certificate_fullchain_file }}
       when: certfile.changed
       notify: "restart portainer"
-
-    - name: "assert that cert paths are defined when remote certs are used for 'other_certs'"
-      when: perun_use_remote_certs and lookup('vars', item.cond) and not lookup('vars', item.same)
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      assert:
-        that:
-          - item.prefix in perun_remote_certs
-          - perun_remote_certs[item.prefix].cert | length > 0
-          - perun_remote_certs[item.prefix].key | length > 0
-          - perun_remote_certs[item.prefix].chain | length > 0
-        fail_msg: "Remote certs paths are NOT defined for '{{ item.prefix }}' cert in 'perun_remote_certs'."
-        success_msg: "Remote certs paths are defined for '{{ item.prefix }}' cert in 'perun_remote_certs'."
-
-    - name: "set other certificates"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond) and not lookup('vars', item.same)
-      copy:
-        src: "{{ (perun_remote_certs[item.prefix].cert if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'cert.pem'))) }}"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
-        owner: root
-        group: root
-        mode: 0644
-        remote_src: "{{ perun_use_remote_certs }}"
-      notify:
-        - "restart perun_apache"
-
-    - name: "set other keys"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond) and not lookup('vars', item.same)
-      copy:
-        src: "{{ (perun_remote_certs[item.prefix].key if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'key.pem'))) }}"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
-        owner: root
-        group: ssl-cert
-        mode: 0640
-        remote_src: "{{ perun_use_remote_certs }}"
-      notify:
-        - "restart perun_apache"
-
-    - name: "set other chains"
-      loop: "{{ other_certs }}"
-      loop_control:
-        label: "{{ item.prefix }}"
-      when: lookup('vars', item.cond) and not lookup('vars', item.same)
-      copy:
-        src: "{{ (perun_remote_certs[item.prefix].chain if perun_use_remote_certs and item.prefix in perun_remote_certs else (perun_instance_hostname ~ '/' ~ ('host' if lookup('vars', item.same) else item.prefix ~ 'chain.pem'))) }}"
-        dest: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
-        owner: root
-        group: root
-        mode: 0644
-        remote_src: "{{ perun_use_remote_certs }}"
-      notify:
-        - "restart perun_apache"
-
-    - name: "clean unnecessary old links for disabled apps or apps which use same cert as host"
-      block:
-        - name: "clean old links to certs"
-          loop: "{{ other_certs }}"
-          loop_control:
-            label: "{{ item.prefix }}"
-          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
-          file:
-            path: "{{ perun_certs_dir }}/{{ item.prefix }}cert.pem"
-            state: absent
-
-        - name: "clean old links to keys"
-          loop: "{{ other_certs }}"
-          loop_control:
-            label: "{{ item.prefix }}"
-          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
-          file:
-            path: "{{ perun_certs_dir }}/{{ item.prefix }}key.pem"
-            state: absent
-
-        - name: "clean old links to chains"
-          loop: "{{ other_certs }}"
-          loop_control:
-            label: "{{ item.prefix }}"
-          when: not lookup('vars', item.cond) or (lookup('vars', item.cond) and lookup('vars', item.same))
-          file:
-            path: "{{ perun_certs_dir }}/{{ item.prefix }}chain.pem"
-            state: absent
 
 #
 # Handle CLIENT certificate using issued cert (in sites repo or remote host)
