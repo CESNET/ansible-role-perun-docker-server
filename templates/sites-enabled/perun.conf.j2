@@ -73,10 +73,8 @@ ShibCompatValidUser on
   #### SSL
 
   SSLEngine on
-
-  SSLCertificateFile /etc/perun/ssl/hostcert.pem
+  SSLCertificateFile /etc/perun/ssl/hostfullchain.pem
   SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
-  SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
 
 {% if perun_apache_igtf_certs and not perun_apache_cert_hostname_enabled %}
   # SSL client certificates authentication

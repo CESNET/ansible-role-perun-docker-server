@@ -68,19 +68,8 @@
     ProxyIOBufferSize 65536
 
     SSLEngine on
-{% if perun_use_certbot_certificates %}
-    SSLCertificateFile /etc/letsencrypt/live/multi/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/multi/privkey.pem
-{% elif perun_api_tls_cert_same_as_host %}
-    SSLCertificateFile /etc/perun/ssl/hostcert.pem
+    SSLCertificateFile /etc/perun/ssl/hostfullchain.pem
     SSLCertificateKeyFile /etc/perun/ssl/hostkey.pem
-    SSLCertificateChainFile /etc/perun/ssl/hostchain.pem
-{% else %}
-    SSLCertificateFile /etc/perun/ssl/{{ perun_cert_prefix }}cert.pem
-    SSLCertificateKeyFile /etc/perun/ssl/{{ perun_cert_prefix }}key.pem
-    SSLCertificateChainFile /etc/perun/ssl/{{ perun_cert_prefix }}chain.pem
-{% endif %}
-
 
     # SSL client certificates authentication
     SSLCACertificatePath /etc/grid-security/certificates/
