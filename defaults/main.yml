@@ -973,6 +973,6 @@ perun_journald_config: |
   # keep free at least 20% of disk
   SystemKeepFree={{ (log_disk.size_total * 0.2 / 1073741824) | int }}G
   # controls how large individual journal files in /var/log/journal may grow at most
-  SystemMaxFileSize=1G
-  # controls how many individual journal files to keep at most
-  SystemMaxFiles={{ (log_disk.size_total * 0.3 / 1073741824) | int }}
+  SystemMaxFileSize=100M
+  # Do not limit number of files (default 100), prefer keeping logest history based on SystemMaxUser and SystemKeepFree
+  SystemMaxFiles=0
