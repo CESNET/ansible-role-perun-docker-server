@@ -201,7 +201,31 @@
     msmtp_listen_interface: 0.0.0.0
     msmtp_config: "{{ perun_msmtp_config }}"
 
-- name: "OpenLDAP directory server installation"
+- name: "Postfix MTA setup (forwarding emails to a SMTP relay)"
+  when: perun_smtp_use_postfix
+  include_role:
+    name: cesnet.postfix
+    apply: { tags: [ 'postfix'] }
+  tags: [ 'postfix']
+  vars:
+    postfix_myhostname: "{{ perun_postfix_myhostname }}"
+    postfix_mydomain: "{{ perun_postfix_mydomain }}"
+    postfix_myorigin: "{{ perun_postfix_myorigin }}"
+    postfix_relayhost: "{{ perun_postfix_relayhost }}"
+    postfix_use_certs: "{{ perun_postfix_use_certs }}"
+    postfix_use_login: "{{ perun_postfix_use_login }}"
+    postfix_smtp_tls_cert_file: "{{ perun_postfix_smtp_tls_cert_file }}"
+    postfix_smtp_tls_key_file: "{{ perun_postfix_smtp_tls_key_file}}"
+    postfix_smtp_tls_security_level: "{{ perun_postfix_smtp_tls_security_level }}"
+    postfix_smtp_username: "{{ perun_postfix_smtp_username }}"
+    postfix_smtp_password: "{{ perun_postfix_smtp_password }}"
+    postfix_canonical_email:  "{{ perun_postfix_canonical_email }}"
+    postfix_generic_email: "{{ perun_postfix_generic_email }}"
+    postfix_for_docker_bridge_network_name: "{{ docker_local_network_name }}"
+    postfix_sasl_passwd: "{{ perun_postfix_sasl_passwd }}"
+    postfix_testing_email: "{{ perun_postfix_testing_email }}"
+
+- name: "OpenLDAP directory server installation" 
   include_role:
     name: cesnet.openldap
     apply:

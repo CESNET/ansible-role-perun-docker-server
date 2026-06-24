@@ -976,3 +976,21 @@ perun_journald_config: |
   SystemMaxFileSize=1G
   # controls how many individual journal files to keep at most
   SystemMaxFiles={{ (log_disk.size_total * 0.3 / 1073741824) | int }}
+
+# switch to Postfix - must by after the certs are defined
+perun_smtp_use_postfix: no
+perun_postfix_myhostname: "{{ perun_instance_hostname }}"
+perun_postfix_mydomain: "{{ perun_postfix_myhostname }}"
+perun_postfix_myorigin: "{{ perun_postfix_mydomain }}"
+perun_postfix_relayhost: "[{{ perun_smtp_relay }}]:{{ perun_smtp_relay_port }}"
+perun_postfix_use_certs: false
+perun_postfix_use_login: true
+perun_postfix_smtp_tls_cert_file: "{{ perun_certs_dir }}/hostcert.pem"
+perun_postfix_smtp_tls_key_file: "{{ perun_certs_dir }}/hostkey.pem"
+perun_postfix_smtp_tls_security_level: "encrypt"
+perun_postfix_smtp_username: "test"
+perun_postfix_smtp_password: "test"
+perun_postfix_canonical_email: "{{ perun_email }}"
+perun_postfix_generic_email: "{{ perun_email }}"
+perun_postfix_sasl_passwd: "{{ perun_postfix_relayhost }} {{ perun_postfix_smtp_username }}:{{ perun_postfix_smtp_password }}"
+perun_postfix_testing_email: "{{ perun_email }}"
