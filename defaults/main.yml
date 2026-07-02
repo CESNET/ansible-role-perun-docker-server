@@ -344,6 +344,7 @@ perun_ngui_admin_other_apps:
 perun_ngui_admin_other_apps_custom:
 # set to "yes" and configure "globalSearch_String_policy" policy on backend to display global search to proper roles
 perun_ngui_admin_display_search: no
+perun_ngui_admin_new_registrar_api_url: "{{ perun_rpc_new_registrar_api_url }}"
 
 #new GUI Profile
 perun_ngui_profile_enabled: no
