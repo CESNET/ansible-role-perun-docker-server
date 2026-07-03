@@ -99,10 +99,7 @@
     name: cesnet.docker
   vars:
     docker_packages_hold: true
-    docker_registries:
-      - url: gitlab-registry.cesnet.cz
-        username: gitlab-deploy-token-712
-        password: gldt-TcDbEs8Yj-cX4KPmM1Wq
+    docker_registries: []
     docker_local_network_name: perun_net
     docker_portainer_install: true
     docker_portainer_version: "{{ perun_portainer_version }}"

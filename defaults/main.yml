@@ -838,7 +838,7 @@ perun_postgresql_version: 17
 perun_portainer_version: latest
 
 # prefix for containers
-perun_container_registry: "gitlab-registry.cesnet.cz/712/deployment/idm/perun_idm_docker"
+perun_container_registry: "hub.cerit.io/perunidm"
 
 # directory with SSL/TLS certificates and keys
 perun_certs_dir: "/etc/perun/ssl"
