@@ -10,6 +10,9 @@
 {% for alias in perun_ngui_pwdreset_hostname_aliases %}
   ServerAlias {{ alias }}
 {% endfor %}
+
+  IncludeOptional /etc/perun/apache/acme.conf
+
   Redirect / https://{{ perun_ngui_pwdreset_hostname }}/
 </VirtualHost>
 
