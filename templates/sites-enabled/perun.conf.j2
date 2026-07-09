@@ -9,10 +9,10 @@ ServerName {{ perun_rpc_hostname }}
 {% for item in perun_rpc_hostname_aliases %}
   ServerAlias {{ item }}
 {% endfor %}
-  RewriteEngine On
-  RewriteCond %{HTTPS} !=on
-  RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
 
+  IncludeOptional /etc/perun/apache/acme.conf
+
+  Redirect / https://{{ perun_rpc_hostname }}/
 </VirtualHost>
 
 # Support Federated and Kerberos authz on single instance
