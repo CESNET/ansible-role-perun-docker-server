@@ -35,25 +35,8 @@
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 
-	<!-- logging to file perun.log rotated daily or when it exceeds 100MB size -->
-	<!-- see https://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy -->
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="main">
-		<file>${LOGDIR}perun.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
-
-
 	<!-- the main logger and its level -->
 	<root level="warn">
-		<appender-ref ref="main"/>
 		<appender-ref ref="journal"/>
 	</root>
 	<!-- keep Spring quiet -->
@@ -66,45 +49,19 @@
 		the element	appender-ref on loggers
 	-->
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-auditer">
-		<file>${LOGDIR}perun-auditer.log</file>
-			<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-auditer.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-auditer">
 		<syslogIdentifier>perun-auditer</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.core.impl.Auditer" level="error" additivity="false">
-		<appender-ref ref="perun-auditer"/>
 		<appender-ref ref="journal-auditer"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-cabinet">
-		<file>${LOGDIR}perun-cabinet.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-cabinet.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-cabinet">
 		<syslogIdentifier>perun-cabinet</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.cabinet" level="debug" additivity="false">
-		<appender-ref ref="perun-cabinet"/>
 		<appender-ref ref="journal-cabinet"/>
 	</logger>
 
@@ -114,18 +71,18 @@
 			<defaultValue>perun-core</defaultValue>
 		</discriminator>
 		<sift>
-		<appender name="sift-${logFileName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-			<file>${LOGDIR}${logFileName}.log</file>
-			<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-				<fileNamePattern>${LOGDIR}${logFileName}.log.%d.%i.gz</fileNamePattern>
-				<maxFileSize>100MB</maxFileSize>
-				<maxHistory>${MAXHISTORY}</maxHistory>
-				<totalSizeCap>1GB</totalSizeCap>
-			</rollingPolicy>
-			<encoder>
-				<pattern>${ENCODER_PATTERN}</pattern>
-			</encoder>
-		</appender>
+			<appender name="sift-${logFileName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>${LOGDIR}${logFileName}.log</file>
+				<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+					<fileNamePattern>${LOGDIR}${logFileName}.log.%d.%i.gz</fileNamePattern>
+					<maxFileSize>100MB</maxFileSize>
+					<maxHistory>${MAXHISTORY}</maxHistory>
+					<totalSizeCap>1GB</totalSizeCap>
+				</rollingPolicy>
+				<encoder>
+					<pattern>${ENCODER_PATTERN}</pattern>
+				</encoder>
+			</appender>
 		</sift>
 	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-core">
@@ -144,112 +101,46 @@
 	<logger name="cz.metacentrum.perun.core.impl.PerunTransactionManager" level="error"/>
 	<logger name="cz.metacentrum.perun.core.impl.PerunBasicDataSource" level="error"/>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-ultimate">
-		<file>${LOGDIR}perun-ultimate.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-ultimate.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-ultimate">
 		<syslogIdentifier>perun-ultimate</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="ultimate_logger" level="{{ perun_rpc_logback_ultimate_logger_level }}" additivity="false">
-		<appender-ref ref="perun-ultimate"/>
 		<appender-ref ref="journal-ultimate"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-events">
-		<file>${LOGDIR}perun-dispatcher-events.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-dispatcher-events.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher-events">
 		<syslogIdentifier>perun-dispatcher-events</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.processing" level="info" additivity="false">
-		<appender-ref ref="perun-dispatcher-events"/>
 		<appender-ref ref="journal-dispatcher-events"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher-jms">
-		<file>${LOGDIR}perun-dispatcher-jms.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-dispatcher-jms.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher-jms">
 		<syslogIdentifier>perun-dispatcher-jms</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher.jms" level="debug" additivity="false">
-		<appender-ref ref="perun-dispatcher-jms"/>
 		<appender-ref ref="journal-dispatcher-jms"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-dispatcher">
-		<file>${LOGDIR}perun-dispatcher.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-dispatcher.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-dispatcher">
 		<syslogIdentifier>perun-dispatcher</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.dispatcher" level="info" additivity="false">
-		<appender-ref ref="perun-dispatcher"/>
 		<appender-ref ref="journal-dispatcher"/>
 	</logger>
 	<logger name="cz.metacentrum.perun.taskslib" level="info" additivity="false">
-		<appender-ref ref="perun-dispatcher"/>
 		<appender-ref ref="journal-dispatcher"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-registrar">
-		<file>${LOGDIR}perun-registrar.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-registrar.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-registrar">
 		<syslogIdentifier>perun-registrar</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.registrar" level="debug" additivity="false">
-		<appender-ref ref="perun-registrar"/>
 		<appender-ref ref="journal-registrar"/>
 	</logger>
 
@@ -270,41 +161,14 @@
 		<appender-ref ref="journal"/>
 	</logger>
 
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="notification">
-		<file>${LOGDIR}perun-notif.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-notif.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<appender class="org.gnieh.logback.SystemdJournalAppender" name="journal-notif">
 		<syslogIdentifier>perun-notif</syslogIdentifier>
 		<encoder><pattern>${JOURNAL_PATTERN}</pattern></encoder>
 	</appender>
 	<logger name="cz.metacentrum.perun.notif" level="debug" additivity="false">
-		<appender-ref ref="notification"/>
 		<appender-ref ref="journal-notif"/>
 	</logger>
-
-	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="perun-notif-sended">
-		<file>${LOGDIR}perun-notif-sended.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${LOGDIR}perun-notif-sended.log.%d.%i.gz</fileNamePattern>
-			<maxFileSize>100MB</maxFileSize>
-			<maxHistory>${MAXHISTORY}</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-		<encoder>
-			<pattern>${ENCODER_PATTERN}</pattern>
-		</encoder>
-	</appender>
 	<logger name="sendMessages" level="debug" additivity="false">
-		<appender-ref ref="perun-notif-sended"/>
 		<appender-ref ref="journal-notif"/>
 	</logger>
 
