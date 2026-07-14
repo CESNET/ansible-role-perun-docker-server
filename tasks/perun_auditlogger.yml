@@ -135,7 +135,7 @@
 - name: "remove old hostname"
   lineinfile:
     dest: /etc/hosts
-    regexp: 'perun_auditlogger'
+    regexp: 'perun-auditlogger'
     state: absent
 
 - name: "put container IP into /etc/hosts"
