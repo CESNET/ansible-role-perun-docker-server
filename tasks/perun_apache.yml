@@ -464,6 +464,7 @@
         default_host_ip: ''
       register: perun_apache_container
 
+    # Note: we don't have to remove old entry in a separate task as deployment of apache container can't be "disabled" in vars
     - name: "put container IP into /etc/hosts"
       lineinfile:
         dest: /etc/hosts

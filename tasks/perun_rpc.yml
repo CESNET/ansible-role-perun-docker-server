@@ -283,12 +283,7 @@
       '*': strict
   register: perun_rpc_container
 
-- name: "remove old hostname"
-  lineinfile:
-    path: /etc/hosts
-    regexp: 'perun_rpc'
-    state: absent
-
+# Note: we don't have to remove old entry in a separate task as deployment of rpc container can't be "disabled" in vars
 - name: "put container IP into /etc/hosts"
   lineinfile:
     path: /etc/hosts

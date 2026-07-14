@@ -406,7 +406,7 @@
 - name: "remove old hostname"
   lineinfile:
     dest: /etc/hosts
-    regexp: 'perun_engine'
+    regexp: 'perun-engine'
     state: absent
 
 - name: "put container IP into /etc/hosts"
