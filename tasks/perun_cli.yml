@@ -154,9 +154,9 @@
 - name: "prune old CLI images"
   when: oldcliimages.stdout_lines | length > 0
   command:
-    argv: "{{ [ 'docker', 'rmi' ] + oldcliimages.stdout_lines }}"
+    argv: "{{ [ 'docker', 'rmi', '--force' ] + oldcliimages.stdout_lines }}"
 
 - name: "prune old CLI python images"
   when: oldclipythonimages.stdout_lines | length > 0
   command:
-    argv: "{{ [ 'docker', 'rmi' ] + oldclipythonimages.stdout_lines }}"
+    argv: "{{ [ 'docker', 'rmi', '--force' ] + oldclipythonimages.stdout_lines }}"
