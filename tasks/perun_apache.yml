@@ -134,23 +134,23 @@
     src: instance_configs/instanceConfig.json.j2
     dest: /etc/perun/apache/instanceConfig.json
 
+- name: "remove /etc/perun/apache/instanceConfig.json if disabled"
+  when: not perun_ngui_admin_enabled
+  file:
+    path: /etc/perun/apache/instanceConfig.json
+    state: absent
+
 - name: "generate /etc/perun/apache/profileInstanceConfig.json"
   when: perun_ngui_profile_enabled
   template:
     src: instance_configs/profileInstanceConfig.json.j2
     dest: /etc/perun/apache/profileInstanceConfig.json
 
-- name: "generate /etc/perun/apache/consolidatorInstanceConfig.json"
-  when: perun_ngui_consolidator_enabled
-  template:
-    src: instance_configs/consolidatorInstanceConfig.json.j2
-    dest: /etc/perun/apache/consolidatorInstanceConfig.json
-
-- name: "generate /etc/perun/apache/linkerInstanceConfig.json"
-  when: perun_ngui_linker_enabled
-  template:
-    src: instance_configs/linkerInstanceConfig.json.j2
-    dest: /etc/perun/apache/linkerInstanceConfig.json
+- name: "remove /etc/perun/apache/profileInstanceConfig.json if disabled"
+  when: not perun_ngui_profile_enabled
+  file:
+    path: /etc/perun/apache/profileInstanceConfig.json
+    state: absent
 
 - name: "generate /etc/perun/apache/pwdresetInstanceConfig.json"
   when: perun_ngui_pwdreset_enabled
@@ -158,11 +158,47 @@
     src: instance_configs/pwdresetInstanceConfig.json.j2
     dest: /etc/perun/apache/pwdresetInstanceConfig.json
 
+- name: "remove /etc/perun/apache/pwdresetInstanceConfig.json if disabled"
+  when: not perun_ngui_pwdreset_enabled
+  file:
+    path: /etc/perun/apache/pwdresetInstanceConfig.json
+    state: absent
+
 - name: "generate /etc/perun/apache/publicationsInstanceConfig.json"
   when: perun_ngui_publications_enabled
   template:
     src: instance_configs/publicationsInstanceConfig.json.j2
     dest: /etc/perun/apache/publicationsInstanceConfig.json
+
+- name: "remove /etc/perun/apache/publicationsInstanceConfig.json if disabled"
+  when: not perun_ngui_publications_enabled
+  file:
+    path: /etc/perun/apache/publicationsInstanceConfig.json
+    state: absent
+
+- name: "generate /etc/perun/apache/consolidatorInstanceConfig.json"
+  when: perun_ngui_consolidator_enabled
+  template:
+    src: instance_configs/consolidatorInstanceConfig.json.j2
+    dest: /etc/perun/apache/consolidatorInstanceConfig.json
+
+- name: "remove /etc/perun/apache/consolidatorInstanceConfig.json if disabled"
+  when: not perun_ngui_consolidator_enabled
+  file:
+    path: /etc/perun/apache/consolidatorInstanceConfig.json
+    state: absent
+
+- name: "generate /etc/perun/apache/linkerInstanceConfig.json"
+  when: perun_ngui_linker_enabled
+  template:
+    src: instance_configs/linkerInstanceConfig.json.j2
+    dest: /etc/perun/apache/linkerInstanceConfig.json
+
+- name: "remove /etc/perun/apache/linkerInstanceConfig.json if disabled"
+  when: not perun_ngui_linker_enabled
+  file:
+    path: /etc/perun/apache/linkerInstanceConfig.json
+    state: absent
 
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
@@ -183,6 +219,13 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-cert.conf if disabled"
+  when: not perun_apache_cert_hostname_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-cert.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-admin.conf"
   when: perun_ngui_admin_enabled
   template:
@@ -193,6 +236,13 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-admin.conf if disabled"
+  when: not perun_ngui_admin_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-admin.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-api.conf"
   when: perun_api_enabled
   template:
@@ -201,6 +251,13 @@
     owner: root
     group: root
     mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "remove /etc/perun/apache/sites-enabled/perun-api.conf if disabled"
+  when: not perun_api_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-api.conf
+    state: absent
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-api-alt.conf"
@@ -219,6 +276,13 @@
     perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative_client_secret }}"
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-api-alt.conf if disabled"
+  when: not perun_api_alternative_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-api-alt.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-api-alt2.conf"
   when: perun_api_alternative2_enabled
   template:
@@ -235,6 +299,13 @@
     perun_apache_oauth_client_secret: "{{ perun_apache_oauth_alternative2_client_secret }}"
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-api-alt2.conf if disabled"
+  when: not perun_api_alternative2_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-api-alt2.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-api-cert.conf"
   when: perun_api_cert_enabled
   template:
@@ -243,6 +314,13 @@
     owner: root
     group: root
     mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "remove /etc/perun/apache/sites-enabled/perun-api-cert.conf if disabled"
+  when: not perun_api_cert_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-api-cert.conf
+    state: absent
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf"
@@ -258,6 +336,13 @@
     perun_api_cert_hostname_aliases: "{{ perun_api_cert_alternative_hostname_aliases }}"
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf if disabled"
+  when: not perun_api_cert_alternative_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-api-cert-alt.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-profile.conf"
   when: perun_ngui_profile_enabled
   template:
@@ -266,6 +351,13 @@
     owner: root
     group: root
     mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "remove /etc/perun/apache/sites-enabled/perun-profile.conf if disabled"
+  when: not perun_ngui_profile_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-profile.conf
+    state: absent
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-pwdreset.conf"
@@ -278,6 +370,13 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-pwdreset.conf if disabled"
+  when: not perun_ngui_pwdreset_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-pwdreset.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-publications.conf"
   when: perun_ngui_publications_enabled
   template:
@@ -286,6 +385,13 @@
     owner: root
     group: root
     mode: '0400'
+  notify: "restart perun_apache"
+
+- name: "remove /etc/perun/apache/sites-enabled/perun-publications.conf if disabled"
+  when: not perun_ngui_publications_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-publications.conf
+    state: absent
   notify: "restart perun_apache"
 
 - name: "create /etc/perun/apache/sites-enabled/perun-consolidator.conf"
@@ -298,6 +404,13 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-consolidator.conf if disabled"
+  when: not perun_ngui_consolidator_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-consolidator.conf
+    state: absent
+  notify: "restart perun_apache"
+
 - name: "create /etc/perun/apache/sites-enabled/perun-linker.conf"
   when: perun_ngui_linker_enabled
   template:
@@ -308,6 +421,12 @@
     mode: '0400'
   notify: "restart perun_apache"
 
+- name: "remove /etc/perun/apache/sites-enabled/perun-linker.conf if disabled"
+  when: not perun_ngui_linker_enabled
+  file:
+    path: /etc/perun/apache/sites-enabled/perun-linker.conf
+    state: absent
+  notify: "restart perun_apache"
 
 - name: "set Kerberos keytab"
   copy:
