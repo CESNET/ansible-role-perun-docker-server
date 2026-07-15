@@ -573,6 +573,13 @@ perun_api_alternative_hostname_aliases: []
 perun_apache_oauth_alternative_introspection_url: https://other.oidc.provider/oidc/introspection
 perun_apache_oauth_alternative_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
 perun_apache_oauth_alternative_client_secret: "YYYYYYYYYYYYYYYYY"
+# third API with other OIDC
+perun_api_alternative2_enabled: no
+perun_api_alternative2_hostname: perun-api-third.example.org
+perun_api_alternative2_hostname_aliases: []
+perun_apache_oauth_alternative2_introspection_url: https://other2.oidc.provider/oidc/introspection
+perun_apache_oauth_alternative2_client_id: "yyyyyyyyy-yyyyyyyyy-yyyyyyyyy-yyyyyyyy"
+perun_apache_oauth_alternative2_client_secret: "YYYYYYYYYYYYYYYYY"
 
 # virtual host for CERT API (if enabled, /cert/ endpoint will no longer be available on default host)
 perun_api_cert_enabled: no
@@ -858,6 +865,10 @@ other_certs:
   - cond: perun_api_alternative_enabled
     hostname: perun_api_alternative_hostname
     aliases: perun_api_alternative_hostname_aliases
+
+  - cond: perun_api_alternative2_enabled
+    hostname: perun_api_alternative2_hostname
+    aliases: perun_api_alternative2_hostname_aliases
 
   - cond: perun_api_cert_enabled
     hostname: perun_api_cert_hostname
