@@ -7,6 +7,8 @@
 PERUN_CLI_PYTHON_USER=perun
 PERUN_CLI_PYTHON_PASSWORD={{ perun_apache_basicAuth_user_perun_password }}
 PERUN_CLI_PYTHON_AUTH_TYPE=basic
+# Export path to default instances file so that external scripts can use our CLI and see it for autoconfiguration
+PERUN_CLI_PYTHON_INSTANCES_PATH="/opt/perun-cli/instances.json"
 
 # inherit these variables from the calling environment
 LOGNAME
