@@ -105,8 +105,6 @@
     docker_portainer_version: "{{ perun_portainer_version }}"
     docker_portainer_admin_password_file: "{{ perun_certs_dir }}/portainer_admin_password.txt"
     docker_portainer_admin_password: "{{ perun_portainer_admin_password }}"
-    docker_portainer_admin_password_file_owner: root
-    docker_portainer_admin_password_file_group: perun
     docker_portainer_use_certbot_certificates: "{{ perun_use_certbot_certificates }}"
     docker_portainer_fullchain_file: "{{ perun_certificate_fullchain_file }}"
     docker_portainer_privkey_file: "{{ perun_certificate_key_file }}"
