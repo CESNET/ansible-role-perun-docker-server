@@ -42,12 +42,24 @@
 
 - name: "create users for each source Perun"
   loop: "{{ perun_sync_users }}"
-  user:
+  ansible.builtin.user:
     name: "{{ item.user }}"
     group: perunsync
     comment: "{{ item.comment }}"
     shell: /bin/bash
     create_home: true
+
+- name: "set group access for each home"
+  loop: "{{ perun_sync_users }}"
+  loop_control:
+    label: "/home/{{ item.user }}"
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ item.user }}"
+    owner: "{{ item.user }}"
+    group: perunsync
+    mode: '0750'
+
 
 - name: "create directory perun_sync_json in each home"
   loop: "{{ perun_sync_users }}"
@@ -58,7 +70,7 @@
     path: "/home/{{ item.user }}/perun_sync_json"
     owner: "{{ item.user }}"
     group: perunsync
-    mode: '0755'
+    mode: '0750'
 
 - name: "add source Perun's engine ssh keys"
   loop: "{{ perun_sync_users }}"
