@@ -68,15 +68,30 @@
     path: "files/{{ perun_instance_hostname }}/services"
   register: hs
 
-- name: "recursive copy to /etc/perun/engine/services"
+- name: "recursive create directories at /etc/perun/engine/services"
   when: hs.stat.exists
-  copy:
-    src: "{{ hs.stat.path }}"
-    dest: /etc/perun/engine/
+  file:
+    path: "/etc/perun/engine/services/{{ item.path }}"
+    state: directory
     owner: root
     group: peruneng
-    directory_mode: '0550'
+    mode: '0550'
+  loop: "{{ lookup('filetree', hs.stat.path) | selectattr('state', 'equalto', 'directory') | list }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: "recursive process templates and copy to /etc/perun/engine/services"
+  when: hs.stat.exists
+  template:
+    src: "{{ item.src }}"
+    dest: >-
+      /etc/perun/engine/services/{{ item.path | regex_replace('\.j2$', '') if item.path.endswith('.j2') else item.path }}
+    owner: root
+    group: peruneng
     mode: '0440'
+  loop: "{{ lookup('filetree', hs.stat.path) | selectattr('state', 'equalto', 'file') | list }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: "install rsync for synchronization"
   apt:
