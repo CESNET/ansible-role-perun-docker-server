@@ -832,7 +832,7 @@ perun_sync_users:
 ######################
 
 # https://www.postgresql.org/support/versioning/
-perun_postgresql_version: 17
+perun_postgresql_version: 18
 
 # https://github.com/portainer/portainer/releases
 perun_portainer_version: latest
