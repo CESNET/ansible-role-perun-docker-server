@@ -159,7 +159,7 @@
     firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
 
 - name: "sendmail setup for Dockerized environment (legacy)"
-  when: not perun_smtp_use_msmtp
+  when: perun_smtp_use_sendmail
   include_role:
     name: cesnet.sendmail_for_docker
     apply: { tags: [ 'sendmail_for_docker'] }
@@ -169,8 +169,43 @@
     sendmail_for_docker_bridge_network_name: perun_net
     sendmail_for_docker_config: "{{ perun_sendmail_config }}"
 
+- name: "msmtp MTA setup (forwarding emails to a SMTP relay)"
+  when: perun_smtp_use_msmtp
+  include_role:
+    name: cesnet.msmtp
+    apply: { tags: [ 'msmtp'] }
+  tags: [ 'msmtp']
+  vars:
+    msmtp_listen_interface: 0.0.0.0
+    msmtp_config: "{{ perun_msmtp_config }}"
+
+- name: "Postfix MTA setup (forwarding emails to a SMTP relay)"
+  when: perun_smtp_use_postfix
+  include_role:
+    name: cesnet.postfix
+    apply: { tags: [ 'postfix'] }
+  tags: [ 'postfix']
+  vars:
+    postfix_myhostname: "{{ perun_postfix_myhostname }}"
+    postfix_mydomain: "{{ perun_postfix_mydomain }}"
+    postfix_myorigin: "{{ perun_postfix_myorigin }}"
+    postfix_relayhost: "{{ perun_postfix_relayhost }}"
+    postfix_use_certs: "{{ perun_postfix_use_certs }}"
+    postfix_use_login: "{{ perun_postfix_use_login }}"
+    postfix_smtp_tls_cert_file: "{{ perun_postfix_smtp_tls_cert_file }}"
+    postfix_smtp_tls_key_file: "{{ perun_postfix_smtp_tls_key_file}}"
+    postfix_smtp_tls_security_level: "{{ perun_postfix_smtp_tls_security_level }}"
+    postfix_smtp_username: "{{ perun_postfix_smtp_username }}"
+    postfix_smtp_password: "{{ perun_postfix_smtp_password }}"
+    postfix_generic_email: "{{ perun_postfix_generic_email }}"
+    postfix_for_docker_bridge_network_name: "{{ perun_postfix_for_docker_bridge_network_name }}"
+    postfix_sasl_passwd: "{{ perun_postfix_sasl_passwd }}"
+    postfix_testing_email: "{{ perun_postfix_testing_email }}"
+
 - name: "set up /etc/aliases for sendmail"
-  when: not perun_smtp_use_msmtp
+  when:
+    - perun_smtp_use_sendmail
+    - perun_smtp_use_postfix
   loop:
     - postmaster
     - postgres
@@ -185,16 +220,6 @@
     state: present
   notify: "run newaliases"
   tags: [ 'aliases']
-
-- name: "msmtp MTA setup (forwarding emails to a SMTP relay)"
-  when: perun_smtp_use_msmtp
-  include_role:
-    name: cesnet.msmtp
-    apply: { tags: [ 'msmtp'] }
-  tags: [ 'msmtp']
-  vars:
-    msmtp_listen_interface: 0.0.0.0
-    msmtp_config: "{{ perun_msmtp_config }}"
 
 - name: "OpenLDAP directory server installation"
   include_role:
