@@ -1,4 +1,4 @@
----
+---    
 - name: "Ansible core version check ({{ ansible_version.full }} >= 2.19)"
   assert:
     that:
@@ -33,6 +33,13 @@
     quiet: true
   tags: always
 
+- name: "Ensure exactly one mailer implementation is enable"
+  ansible.builtin.assert:
+    that:
+      - (perun_smtp_use_sendmail | bool) + (perun_smtp_use_msmtp | bool) + (perun_smtp_use_postfix | bool) == 1
+    fail_msg: "Exactly one mailer implementation must be enabled, but the sum of enabled implementations is {{ (perun_smtp_use_sendmail | bool) + (perun_smtp_use_msmtp | bool) + (perun_smtp_use_postfix | bool) }}"
+- tags: always
+
 - name: "get OS service facts"
   service_facts:
   tags: always
@@ -52,7 +59,6 @@
         - motd
       paths:
         - files
-
   tags: motd
 
 - name: "TLS certificates setup"
@@ -158,7 +164,7 @@
     firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_open_ldap_ports + perun_firewall_open_postgres_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
     firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
 
-- name: "sendmail setup for Dockerized environment (legacy)"
+- name: "sendmail MTA setup for Dockerized environment (legacy)"
   when: perun_smtp_use_sendmail
   include_role:
     name: cesnet.sendmail_for_docker
@@ -203,9 +209,7 @@
     postfix_testing_email: "{{ perun_postfix_testing_email }}"
 
 - name: "set up /etc/aliases for sendmail"
-  when:
-    - perun_smtp_use_sendmail
-    - perun_smtp_use_postfix
+  when: perun_smtp_use_sendmail or perun_smtp_use_postfix
   loop:
     - postmaster
     - postgres

@@ -915,7 +915,7 @@ perun_postfix_mydomain: "{{ perun_postfix_myhostname }}"
 perun_postfix_myorigin: "{{ perun_postfix_mydomain }}"
 perun_postfix_relayhost: "[{{ perun_smtp_relay }}]:{{ perun_smtp_relay_port }}"
 perun_postfix_use_certs: false
-perun_postfix_use_login: true
+perun_postfix_use_login: false
 perun_postfix_smtp_tls_cert_file: "{{ perun_certs_dir }}/hostcert.pem"
 perun_postfix_smtp_tls_key_file: "{{ perun_certs_dir }}/hostkey.pem"
 perun_postfix_smtp_tls_security_level: "secure"
