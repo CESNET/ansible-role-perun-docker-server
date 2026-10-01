@@ -38,7 +38,8 @@
     that:
       - (perun_smtp_use_sendmail | bool) + (perun_smtp_use_msmtp | bool) + (perun_smtp_use_postfix | bool) == 1
     fail_msg: "Exactly one mailer implementation must be enabled, but the sum of enabled implementations is {{ (perun_smtp_use_sendmail | bool) + (perun_smtp_use_msmtp | bool) + (perun_smtp_use_postfix | bool) }}"
-- tags: always
+    quiet: true
+  tags: always
 
 - name: "get OS service facts"
   service_facts:
