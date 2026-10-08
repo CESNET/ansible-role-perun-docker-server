@@ -208,6 +208,7 @@
     postfix_with_docker: true
     postfix_docker_bridge_network_name: "{{ perun_postfix_docker_bridge_network_name }}"
     postfix_sasl_passwd: "{{ perun_postfix_sasl_passwd }}"
+    postfix_root_email_address: "{{ perun_root_email_address }}"
     postfix_testing_email: "{{ perun_postfix_testing_email }}"
 
 - name: "set up /etc/aliases for sendmail"
