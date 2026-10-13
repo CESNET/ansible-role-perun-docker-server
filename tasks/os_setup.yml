@@ -24,7 +24,6 @@
     unattended_upgrades_origin_patterns: "{{ perun_unattended_upgrades_origin_patterns }}"
     unattended_upgrades_blacklist: "{{ perun_unattended_upgrades_blacklist }}"
     unattended_upgrades_automatic_reboot: "{{ perun_unattended_upgrades_automatic_reboot }}"
-    root_email_address: "{{ perun_root_email_address }}"
 
 - name: "set up Yubikeys"
   import_role:
