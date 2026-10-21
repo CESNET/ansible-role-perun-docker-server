@@ -284,8 +284,19 @@
   register: perun_rpc_container
 
 # Note: we don't have to remove old entry in a separate task as deployment of rpc container can't be "disabled" in vars
-- name: "put container IP into /etc/hosts"
-  lineinfile:
+- name: "Put container IPv4 into /etc/hosts"
+  ansible.builtin.lineinfile:
     path: /etc/hosts
-    regexp: "{{ perun_rpc_container.container.Config.Hostname }}"
+    regexp: '^[0-9.]+\s+{{ perun_rpc_container.container.Config.Hostname | regex_escape }}$'
     line: "{{ perun_rpc_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_rpc_container.container.Config.Hostname }}"
+  notify:
+    - update postfix hosts
+
+- name: "Put container IPv6 into /etc/hosts"
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^[0-9a-fA-F:]+\s+{{ perun_rpc_container.container.Config.Hostname | regex_escape }}$'
+    line: "{{ perun_rpc_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address }} {{ perun_rpc_container.container.Config.Hostname }}"
+  when: perun_rpc_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address | default('') | length > 0
+  notify:
+    - update postfix hosts

@@ -69,3 +69,21 @@
     name: sshd
     state: restarted
 
+- name: "Update postfix hosts"
+  when: perun_smtp_use_postfix
+  ansible.builtin.copy:
+    src: /etc/hosts
+    dest: /var/spool/postfix/etc/hosts
+    remote_src: true
+    owner: root
+    group: root
+    mode: '0644'
+  listen: "update postfix hosts"
+  notify: "reload postfix hosts"
+
+- name: "Reload postfix hosts"
+  when: perun_smtp_use_postfix
+  ansible.builtin.service:
+    name: postfix
+    state: reloaded
+  listen: "reload postfix hosts"

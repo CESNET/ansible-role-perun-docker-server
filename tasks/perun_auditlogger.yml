@@ -137,10 +137,23 @@
     dest: /etc/hosts
     regexp: 'perun-auditlogger'
     state: absent
+  notify:
+    - update postfix hosts
 
-- name: "put container IP into /etc/hosts"
+- name: "Put container IPv4 into /etc/hosts"
   when: perun_auditlogger_enabled
-  lineinfile:
-    dest: /etc/hosts
-    regexp: "{{ perun_auditlogger_container.container.Config.Hostname }}"
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^[0-9.]+\s+{{ perun_auditlogger_container.container.Config.Hostname | regex_escape }}$'
     line: "{{ perun_auditlogger_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_auditlogger_container.container.Config.Hostname }}"
+  notify:
+    - update postfix hosts
+
+- name: "Put container IPv6 into /etc/hosts"
+  when: perun_auditlogger_enabled and perun_auditlogger_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address | default('') | length > 0
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^[0-9a-fA-F:]+\s+{{ perun_auditlogger_container.container.Config.Hostname | regex_escape }}$'
+    line: "{{ perun_auditlogger_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address }} {{ perun_auditlogger_container.container.Config.Hostname }}"
+  notify:
+    - update postfix hosts
