@@ -65,6 +65,8 @@
 - name: "TLS certificates setup"
   import_tasks: perun_certs.yml
   tags: perun_certs
+  vars: 
+    certbot_for_geant: "{{ perun_certbot_for_geant }}"
 
 - name: "Operating System setup (yubikeys, monitoring)"
   import_tasks: os_setup.yml

@@ -907,7 +907,7 @@ other_certs:
 
   - cond: perun_ngui_linker_enabled
     hostname: perun_ngui_linker_hostname
-    aliases: perun_ngui_linker_hostname_aliases
+    aliases: perun_ngui_linker_hostname_aliases\
 
 # switch to Postfix - must by after the certs are defined
 perun_postfix_myhostname: "{{ perun_instance_hostname }}"
