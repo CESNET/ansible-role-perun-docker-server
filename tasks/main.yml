@@ -164,6 +164,62 @@
     firewall_open_tcp_ports: "{{ perun_firewall_open_tcp_ports + perun_firewall_open_ldap_ports + perun_firewall_open_postgres_ports + perun_firewall_perun_net_related_rules + site_specific_open_tcp_ports }}"
     firewall_docker_rules: "{{ perun_firewall_docker_rules }}"
 
+- name: "set perun_net IP addresses to /etc/hosts"
+  block:
+    - name: "get perun_net info"
+      docker_network_info:
+        name: perun_net
+      register: perun_net_info
+    # Temporary tasks for cleanup
+    - name: "check if the new Ansible marker already exists in /etc/hosts"
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: '# BEGIN ANSIBLE MANAGED BLOCK - "perun_net" docker network'
+      check_mode: yes
+      register: hosts_file_check
+    - name: "remove legacy unmanaged container records from /etc/hosts"
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: '\s+(perun_net|perun-rpc|perun-apache|perun-engine|perun-ldapc|perun-auditlogger)$'
+        state: absent
+      when: hosts_file_check.changed
+    # End of temporary tasks for cleanup
+    - name: "set perun_net IPs in /etc/hosts"
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - \"perun_net\" docker network"
+        block: |
+          {% set net_config = perun_net_info.network.IPAM.Config %}
+          {# Dynamic assignment of IPv4/6 subnets #}
+          {% set v4_sub = net_config[0].Subnet if '.' in net_config[0].Subnet else (net_config[1].Subnet if net_config | length > 1 and '.' in net_config[1].Subnet else none) %}
+          {% set v6_sub = net_config[0].Subnet if ':' in net_config[0].Subnet else (net_config[1].Subnet if net_config | length > 1 and ':' in net_config[1].Subnet else none) %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }} perun_net
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(1) | ansible.utils.ipaddr('address') }} perun_net
+          {% endif %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(12) | ansible.utils.ipaddr('address') }} perun-rpc
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(12) | ansible.utils.ipaddr('address') }} perun-rpc
+          {% endif %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(13) | ansible.utils.ipaddr('address') }} perun-apache
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(13) | ansible.utils.ipaddr('address') }} perun-apache
+          {% endif %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(14) | ansible.utils.ipaddr('address') }} perun-engine
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(14) | ansible.utils.ipaddr('address') }} perun-engine
+          {% endif %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(15) | ansible.utils.ipaddr('address') }} perun-ldapc
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(15) | ansible.utils.ipaddr('address') }} perun-ldapc
+          {% endif %}
+          {% if v4_sub %}{{ v4_sub | ansible.utils.ipaddr(16) | ansible.utils.ipaddr('address') }} perun-auditlogger
+          {% endif %}
+          {% if v6_sub %}{{ v6_sub | ansible.utils.ipaddr(16) | ansible.utils.ipaddr('address') }} perun-auditlogger
+          {% endif %}
+      notify:
+        - update postfix hosts
+
 - name: "sendmail MTA setup for Dockerized environment (legacy)"
   when: perun_smtp_use_sendmail
   include_role:

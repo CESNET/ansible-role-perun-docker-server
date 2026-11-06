@@ -588,6 +588,9 @@
         networks_cli_compatible: yes
         networks:
           - name: perun_net
+            # Always "x.x.x.13", usually "172.18.0.13"
+            ipv4_address: "{{ perun_net_info.network.IPAM.Config[0].Subnet | ansible.utils.ipaddr(13) | ansible.utils.ipaddr('address') }}"
+            ipv6_address: "{{ perun_net_info.network.IPAM.Config[1].Subnet | ansible.utils.ipaddr(13) | ansible.utils.ipaddr('address') }}"
         network_mode: perun_net
         etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
         image_name_mismatch: recreate
@@ -598,21 +601,3 @@
           - '443:443'
         default_host_ip: ''
       register: perun_apache_container
-
-    # Note: we don't have to remove old entry in a separate task as deployment of apache container can't be "disabled" in vars
-    - name: "Put container IPv4 into /etc/hosts"
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        regexp: '^[0-9.]+\s+{{ perun_apache_container.container.Config.Hostname | regex_escape }}$'
-        line: "{{ perun_apache_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_apache_container.container.Config.Hostname }}"
-      notify:
-        - update postfix hosts
-
-    - name: "Put container IPv6 into /etc/hosts"
-      when: perun_apache_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address | default('') | length > 0
-      ansible.builtin.lineinfile:
-        path: /etc/hosts
-        regexp: '^[0-9a-fA-F:]+\s+{{ perun_apache_container.container.Config.Hostname | regex_escape }}$'
-        line: "{{ perun_apache_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address }} {{ perun_apache_container.container.Config.Hostname }}"
-      notify:
-        - update postfix hosts
