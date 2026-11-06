@@ -120,6 +120,9 @@
     networks_cli_compatible: yes
     networks:
       - name: perun_net
+        # Always "x.x.x.15", usually "172.18.0.15"
+        ipv4_address: "{{ perun_net_info.network.IPAM.Config[0].Subnet | ansible.utils.ipaddr(15) | ansible.utils.ipaddr('address') }}"
+        ipv6_address: "{{ perun_net_info.network.IPAM.Config[1].Subnet | ansible.utils.ipaddr(15) | ansible.utils.ipaddr('address') }}"
     network_mode: perun_net
     etc_hosts: "{{ perun_containers_etc_hosts | combine( { 'perun-host': perun_net_info.network.IPAM.Config[0].Gateway }) }}"
     image_name_mismatch: recreate
@@ -128,28 +131,3 @@
     state: "{{ 'started' if perun_ldapc_enabled else 'absent' }}"
   register: perun_ldapc_container
 
-- name: "remove old hostname"
-  lineinfile:
-    dest: /etc/hosts
-    regexp: 'perun-ldapc'
-    state: absent
-  notify:
-    - update postfix hosts
-
-- name: "Put container IPv4 into /etc/hosts"
-  when: perun_ldapc_enabled
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    regexp: '^[0-9.]+\s+{{ perun_ldapc_container.container.Config.Hostname | regex_escape }}$'
-    line: "{{ perun_ldapc_container.container.NetworkSettings.Networks.perun_net.IPAddress }} {{ perun_ldapc_container.container.Config.Hostname }}"
-  notify:
-    - update postfix hosts
-
-- name: "Put container IPv6 into /etc/hosts"
-  when: perun_ldapc_enabled and perun_ldapc_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address | default('') | length > 0
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    regexp: '^[0-9a-fA-F:]+\s+{{ perun_ldapc_container.container.Config.Hostname | regex_escape }}$'
-    line: "{{ perun_ldapc_container.container.NetworkSettings.Networks.perun_net.GlobalIPv6Address }} {{ perun_ldapc_container.container.Config.Hostname }}"
-  notify:
-    - update postfix hosts
