@@ -35,6 +35,7 @@ perun_security_preferred_languages: "en, cs, sk"
 # If "no" (default) then certificates in "files/{{ perun_instance_hostname }}/" are used
 perun_use_certbot_certificates: no
 # Enable when you want to use certificates already present on remote machine instead of certs from "files/{{ perun_instance_hostname }}/"
+perun_certbot_hostname: "{{ perun_rpc_hostname }}"
 perun_use_remote_certs: no
 # When "perun_use_remote_certs" is set to "yes", you must define paths to remote certs
 # You need to define at least "host" certs (if one cert is used for all hostnames).
