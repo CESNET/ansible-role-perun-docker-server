@@ -675,6 +675,11 @@ perun_apache_enable_robots_config: yes
 perun_apache_basicAuth_user_perun_password: "test"
 perun_apache_basicAuth_user_perun_engine_password: "test"
 perun_apache_basicAuth_user_nagios_password: "test"
+# IP filter
+perun_apache_basicAuth_common_ip_filter: {}
+#  perun: "{{ my_ip_range }}"
+#  perun-engine: "1.1.1.1 1.1.1.2"
+#  nagios: "fd00:deaf:face:cafe::1"
 # list of users to always generate in perun.passwd
 perun_apache_basicAuth_common:
   perun: "{{ perun_apache_basicAuth_user_perun_password }}"
@@ -682,6 +687,9 @@ perun_apache_basicAuth_common:
   nagios: "{{ perun_apache_basicAuth_user_nagios_password }}"
 # additional users to generate in perun.passwd, map from usernames to passwords
 perun_apache_basicAuth_additional: {}
+# additional filter login = space separated list of v4/v6 IPs (ranges) to allow ba login from
+perun_apache_basicAuth_additional_ip_filter: {}
+
 # whether to enable authentication with federation (Shibboleth)
 perun_apache_fed_enabled: no
 # if fed is enabled, this list of additional Shibboleth initiators is used

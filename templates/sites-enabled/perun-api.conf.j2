@@ -125,14 +125,53 @@
         SSLVerifyClient none
         AuthType basic
         AuthName "Perun RPC"
-        <LimitExcept OPTIONS>
-            Require valid-user
-        </LimitExcept>
         AuthBasicProvider file
         AuthUserFile /etc/perun/apache/perun.passwd
         SetEnvIf _ .* AJP_EXTSOURCE=INTERNAL
         SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceInternal
         SetEnvIf _ .* AJP_EXTSOURCELOA=0
+        <RequireAny>
+          # Allow any pre-flight requests (OPTIONS)
+          <RequireAll>
+            Require method OPTIONS
+          </RequireAll>
+          # For standard GET, POST etc. require password + optionally IP filter
+          <RequireAll>
+            Require valid-user
+{% set common_filtered = (perun_apache_basicAuth_common_ip_filter | default({})) | list %}
+{% set additional_filtered = (perun_apache_basicAuth_additional_ip_filter | default({})) | list %}
+{% set all_filtered_users = (common_filtered + additional_filtered) | unique %}
+{% if all_filtered_users %}
+            <RequireAny>
+              # These users have IP filter
+{% if perun_apache_basicAuth_common_ip_filter is defined and perun_apache_basicAuth_common_ip_filter %}
+{% for login, ip_ranges in perun_apache_basicAuth_common_ip_filter.items() %}
+              <RequireAll>
+                #Require user {{ login }}
+                Require expr "%{REMOTE_USER} == '{{ login }}'"
+                Require ip {{ ip_ranges }}
+              </RequireAll>
+{% endfor %}
+{% endif %}
+{% if perun_apache_basicAuth_additional_ip_filter is defined and perun_apache_basicAuth_additional_ip_filter %}
+{% for login, ip_ranges in perun_apache_basicAuth_additional_ip_filter.items() %}
+              <RequireAll>
+                #Require user {{ login }}
+                Require expr "%{REMOTE_USER} == '{{ login }}'"
+                Require ip {{ ip_ranges }}
+              </RequireAll>
+{% endfor %}
+{% endif %}
+              # Others can use password without IP filter
+              <RequireAll>
+                Require valid-user
+                #Require not user {{ all_filtered_users | join(' ') }}
+                Require expr "!(%{REMOTE_USER} in { {% for u in all_filtered_users %}'{{ u }}'{% if not loop.last %},{% endif %}{% endfor %} })"
+              </RequireAll>
+            </RequireAny>
+{% endif %}
+          </RequireAll>
+        </RequireAny>
     </LocationMatch>
 
 {% if perun_apache_non_enabled %}
