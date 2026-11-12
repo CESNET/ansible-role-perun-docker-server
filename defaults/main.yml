@@ -171,6 +171,9 @@ perun_rpc_personal_custom_organization_requires_approve: no
 perun_rpc_personal_enable_linked_email: no
 perun_rpc_personal_enable_custom_email: yes
 perun_rpc_personal_custom_email_requires_approve: yes
+# shortname of user attribute which contains list of "verified" emaill addresses users can choose from
+# and they don't have to verify them.
+perun_rpc_personal_verified_emails_attr: ""
 
 # TODO - enable when we ditch old admin gui and enable step-up for MFA
 perun_rpc_app_allowed_roles: []
