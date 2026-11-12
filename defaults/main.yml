@@ -683,12 +683,19 @@ perun_apache_basicAuth_common:
 # IP filter for common accounts to allow basic-auth login from "login: space separated list of v4/v6 IPs (ranges)"
 perun_apache_basicAuth_common_ip_filter: {}
 #  perun: "{{ my_ip_range }}"
-#  perun-engine: "1.1.1.1 1.1.1.2"
+#  perun-engine: "1.1.1.1 1.1.1.2 {{ perun_apache_basicAuth_host_ip_ranges }}"
 #  nagios: "fd00:deaf:face:cafe::1"
 # additional users to generate in perun.passwd, map from usernames to passwords
 perun_apache_basicAuth_additional: {}
 # IP filter for additional accounts to allow basic-auth login from "login: space separated list of v4/v6 IPs (ranges)"
 perun_apache_basicAuth_additional_ip_filter: {}
+
+# Helper variable which can be used in IP flters for apache basic-auth
+# Gateway IPs of "perun_net" docker network are appened to this variable just before usage in apache sites templates.
+# IF host is behind NAT (doesn't know its own public IP), you need to manually add it in your host_vars (override this var).
+perun_apache_basicAuth_host_ip_ranges: "{{ []
+  + ([ansible_facts.default_ipv4.address] if (ansible_facts.default_ipv4.address is defined) else [])
+  + ([ansible_facts.default_ipv6.address] if (ansible_facts.default_ipv6.address is defined) else [])}}"
 
 # whether to enable authentication with federation (Shibboleth)
 perun_apache_fed_enabled: no

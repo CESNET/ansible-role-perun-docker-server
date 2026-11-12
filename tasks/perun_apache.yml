@@ -200,6 +200,24 @@
     path: /etc/perun/apache/linkerInstanceConfig.json
     state: absent
 
+- name: "get perun_net info"
+  docker_network_info:
+    name: perun_net
+  register: perun_net_info
+
+- name: "extend perun_apache_basicAuth_host_ip_ranges with perun_net network gateway"
+  ansible.builtin.set_fact:
+    perun_apache_basicAuth_host_ip_ranges: >-
+      {{ perun_apache_basicAuth_host_ip_ranges + (
+          perun_net_info.network.IPAM.Config
+          | map(attribute='Gateway', default=none)
+          | select('string')
+          | list
+      ) }}
+  when:
+    - perun_net_info.exists
+    - perun_net_info.network.IPAM.Config is defined
+
 - name: "create /etc/perun/apache/sites-enabled/000-perun.conf"
   template:
     src: sites-enabled/perun.conf.j2
@@ -570,11 +588,6 @@
       when: perun_use_certbot_certificates
       set_fact:
         apache_mounts: "{{ apache_mounts + perun_certbot_mounts }}"
-
-    - name: "get perun_net info"
-      docker_network_info:
-        name: perun_net
-      register: perun_net_info
 
     - name: "create Perun Apache container"
       docker_container:
