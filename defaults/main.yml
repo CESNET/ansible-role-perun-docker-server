@@ -49,6 +49,10 @@ perun_remote_certs: {}
 #    key: /path_to_cert/hostkey.pem
 #    chain: /path_to_cert/hostchain.pem
 
+# Include all known Perun hostnames and aliases in the certificate
+perun_certbot_hostname: "{{ perun_rpc_hostname }}"
+perun_certbot_include_all_hostnames: yes
+
 # alternative DNS names to include into certificate
 perun_certbot_alt_hostnames: []
 # Support client authentication in server certs from LE by selecting "tlsclient" profile
