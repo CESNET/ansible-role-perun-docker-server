@@ -846,6 +846,7 @@ perun_msmtp_config: |
 
 # Perun-to-Perun synchronization
 perun_sync_enabled: no
+perun_sync_allowed_facilities: []
 perun_sync_users:
   - user: perunsync
     comment: Perun-to-Perun synchronization
