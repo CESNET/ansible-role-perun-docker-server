@@ -387,16 +387,46 @@ ShibCompatValidUser on
 {% endfor %}
 {% endif %}
 
-{% if perun_apache_non_enabled %}
+{% if not perun_apache_non_enabled %}
+  # Block all /non/ endpoints
   <LocationMatch "^/non/">
+    Require all denied
+  </LocationMatch>
+{% else %}
+{% set regex_paths = [ 'rpc/$' ] %}
+{% if not perun_apache_old_pwdreset_disabled | default(false) %}
+    {% set regex_paths = regex_paths + [
+        'pwd-reset/',
+        'rpc/jsonp/authzResolver/getPerunPrincipal$',
+        'rpc/jsonp/utils/getGuiConfiguration$',
+        'rpc/jsonp/usersManager/checkPasswordResetRequestIsValid$',
+        'rpc/jsonp/usersManager/checkPasswordStrength$',
+        'rpc/jsonp/usersManager/changeNonAuthzPassword$',
+        'rpc/jsonp/registrarManager/verifyCaptcha$'
+    ] %}
+{% endif %}
+{% if perun_ngui_pwdreset_enabled | default(false) %}
+    {% set regex_paths = regex_paths + [
+        'rpc/json/usersManager/checkPasswordResetRequestIsValid',
+        'rpc/json/usersManager/checkPasswordStrength',
+        'rpc/json/usersManager/changeNonAuthzPassword'
+    ] %}
+{% endif %}
+{% if regex_paths | length > 0 %}
+# Allow /non/ only for old/new pwd reset apps
+  <LocationMatch "^/non/(?:{{ regex_paths | join('|') }})">
     Options FollowSymLinks
     Require all granted
     SSLVerifyClient none
-
     SetEnvIf _ .* AJP_EXTSOURCE=LOCAL
     SetEnvIf _ .* AJP_EXTSOURCETYPE=cz.metacentrum.perun.core.impl.ExtSourceInternal
     SetEnvIf _ .* AJP_EXTSOURCELOA=0
   </LocationMatch>
+  # Block all other /non/ endpoints
+  <LocationMatch "^/non/(?!{{ regex_paths | join('|') }})">
+    Require all denied
+  </LocationMatch>
+{% endif %}
 {% endif %}
 
 {% if perun_apache_kerberos_enabled %}
