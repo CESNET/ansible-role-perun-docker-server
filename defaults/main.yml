@@ -758,6 +758,7 @@ perun_apache_pwdreset_default_auth: "fed"
 perun_apache_pwdreset_html_suffix: ""
 perun_apache_special_config2: ""
 perun_apache_api_special_config: ""
+perun_apache_api_special_config2: ""
 perun_apache_mounts_additional: []
 perun_apache_old_profile_disabled: no
 perun_apache_old_admin_gui_disabled: no

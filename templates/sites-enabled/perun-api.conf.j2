@@ -104,6 +104,8 @@
     </If>
 {% endif %}
 
+{{ perun_apache_api_special_config }}
+
     ####################################
     ##     RPC                      ####
     ####################################
@@ -227,5 +229,7 @@
         Authtype oauth20
         Require valid-user
     </LocationMatch>
-{{ perun_apache_api_special_config }}
+
+{{ perun_apache_api_special_config2 }}
+
 </VirtualHost>
