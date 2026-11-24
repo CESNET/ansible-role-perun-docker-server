@@ -721,6 +721,8 @@ perun_apache_cert_hostname_enabled: no
 perun_apache_cert_hostname: perun-cert.example.org
 perun_apache_cert_hostname_aliases: []
 perun_apache_non_enabled: no
+perun_apache_non_registration_enabled: no
+perun_apache_non_additional_api_calls: []
 perun_apache_kerberos_enabled: no
 perun_apache_kerberos_realms:
   - name: META

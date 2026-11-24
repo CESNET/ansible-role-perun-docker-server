@@ -412,9 +412,24 @@ ShibCompatValidUser on
         'rpc/json/usersManager/changeNonAuthzPassword'
     ] %}
 {% endif %}
+{% if perun_apache_non_registration_enabled | default(false) %}
+    {% set regex_paths = regex_paths + [
+        'registrar/',
+        'rpc/jsonp/authzResolver/getPerunPrincipal$',
+        'rpc/jsonp/utils/getGuiConfiguration$',
+        'rpc/jsonp/registrarManager/initialize$',
+        'rpc/jsonp/registrarManager/initializeRegistrar$',
+        'rpc/jsonp/registrarManager/verifyCaptcha$',
+        'rpc/jsonp/registrarManager/submitApplication$',
+        'rpc/jsonp/registrarManager/validateEmail$',
+        'rpc/jsonp/registrarManager/getOpenApplicationsForUser$',
+        'rpc/jsonp/registrarManager/getApplicationsForUser$'
+    ] %}
+{% endif %}
+{% set regex_paths = regex_paths + (perun_apache_non_additional_api_calls | default([], true)) %}
 {% if regex_paths | length > 0 %}
 # Allow /non/ only for old/new pwd reset apps
-  <LocationMatch "^/non/(?:{{ regex_paths | join('|') }})">
+  <LocationMatch "^/non/(?:{{ regex_paths | unique | join('|') }})">
     Options FollowSymLinks
     Require all granted
     SSLVerifyClient none
@@ -423,7 +438,7 @@ ShibCompatValidUser on
     SetEnvIf _ .* AJP_EXTSOURCELOA=0
   </LocationMatch>
   # Block all other /non/ endpoints
-  <LocationMatch "^/non/(?!{{ regex_paths | join('|') }})">
+  <LocationMatch "^/non/(?!{{ regex_paths | unique | join('|') }})">
     Require all denied
   </LocationMatch>
 {% endif %}
