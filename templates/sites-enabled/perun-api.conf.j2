@@ -190,9 +190,10 @@
         'rpc/json/usersManager/changeNonAuthzPassword'
     ] %}
 {% endif %}
+{% set regex_paths = regex_paths + (perun_apache_non_additional_api_calls | default([], true)) %}
 {% if regex_paths | length > 0 %}
     # Allow /non/ only for new pwd reset app
-    <LocationMatch "^/non/(?:{{ regex_paths | join('|') }})">
+    <LocationMatch "^/non/(?:{{ regex_paths | unique | join('|') }})">
         Options FollowSymLinks
         Require all granted
         SSLVerifyClient none
@@ -201,7 +202,7 @@
         SetEnvIf _ .* AJP_EXTSOURCELOA=0
     </LocationMatch>
     # Block all other /non/ endpoints
-    <LocationMatch "^/non/(?!{{ regex_paths | join('|') }})">
+    <LocationMatch "^/non/(?!{{ regex_paths | unique | join('|') }})">
         Require all denied
     </LocationMatch>
 {% endif %}
