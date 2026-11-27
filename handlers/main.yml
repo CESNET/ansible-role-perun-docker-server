@@ -1,3 +1,10 @@
+- name: "collect service facts"
+  ansible.builtin.service_facts:
+  listen:
+    - "restart ldap"
+    - "restart postgres"
+    - "restart syslog-ng"
+
 - name: "restart perun_rpc"
   docker_container:
     name: perun_rpc
